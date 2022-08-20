@@ -12,7 +12,7 @@ import {
 import { AxiosError } from 'axios'
 
 class ApiService {
-  errorHandler(error: AxiosError) {
+  private errorHandler(error: AxiosError) {
     if (error.response) {
       console.log(error.response.data)
       console.log(error.response.status)
@@ -25,7 +25,7 @@ class ApiService {
     console.log(error.config)
   }
 
-  header(token = '') {
+  private header(token = '') {
     return {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -35,7 +35,8 @@ class ApiService {
     }
   }
 
-  //Words
+  // Words
+
   async getAllWords(group = '0', page = '0') {
     try {
       const response = await http.get<Array<IWord>>(`/words?group=${group}&page=${page}`)
@@ -54,7 +55,8 @@ class ApiService {
     }
   }
 
-  //Users
+  // Users
+
   async createUser(obj: IUser) {
     try {
       await http.post<IUser>('/users', obj)
@@ -97,7 +99,8 @@ class ApiService {
     }
   }
 
-  //Users/Words
+  // Users/Words
+
   async getAllUserWords(id: string, token: string) {
     try {
       const response = await http.get<Array<IUserWord>>(`/users/${id}/words`, this.header(token))
@@ -140,7 +143,7 @@ class ApiService {
     }
   }
 
-  //Users/AggregatedWords
+  // Users/AggregatedWords
 
   async getAllAgregatedWords(
     id: string,
@@ -172,7 +175,8 @@ class ApiService {
     }
   }
 
-  //Users/Statistic
+  // Users/Statistic
+
   async getUserStatistic(id: string, token: string) {
     try {
       const response = await http.get<IUserStat>(`/users/${id}/statistics`, this.header(token))
@@ -190,7 +194,8 @@ class ApiService {
     }
   }
 
-  //Users/Setting
+  // Users/Setting
+
   async getUserSettings(id: string, token: string) {
     try {
       const response = await http.get<IUserStat>(`/users/${id}/settings`, this.header(token))
@@ -208,10 +213,11 @@ class ApiService {
     }
   }
 
-  //Sign In
+  // Sign In
+
   async signIn(obj: IUserSignIn, token: string) {
     try {
-      const response = await http.post<IUserSignInResponse>(`/signin`, obj, this.header(token))
+      const response = await http.post<IUserSignInResponse>('/signin', obj, this.header(token))
       return response.data
     } catch (error) {
       this.errorHandler(error as AxiosError)

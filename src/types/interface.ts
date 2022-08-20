@@ -31,17 +31,17 @@ export interface IToken {
 
 export interface IUserWord {
   difficulty: string
-  optional: {}
+  optional: unknown
 }
 
 export interface IUserStat {
   learnedWords: number
-  optional: {}
+  optional: unknown
 }
 
 export interface IUserSettings {
   wordsPerDay: number
-  optional: {}
+  optional: unknown
 }
 
 export interface IUserSignIn {
