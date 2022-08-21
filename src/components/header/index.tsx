@@ -1,6 +1,6 @@
 import styles from './styles.module.scss'
 // @ts-ignore: Unreachable code error
-function Header({ setActive }) {
+function Header({ setActive, setAuthType }) {
   return (
     <header className={styles.header}>
       <div className={styles['header-wrapper']}>
@@ -16,7 +16,10 @@ function Header({ setActive }) {
           className={styles.user__img}
           src='/icons/user.svg'
           alt='User'
-          onClick={() => setActive(true)}
+          onClick={() => {
+            setActive(true)
+            setAuthType('reg')
+          }}
         />
       </div>
     </header>

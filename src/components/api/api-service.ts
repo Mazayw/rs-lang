@@ -59,7 +59,8 @@ class ApiService {
 
   async createUser(obj: IUser) {
     try {
-      await http.post<IUser>('/users', obj)
+      const response = await http.post<IUser>('/users', obj)
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -215,10 +216,10 @@ class ApiService {
 
   // Sign In
 
-  async signIn(obj: IUserSignIn, token: string) {
+  async signIn(obj: IUserSignIn) {
     try {
-      const response = await http.post<IUserSignInResponse>('/signin', obj, this.header(token))
-      return response.data
+      const response = await http.post<IUserSignInResponse>('/signin', obj)
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
