@@ -6,8 +6,17 @@ import PropTypes from 'prop-types'
 
 Auth.propTypes = { active: PropTypes.bool, setActive: PropTypes.func }
 
-//// @ts-ignore: Unreachable code error
-function Auth({ active, setActive, setIsAuthorized, authType }) {
+function Auth({
+  active,
+  setActive,
+  setIsAuthorized,
+  authType,
+}: {
+  active: boolean
+  setActive: React.Dispatch<React.SetStateAction<boolean>>
+  setIsAuthorized: React.Dispatch<React.SetStateAction<boolean>>
+  authType: string
+}) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailDirty, setEmailDirty] = useState(false)
@@ -73,15 +82,16 @@ function Auth({ active, setActive, setIsAuthorized, authType }) {
 
   const authHandler = async (obj: IUser) => {
     switch (authType) {
-      case 'reg':
+      case 'Регистрация': {
         const regResult = await apiService.createUser(obj)
         if (regResult?.status !== 200) setRegInfo('Пользователь с таким E-mail уже существует')
         if (regResult?.status === 200) {
           await authorization(obj)
         }
         break
+      }
 
-      case 'auth':
+      case 'Войти':
         await authorization(obj)
         break
     }
@@ -125,10 +135,11 @@ function Auth({ active, setActive, setIsAuthorized, authType }) {
           type='button'
           onClick={() => authHandler({ name: email, email: email, password: password })}
         >
-          Регистрация
+          {authType}
         </button>
       </form>
     </div>
   )
 }
+
 export default Auth

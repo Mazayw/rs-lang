@@ -1,6 +1,13 @@
 import styles from './styles.module.scss'
-// @ts-ignore: Unreachable code error
-function Header({ setActive, setAuthType }) {
+
+function Header({
+  setActive,
+  setAuthType,
+}: {
+  setActive: React.Dispatch<React.SetStateAction<boolean>>
+
+  setAuthType: React.Dispatch<React.SetStateAction<string>>
+}) {
   return (
     <header className={styles.header}>
       <div className={styles['header-wrapper']}>
@@ -18,7 +25,7 @@ function Header({ setActive, setAuthType }) {
           alt='User'
           onClick={() => {
             setActive(true)
-            setAuthType('reg')
+            setAuthType('Регистрация')
           }}
         />
       </div>
