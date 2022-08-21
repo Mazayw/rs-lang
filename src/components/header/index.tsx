@@ -1,6 +1,6 @@
 import styles from './styles.module.scss'
-
-function Header() {
+// @ts-ignore: Unreachable code error
+function Header({ setActive }) {
   return (
     <header className={styles.header}>
       <div className={styles['header-wrapper']}>
@@ -12,7 +12,12 @@ function Header() {
           <li className={styles.menu__item}>О команде</li>
           <li className={styles.menu__item}>Мой прогресс</li>
         </ul>
-        <img className={styles.user__img} src='/icons/user.svg' alt='Logo' />
+        <img
+          className={styles.user__img}
+          src='/icons/user.svg'
+          alt='User'
+          onClick={() => setActive(true)}
+        />
       </div>
     </header>
   )
