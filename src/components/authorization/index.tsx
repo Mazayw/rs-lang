@@ -2,9 +2,6 @@ import apiService from '../api/api-service'
 import { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import { IUser } from '../types/interface'
-import PropTypes from 'prop-types'
-
-Auth.propTypes = { active: PropTypes.bool, setActive: PropTypes.func }
 
 function Auth({
   active,
