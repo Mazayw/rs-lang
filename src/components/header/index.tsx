@@ -1,6 +1,13 @@
 import styles from './styles.module.scss'
 
-function Header() {
+function Header({
+  setActive,
+  setAuthType,
+}: {
+  setActive: React.Dispatch<React.SetStateAction<boolean>>
+
+  setAuthType: React.Dispatch<React.SetStateAction<string>>
+}) {
   return (
     <header className={styles.header}>
       <div className={styles['header-wrapper']}>
@@ -12,7 +19,15 @@ function Header() {
           <li className={styles.menu__item}>О команде</li>
           <li className={styles.menu__item}>Мой прогресс</li>
         </ul>
-        <img className={styles.user__img} src='/icons/user.svg' alt='Logo' />
+        <img
+          className={styles.user__img}
+          src='/icons/user.svg'
+          alt='User'
+          onClick={() => {
+            setActive(true)
+            setAuthType('Регистрация')
+          }}
+        />
       </div>
     </header>
   )
