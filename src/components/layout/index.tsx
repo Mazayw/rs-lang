@@ -1,7 +1,6 @@
 import styles from './styles.module.scss'
-import { Outlet } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
 import Footer from '../footer'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import Navbar from '../navbar'
 import Auth from '../authorization/index'
 import { useState } from 'react'
@@ -20,7 +19,9 @@ function Layout() {
       />
       <header className={styles.header}>
         <div className={styles['header-wrapper']}>
-          <img className={styles.logo__img} src='/icons/logo.svg' alt='Logo' />
+          <NavLink to='/'>
+            <img className={styles.logo__img} src='/icons/logo.svg' alt='Logo' />
+          </NavLink>
           <div className={styles.menu}>
             <Navbar />
           </div>
