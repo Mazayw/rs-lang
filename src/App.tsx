@@ -19,7 +19,7 @@ function App() {
         authType={authType}
       />
       <Header setActive={setModalActive} setAuthType={setAuthType} />
-      <MainPage />
+      <MainPage setActive={setModalActive} setAuthType={setAuthType} />
       <Footer />
     </div>
   )

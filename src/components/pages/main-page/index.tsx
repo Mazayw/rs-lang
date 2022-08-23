@@ -1,6 +1,13 @@
 import styles from './styles.module.scss'
 
-function MainPage() {
+function MainPage({
+  setActive,
+  setAuthType,
+}: {
+  setActive: React.Dispatch<React.SetStateAction<boolean>>
+
+  setAuthType: React.Dispatch<React.SetStateAction<string>>
+}) {
   return (
     <div className={styles.main}>
       <img src='./img/hero-img.png' alt='Girl with books' className={styles['hero-img']} />
@@ -13,10 +20,24 @@ function MainPage() {
           </h3>
         </div>
         <div className={styles['buttons-block']}>
-          <button type='button' className={`${styles.button} ${styles.regbtn}`}>
+          <button
+            type='button'
+            className={`${styles.button} ${styles.regbtn}`}
+            onClick={() => {
+              setActive(true)
+              setAuthType('Регистрация')
+            }}
+          >
             регистрация
           </button>
-          <button type='button' className={`${styles.button} ${styles.authbtn}`}>
+          <button
+            type='button'
+            className={`${styles.button} ${styles.authbtn}`}
+            onClick={() => {
+              setActive(true)
+              setAuthType('Войти')
+            }}
+          >
             войти
           </button>
         </div>
