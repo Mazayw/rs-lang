@@ -9,7 +9,6 @@ import Sprint from './components/pages/games/sprint/index'
 import Statistics from './components/pages/statistics/index'
 import About from './components/pages/about'
 import NotFound from './components/pages/notfound/index'
-import GemeDescr from './components/pages/game-desc'
 
 function App() {
   return (
@@ -18,7 +17,6 @@ function App() {
         <Route path='/' element={<Layout />}>
           <Route index element={<MainPage />} />
           <Route path='vocabulary' element={<Vocabulary />} />
-          <Route path='games' element={<GemeDescr />} />
           <Route path='audiocall' element={<Audiocall />} />
           <Route path='sprint' element={<Sprint />} />
           <Route path='statistics' element={<Statistics />} />
