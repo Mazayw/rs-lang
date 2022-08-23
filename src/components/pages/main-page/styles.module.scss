@@ -57,6 +57,11 @@
   font-size: 18px;
   text-transform: uppercase;
   color: #ffffff;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #ffffff;
+  }
 }
 
 .regbtn {

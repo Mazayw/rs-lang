@@ -5,7 +5,6 @@ function MainPage({
   setAuthType,
 }: {
   setActive: React.Dispatch<React.SetStateAction<boolean>>
-
   setAuthType: React.Dispatch<React.SetStateAction<string>>
 }) {
   return (
