@@ -1,4 +1,69 @@
 .main {
   background: #171836;
   height: calc(100vh - 100px - 140px);
+  display: flex;
+  align-items: center;
+}
+
+.info {
+  margin-left: 15%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-img {
+  height: 100%;
+  width: auto;
+}
+
+.title {
+  width: 550px;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 64px;
+  line-height: 130%;
+  letter-spacing: -0.01em;
+  text-transform: capitalize;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.subtitle {
+  width: 550px;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 130%;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 25px;
+}
+
+.buttons-block {
+  margin-top: 100px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 306px;
+  height: 62px;
+  border-radius: 6px;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.regbtn {
+  background: #f5443b;
+}
+
+.authbtn {
+  background: rgba(245, 68, 59, 0.2);
+  margin-top: 40px;
 }
