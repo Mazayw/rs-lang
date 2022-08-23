@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import Auth from './components/authorization'
 import Footer from './components/footer'
-import Header from './components/header'
+import Header from './components/layout'
 import MainPage from './components/pages/main-page/index'
 import { useState } from 'react'
 import Vocabulary from './components/pages/vocabulary/index'
@@ -12,6 +12,7 @@ import Sprint from './components/pages/games/sprint/index'
 import Statistics from './components/pages/statistics/index'
 import About from './components/pages/about'
 import NotFound from './components/pages/notfound/index'
+import GemeDescr from './components/pages/game-desc'
 
 function App() {
   const [isModalActive, setModalActive] = useState(false)
@@ -31,6 +32,7 @@ function App() {
         <Route path='/' element={<Header setActive={setModalActive} setAuthType={setAuthType} />}>
           <Route index element={<MainPage />} />
           <Route path='vocabulary' element={<Vocabulary />} />
+          <Route path='games' element={<GemeDescr />} />
           <Route path='audiocall' element={<Audiocall />} />
           <Route path='sprint' element={<Sprint />} />
           <Route path='statistics' element={<Statistics />} />
