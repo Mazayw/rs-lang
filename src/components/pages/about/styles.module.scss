@@ -1,4 +1,87 @@
+$about-dark-blue: #171836;
+$about-middle-blue: #3f418b;
+$about-middle-blue: #1f2143;
+$about-light-blue: #cccdff;
+%about-flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .about-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
   background: #171836;
   height: calc(100vh - 100px - 140px);
+  color: $about-light-blue;
+  padding: 0 0 0 10vw;
+}
+
+#about__title {
+  font-size: 2em;
+  padding: 0.4em 0 0 0;
+}
+
+#members {
+  display: flex;
+  flex-direction: column;
+  gap: 4vh;
+  list-style: inside;
+  list-style-type: none;
+  font-size: 1em;
+}
+
+.about__member {
+  width: 60vw;
+  display: flex;
+  flex-direction: row;
+  background-color: $about-middle-blue;
+  border-radius: 0.5rem;
+  box-shadow: 0.01em 0.01em 0.3em $about-light-blue;
+}
+
+.about__member:hover {
+  cursor: pointer;
+  box-shadow: 0.2em 0.2em 1.1em $about-light-blue;
+}
+
+.about__member:active {
+  box-shadow: 0.05em 0.05em 0.6em $about-light-blue;
+}
+
+.member__photo {
+  display: block;
+  max-width: 22vh;
+  max-height: 20vh;
+  width: 18vh;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.member__about {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  padding: 0.3em 0 0.3em 2vw;
+}
+
+.member__name {
+  width: fit-content;
+  font-size: 1.4em;  
+  padding: 0 0.5em 0.5em 0;
+  border-bottom: 0.1em solid $about-light-blue;
+}
+
+.member__title {
+  font-size: 1.1em;
+  font-weight: 700;  
+}
+
+@media (max-width: 1023.9px) {
+
+  .about__member {
+    width: 80vw;
+  }
+
 }
