@@ -1,25 +1,23 @@
-interface IMembers {
-  [key: string]: { [keyInn: string]: string }
-}
+import { IAboutData } from '../../types/about-interface'
 
-export const members: IMembers = {
+export const aboutData: IAboutData = {
   Mazayw: {
     name: 'Igor Dronishinets',
-    photo: './image/Mazayw.jpg',
+    photo: './img/Mazayw.jpg',
     title: 'Junior JavaScript/Frontend Developer',
     content: 'some works',
     link: 'https://github.com/Mazayw/',
   },
   niknikolay: {
     name: 'Nikolay Kyev',
-    photo: './image/niknikolay.png',
+    photo: './img/niknikolay.png',
     title: 'Junior JavaScript/Frontend Developer',
     content: 'some works',
     link: 'https://github.com/niknikolay/',
   },
   rydvone: {
     name: 'Alexander Verbitsky',
-    photo: './image/rydvone.jpg',
+    photo: './img/rydvone.jpg',
     title: 'Junior JavaScript/Frontend Developer',
     content: 'some works',
     link: 'https://github.com/rydvone/',
