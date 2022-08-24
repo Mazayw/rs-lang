@@ -7,7 +7,7 @@ function About() {
 
   return (
     <main className={styles['about-main']}>
-      <h2 id={styles['about__title']}>About our team</h2>
+      <h1 id={styles['about__title']}>About our team</h1>
       <ul className='members' id={styles['members']}>
         {member.map((el) => (
           <li className='member' key={`member-${el}`}>
