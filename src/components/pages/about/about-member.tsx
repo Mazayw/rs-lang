@@ -16,10 +16,8 @@ export function AboutMember(props: INickname) {
         alt="member's team"
       />
       <div className={styles['member__about']}>
-
-          <h3 className={styles['member__name']}>{aboutData[nickname].name}</h3>
-          <div className={styles['member__title']}>{aboutData[nickname].title}</div>
-
+        <h3 className={styles['member__name']}>{aboutData[nickname].name}</h3>
+        <div className={styles['member__title']}>{aboutData[nickname].title}</div>
         <div className={styles['member__content']}>{aboutData[nickname].content}</div>
       </div>
     </div>

@@ -1,5 +1,4 @@
 $about-dark-blue: #171836;
-$about-middle-blue: #3f418b;
 $about-middle-blue: #1f2143;
 $about-light-blue: #cccdff;
 %about-flex-center {
@@ -68,20 +67,18 @@ $about-light-blue: #cccdff;
 
 .member__name {
   width: fit-content;
-  font-size: 1.4em;  
-  padding: 0 0.5em 0.5em 0;
+  font-size: 1.4em;
+  padding: 0.3em 0.5em 0.5em 0;
   border-bottom: 0.1em solid $about-light-blue;
 }
 
 .member__title {
   font-size: 1.1em;
-  font-weight: 700;  
+  font-weight: 700;
 }
 
 @media (max-width: 1023.9px) {
-
   .about__member {
     width: 80vw;
   }
-
 }
