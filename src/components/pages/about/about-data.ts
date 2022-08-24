@@ -10,7 +10,7 @@ export const aboutData: IAboutData = {
   },
   niknikolay: {
     name: 'Nikolay Kyev',
-    photo: './img/niknikolay.png',
+    photo: './img/niknikolay.jpg',
     title: 'Junior JavaScript/Frontend Developer',
     content: 'some works',
     link: 'https://github.com/niknikolay/',

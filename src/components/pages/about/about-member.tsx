@@ -2,9 +2,7 @@ import styles from './styles.module.scss'
 import { aboutData } from './about-data';
 import { INickname } from '../../types/about-interface';
 
-
 export function AboutMember(props: INickname) {
-  // const aboutData: IAboutData = JSON.parse(JSON.stringify(data));
   const nickname = props.text
 
   return (
