@@ -9,13 +9,31 @@ import Sprint from './components/pages/games/sprint/index'
 import Statistics from './components/pages/statistics/index'
 import About from './components/pages/about'
 import NotFound from './components/pages/notfound/index'
+import { useState } from 'react'
 
 function App() {
+  const [isModalActive, setModalActive] = useState(false)
+  const [isAuthorized, setIsAuthorized] = useState(false)
+  const [authType, setAuthType] = useState('')
   return (
     <div className='App'>
       <Routes>
-        <Route path='/' element={<Layout />}>
-          <Route index element={<MainPage />} />
+        <Route
+          path='/'
+          element={
+            <Layout
+              isModalActive={isModalActive}
+              setModalActive={setModalActive}
+              setIsAuthorized={setIsAuthorized}
+              authType={authType}
+              setAuthType={setAuthType}
+            />
+          }
+        >
+          <Route
+            index
+            element={<MainPage setActive={setModalActive} setAuthType={setAuthType} />}
+          />
           <Route path='vocabulary' element={<Vocabulary />} />
           <Route path='audiocall' element={<Audiocall />} />
           <Route path='sprint' element={<Sprint />} />
