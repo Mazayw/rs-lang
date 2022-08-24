@@ -56,3 +56,14 @@ export interface IUserSignInResponse {
   userId: string
   name: string
 }
+
+export interface IMenuMain {
+  title: string
+  url: string
+}
+
+export interface IMenu {
+  title: string
+  url: string
+  submenu?: Array<IMenuMain>
+}
