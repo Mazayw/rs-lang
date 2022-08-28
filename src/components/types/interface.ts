@@ -67,3 +67,8 @@ export interface IMenu {
   url: string
   submenu?: Array<IMenuMain>
 }
+
+export interface IButton {
+  name: string
+  group: number
+}
