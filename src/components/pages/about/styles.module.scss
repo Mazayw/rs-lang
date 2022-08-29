@@ -28,14 +28,14 @@ $about-light-blue: #d1d1d7;
 #members {
   display: flex;
   flex-direction: column;
-  gap: 2vw;
+  gap: 24px;
   list-style: inside;
   list-style-type: none;
   font-size: 1em;
 }
 
 .about__member {
-  width: 88vw;
+  width: 1270px;
   display: flex;
   flex-direction: row;
   background: $about-middle-blue;
@@ -49,15 +49,15 @@ $about-light-blue: #d1d1d7;
 
 .member__photo {
   display: block;
-  width: 18vw;
-  height: 18vw;
+  width: 252px;
+  height: 252px;
 }
 
 .member__about {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  padding: 0.3em 0 0 2em;
+  padding: 0 0 0 1.5em;
 }
 
 .member__name {
