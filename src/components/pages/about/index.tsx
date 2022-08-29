@@ -6,7 +6,7 @@ function About() {
   const member = Object.keys(aboutData)
 
   return (
-    <main className={styles['about-main']}>
+    <div className={styles['about']}>
       <h1 id={styles['about__title']}>About our team</h1>
       <ul className='members' id={styles['members']}>
         {member.map((el) => (
@@ -15,7 +15,7 @@ function About() {
           </li>
         ))}
       </ul>
-    </main>
+    </div>
   )
 }
 export default About
