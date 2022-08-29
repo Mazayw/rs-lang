@@ -5,10 +5,19 @@ import Navbar from '../navbar'
 import Auth from '../authorization/index'
 import { useState } from 'react'
 
-function Layout() {
-  const [isModalActive, setModalActive] = useState(false)
-  const [isAuthorized, setIsAuthorized] = useState(false)
-  const [authType, setAuthType] = useState('')
+function Layout({
+  isModalActive,
+  setModalActive,
+  setIsAuthorized,
+  authType,
+  setAuthType,
+}: {
+  isModalActive: boolean
+  setModalActive: React.Dispatch<React.SetStateAction<boolean>>
+  setIsAuthorized: React.Dispatch<React.SetStateAction<boolean>>
+  authType: string
+  setAuthType: React.Dispatch<React.SetStateAction<string>>
+}) {
   return (
     <>
       <Auth
