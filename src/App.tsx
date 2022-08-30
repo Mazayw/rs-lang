@@ -10,6 +10,8 @@ import Statistics from './components/pages/statistics/index'
 import About from './components/pages/about'
 import NotFound from './components/pages/notfound/index'
 import { useState } from 'react'
+import apiService from './components/api/api-service'
+import { IWord, IUserWord } from './components/types/interface'
 
 function App() {
   const [isModalActive, setModalActive] = useState(false)
