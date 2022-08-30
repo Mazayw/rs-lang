@@ -148,17 +148,20 @@ class ApiService {
 
   async getAllAgregatedWords(
     id: string,
-    group = '0',
-    page = '0',
-    wordsPerPage = '20',
     token: string,
+    group = '',
+    page = '',
+    wordsPerPage = '20',
   ) {
+    const url: string[] = []
+    url.push(`/users/${id}/aggregatedWords?`)
+    group && url.push(`group=${group}`)
+    page && url.push(`page=${page}`)
+    wordsPerPage && url.push(`wordsPerPage=${wordsPerPage}`)
+    const urlStr = url.join('&').replace('&', '')
+
     try {
-      const response = await http.get<IUserWord>(
-        `/users/${id}/aggregatedWords?group=${group}&page=${page}&wordsPerPage=${wordsPerPage}`,
-        this.header(token),
-      )
-      return response.data
+      return (await http.get(urlStr, this.header(token))).data[0].paginatedResults as IWord[]
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
