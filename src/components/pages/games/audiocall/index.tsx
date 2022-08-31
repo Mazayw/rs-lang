@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { IWord } from '../../../types/interface'
 import AudioGameMain from './game/index'
 import { IAnswer } from '../../../types/audioGame-interface'
+import GameResults from './results/index'
 
 function Audiocall() {
   const [gameState, setGameState] = useState(0)
@@ -19,13 +20,9 @@ function Audiocall() {
     <div className={styles['about-main']}>
       {gameState === 0 && <Description setGameState={setGameState} setWords={setWords} />}
       {gameState === 1 && (
-        <AudioGameMain
-          setGameState={setGameState}
-          words={words}
-          setAnswersArr={setAnswersArr}
-          answersArr={answersArr}
-        />
+        <AudioGameMain setGameState={setGameState} words={words} setAnswersArr={setAnswersArr} />
       )}
+      {gameState === 3 && <GameResults setGameState={setGameState} answersArr={answersArr} />}
     </div>
   )
 }

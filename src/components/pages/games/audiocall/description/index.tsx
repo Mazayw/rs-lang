@@ -1,5 +1,5 @@
 import styles from './styles.module.scss'
-import ChooseButton from '../button'
+import ChooseButton from './button'
 import { buttonsData } from '../buttons-data'
 import { IWord } from '../../../../types/interface'
 

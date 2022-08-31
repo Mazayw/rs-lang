@@ -1,6 +1,6 @@
 import styles from './styles.module.scss'
-import { IButton, IWord } from '../../../../types/interface'
-import apiService from '../../../../api/api-service'
+import { IButton, IWord } from '../../../../../types/interface'
+import apiService from '../../../../../api/api-service'
 
 function ChooseButton({
   data,

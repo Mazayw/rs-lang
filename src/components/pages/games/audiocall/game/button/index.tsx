@@ -25,7 +25,7 @@ function AudioChooseButton({
     setTimeout(() => {
       setShowAnswer(false)
       setCurrent((prev) => prev + 1)
-    }, 1500)
+    }, 800)
   }
   return (
     <button
