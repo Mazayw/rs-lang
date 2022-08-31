@@ -22,7 +22,13 @@ function Audiocall() {
       {gameState === 1 && (
         <AudioGameMain setGameState={setGameState} words={words} setAnswersArr={setAnswersArr} />
       )}
-      {gameState === 3 && <GameResults setGameState={setGameState} answersArr={answersArr} />}
+      {gameState === 3 && (
+        <GameResults
+          setGameState={setGameState}
+          answersArr={answersArr}
+          setAnswersArr={setAnswersArr}
+        />
+      )}
     </div>
   )
 }

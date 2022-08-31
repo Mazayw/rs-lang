@@ -5,10 +5,16 @@ import DrawTable from './drawTable/index'
 function GameResults({
   setGameState,
   answersArr,
+  setAnswersArr,
 }: {
   setGameState: React.Dispatch<React.SetStateAction<number>>
   answersArr: IAnswer[]
+  setAnswersArr: React.Dispatch<React.SetStateAction<IAnswer[]>>
 }) {
+  const newGame = () => {
+    setAnswersArr([])
+    setGameState(0)
+  }
   return (
     <div className={styles.content}>
       <h1 className={styles.title}>Ваши результаты</h1>
@@ -17,7 +23,7 @@ function GameResults({
           <DrawTable key={index} word={el} index={index} />
         ))}
       </div>
-      <button type='button' className={styles.button} onClick={() => setGameState(0)}>
+      <button type='button' className={styles.button} onClick={newGame}>
         Играть снова
       </button>
     </div>
