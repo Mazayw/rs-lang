@@ -5,16 +5,17 @@ import apiService from '../../../../api/api-service'
 function ChooseButton({
   data,
   setGameState,
-  words,
+  setWords,
 }: {
   data: IButton
   setGameState: React.Dispatch<React.SetStateAction<number>>
-  words: IWord[] | undefined
+  setWords: React.Dispatch<React.SetStateAction<IWord[] | never[]>>
 }) {
   const page = `${Math.floor(Math.random() * 30)}`
   const getWords = async () => {
     setGameState(1)
-    words = await apiService.getAllWords(`${data.group}`, page)
+    const words = await apiService.getAllWords(`${data.group}`, page)
+    setWords(words!)
   }
 
   return (

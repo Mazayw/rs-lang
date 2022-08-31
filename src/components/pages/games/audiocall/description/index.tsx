@@ -5,10 +5,10 @@ import { IWord } from '../../../../types/interface'
 
 function Description({
   setGameState,
-  words,
+  setWords,
 }: {
   setGameState: React.Dispatch<React.SetStateAction<number>>
-  words: IWord[] | undefined
+  setWords: React.Dispatch<React.SetStateAction<IWord[] | never[]>>
 }) {
   return (
     <div className={styles['about-main']}>
@@ -20,7 +20,7 @@ function Description({
         <h3 className={styles.description}>Пожалуйста, выберите уровень сложности:</h3>
         <div className={styles['buttons-block']}>
           {buttonsData.map((el, index) => (
-            <ChooseButton data={el} key={index} setGameState={setGameState} words={words} />
+            <ChooseButton data={el} key={index} setGameState={setGameState} setWords={setWords} />
           ))}
         </div>
       </div>

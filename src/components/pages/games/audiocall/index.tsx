@@ -3,19 +3,29 @@ import styles from './styles.module.scss'
 import { useState, useEffect } from 'react'
 import { IWord } from '../../../types/interface'
 import AudioGameMain from './game/index'
+import { IAnswer } from '../../../types/audioGame-interface'
 
 function Audiocall() {
   const [gameState, setGameState] = useState(0)
-  const words: IWord[] = []
+  const [words, setWords] = useState<Array<IWord | never>>([])
+  const [answersArr, setAnswersArr] = useState<IAnswer[]>([])
 
   useEffect(() => {
     setGameState(0)
+    setAnswersArr([])
   }, [])
 
   return (
     <div className={styles['about-main']}>
-      {gameState === 0 && <Description setGameState={setGameState} words={words} />}
-      {gameState === 1 && <AudioGameMain setGameState={setGameState} words={words} />}
+      {gameState === 0 && <Description setGameState={setGameState} setWords={setWords} />}
+      {gameState === 1 && (
+        <AudioGameMain
+          setGameState={setGameState}
+          words={words}
+          setAnswersArr={setAnswersArr}
+          answersArr={answersArr}
+        />
+      )}
     </div>
   )
 }
