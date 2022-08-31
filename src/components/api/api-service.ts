@@ -94,7 +94,7 @@ class ApiService {
   async getUserToken(id: string, token: string) {
     try {
       const response = await http.get<IToken>(`/users/${id}/tokens`, this.header(token))
-      return response.data
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
