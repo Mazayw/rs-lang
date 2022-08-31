@@ -4,12 +4,13 @@ import './App.css'
 import Layout from './components/layout'
 import MainPage from './components/pages/main-page/index'
 import Vocabulary from './components/pages/vocabulary/index'
-import Audiocall from './components/pages/games/audiocall/index'
 import Sprint from './components/pages/games/sprint/index'
 import Statistics from './components/pages/statistics/index'
 import About from './components/pages/about'
 import NotFound from './components/pages/notfound/index'
 import { useState } from 'react'
+import AudioGameMain from './components/pages/games/audiocall/game/index'
+import Description from './components/pages/games/audiocall/description/index'
 
 function App() {
   const [isModalActive, setModalActive] = useState(false)
@@ -35,8 +36,9 @@ function App() {
             element={<MainPage setActive={setModalActive} setAuthType={setAuthType} />}
           />
           <Route path='vocabulary' element={<Vocabulary />} />
-          <Route path='audiocall' element={<Audiocall />} />
-          <Route path='sprint' element={<Sprint />} />
+          <Route path='audiocall' element={<Description />} />
+          <Route path='audiocall/:group/:page' element={<AudioGameMain />} />
+          <Route path='sprint/' element={<Sprint />} />
           <Route path='statistics' element={<Statistics />} />
           <Route path='about' element={<About />} />
           <Route path='*' element={<NotFound />} />

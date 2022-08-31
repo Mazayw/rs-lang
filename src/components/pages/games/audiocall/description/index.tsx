@@ -1,15 +1,8 @@
 import styles from './styles.module.scss'
 import ChooseButton from './button'
 import { buttonsData } from '../buttons-data'
-import { IWord } from '../../../../types/interface'
 
-function Description({
-  setGameState,
-  setWords,
-}: {
-  setGameState: React.Dispatch<React.SetStateAction<number>>
-  setWords: React.Dispatch<React.SetStateAction<IWord[] | never[]>>
-}) {
+function Description() {
   return (
     <div className={styles['about-main']}>
       <div className={styles.content}>
@@ -20,7 +13,7 @@ function Description({
         <h3 className={styles.description}>Пожалуйста, выберите уровень сложности:</h3>
         <div className={styles['buttons-block']}>
           {buttonsData.map((el, index) => (
-            <ChooseButton data={el} key={index} setGameState={setGameState} setWords={setWords} />
+            <ChooseButton data={el} key={index} />
           ))}
         </div>
       </div>

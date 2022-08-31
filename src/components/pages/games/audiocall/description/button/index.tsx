@@ -1,31 +1,19 @@
 import styles from './styles.module.scss'
 import { IButton, IWord } from '../../../../../types/interface'
-import apiService from '../../../../../api/api-service'
+import { Link } from 'react-router-dom'
 
-function ChooseButton({
-  data,
-  setGameState,
-  setWords,
-}: {
-  data: IButton
-  setGameState: React.Dispatch<React.SetStateAction<number>>
-  setWords: React.Dispatch<React.SetStateAction<IWord[] | never[]>>
-}) {
+function ChooseButton({ data }: { data: IButton }) {
   const page = `${Math.floor(Math.random() * 30)}`
-  const getWords = async () => {
-    setGameState(1)
-    const words = await apiService.getAllWords(`${data.group}`, page)
-    setWords(words!)
-  }
 
   return (
-    <button
-      type='button'
-      className={`${styles['choose-button']} ${styles[`button-${data.name}`]}`}
-      onClick={() => getWords()}
-    >
-      <h5>{data.name}</h5>
-    </button>
+    <Link className={styles.link} to={`${data.group}/${page}`}>
+      <button
+        type='button'
+        className={`${styles['choose-button']} ${styles[`button-${data.name}`]}`}
+      >
+        <h5>{data.name}</h5>
+      </button>
+    </Link>
   )
 }
 export default ChooseButton

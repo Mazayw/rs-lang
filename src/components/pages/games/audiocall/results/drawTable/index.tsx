@@ -11,7 +11,7 @@ function DrawTable({ word, index }: { word: IAnswer; index: number }) {
       <div className={`${styles.word} ${styles.eng}`}>{index + 1}</div>
       <img
         className={`${styles.word} ${styles.icon}`}
-        src='./icons/audio.svg'
+        src='./../../icons/audio.svg'
         alt='Listen word'
         onClick={() => currentAudio.play()}
       />
