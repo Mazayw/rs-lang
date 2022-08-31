@@ -1,10 +1,10 @@
 import Dropdown from './dropdown'
-import { IMenu } from '../types/interface'
+import { IMenu, IWord } from '../types/interface'
 import { NavLink } from 'react-router-dom'
 import styles from './styles.module.scss'
 import { useState, useRef, useEffect } from 'react'
 
-export const MenuItems = ({ items }: { items: IMenu }) => {
+export const MenuItems = ({ items, index, check20WordsInPage, setCheck20WordsInPage }: { items: IMenu, index: number, check20WordsInPage: IWord[], setCheck20WordsInPage: React.Dispatch<React.SetStateAction<IWord[]>> }) => {
   const setActive = ({ isActive }: { isActive: boolean }) =>
     isActive ? `${styles.active} ${styles.menu__item}` : styles.menu__item
 
@@ -35,7 +35,7 @@ export const MenuItems = ({ items }: { items: IMenu }) => {
 
   return (
     <li
-      className={styles['menu__item']}
+      className={`${styles['menu__item']} ${check20WordsInPage.length === 20 && index === 2 ? styles['menu__item_disabled'] : ''}`}
       ref={ref}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -55,7 +55,7 @@ export const MenuItems = ({ items }: { items: IMenu }) => {
           <Dropdown submenus={items.submenu} setActive={setActive} dropdown={dropdown} />
         </>
       ) : (
-        <NavLink className={setActive} to={items.url}>
+        <NavLink className={setActive} to={items.url} >
           {items.title}
         </NavLink>
       )}

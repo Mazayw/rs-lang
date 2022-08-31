@@ -2,14 +2,14 @@ import styles from './styles.module.scss';
 import { INDEX_STAR_SECTION_BUTTON } from '.';
 import { IWord } from '../../types/interface';
 
-export function TextbookPagesButtons({ textbookNumberPage, buttonSectionCurrentIndex, clickPrevPage, clickNextPage, check20EasyWordsInPage }: { textbookNumberPage: number, buttonSectionCurrentIndex: number, clickPrevPage: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void, clickNextPage: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void, check20EasyWordsInPage: IWord[] }) {
+export function TextbookPagesButtons({ textbookNumberPage, buttonSectionCurrentIndex, clickPrevPage, clickNextPage, check20WordsInPage }: { textbookNumberPage: number, buttonSectionCurrentIndex: number, clickPrevPage: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void, clickNextPage: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void, check20WordsInPage: IWord[] }) {
   const page = {
     first: 1,
     last: 30,
     disabled: '#1F2143',
     active: 'rgba(255, 255, 255, 0.3)',
   };
-  console.log('INDEX_STAR_SECTION_BUTTON', check20EasyWordsInPage.length);
+  console.log('INDEX_STAR_SECTION_BUTTON', check20WordsInPage.length);
 
   return (
     <div className={INDEX_STAR_SECTION_BUTTON === buttonSectionCurrentIndex ? styles['page-buttons_none'] : styles['page-buttons']}>
@@ -20,7 +20,7 @@ export function TextbookPagesButtons({ textbookNumberPage, buttonSectionCurrentI
           </g>
         </svg>
       </button>
-      <p className={`${styles['page-buttons__page']} ${check20EasyWordsInPage.length === 20 ? styles['page-buttons__page_active'] : page.disabled}`} >{textbookNumberPage + 1}</p>
+      <p className={`${styles['page-buttons__page']} ${check20WordsInPage.length === 20 ? styles['page-buttons__page_active'] : page.disabled}`} >{textbookNumberPage + 1}</p>
       <button className={styles['page-buttons__arrow-right']} disabled={(textbookNumberPage + 1) === page.last ? true : false} onClick={(e) => clickNextPage(e)}>
         <svg width="70" height="68" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <g id="#000000ff">

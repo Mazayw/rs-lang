@@ -1,7 +1,8 @@
 import styles from './styles.module.scss';
 import { IWord, IUserWord } from '../../types/interface';
 
-export function WordButtons({ words, buttonWordCurrentIndex, clickWordButtons, hardWord, hardWordsId, easyWordsId, isAuthorized, dbUserWords, easyWord }: { words: IWord[], buttonWordCurrentIndex: number, clickWordButtons: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => void, hardWord: IWord[], hardWordsId: string[], easyWordsId: string[], isAuthorized: boolean, dbUserWords: IUserWord[], easyWord: IWord[] }) {
+export function WordButtons({ words, buttonWordCurrentIndex, clickWordButtons, hardWord, hardWordsId, easyWordsId, allWordsId, isAuthorized, dbUserWords, easyWord }: { words: IWord[], buttonWordCurrentIndex: number, clickWordButtons: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => void, hardWord: IWord[], hardWordsId: string[], easyWordsId: string[], allWordsId: string[], isAuthorized: boolean, dbUserWords: IUserWord[], easyWord: IWord[] }) {
+  console.log('WordsButton ', hardWord, 'hardId ', hardWordsId, dbUserWords, easyWord, 'easyId', easyWordsId, 'allId ', allWordsId);
 
   return (
     <ul className={styles['word-buttons']}>

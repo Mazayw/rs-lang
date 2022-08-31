@@ -10,13 +10,14 @@ import Statistics from './components/pages/statistics/index'
 import About from './components/pages/about'
 import NotFound from './components/pages/notfound/index'
 import { useState } from 'react'
-import apiService from './components/api/api-service'
-import { IWord, IUserWord } from './components/types/interface'
+import { IWord } from './components/types/interface'
 
 function App() {
   const [isModalActive, setModalActive] = useState(false)
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [authType, setAuthType] = useState('')
+  const [check20WordsInPage, setCheck20WordsInPage] = useState([] as IWord[]);
+
   return (
     <div className='App'>
       <Routes>
@@ -29,6 +30,8 @@ function App() {
               setIsAuthorized={setIsAuthorized}
               authType={authType}
               setAuthType={setAuthType}
+              check20WordsInPage={check20WordsInPage}
+              setCheck20WordsInPage={setCheck20WordsInPage}
             />
           }
         >
@@ -36,7 +39,7 @@ function App() {
             index
             element={<MainPage setActive={setModalActive} setAuthType={setAuthType} />}
           />
-          <Route path='vocabulary' element={<Vocabulary />} />
+          <Route path='vocabulary' element={<Vocabulary isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} check20WordsInPage={check20WordsInPage} setCheck20WordsInPage={setCheck20WordsInPage} />} />
           <Route path='audiocall' element={<Audiocall />} />
           <Route path='sprint' element={<Sprint />} />
           <Route path='statistics' element={<Statistics />} />
