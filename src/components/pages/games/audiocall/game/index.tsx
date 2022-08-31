@@ -18,8 +18,8 @@ function AudioGameMain() {
   const [answersArr, setAnswersArr] = useState<IAnswer[]>([])
 
   const currentWord = words[current]
-  const group = Number(groupUrl) > 6 ? '0' : groupUrl
-  const page = Number(pageUrl) > 30 ? '0' : groupUrl
+  const group = Number(groupUrl) > settings.maxGroup ? '0' : groupUrl
+  const page = Number(pageUrl) > settings.maxPage ? '0' : groupUrl
 
   const shuffleArray = (array: string[]) => {
     return array && array.sort(() => Math.random() - 0.5)
@@ -43,9 +43,9 @@ function AudioGameMain() {
   }, [current])
 
   useEffect(() => {
-    getWords()
     setGameState(0)
     setAnswersArr([])
+    getWords()
   }, [])
 
   useEffect(() => {

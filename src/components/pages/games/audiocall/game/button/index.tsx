@@ -1,6 +1,5 @@
 import styles from './styles.module.scss'
 import { IWord, IButton } from '../../../../../types/interface'
-import { useState } from 'react'
 import { IAnswer } from '../../../../../types/audioGame-interface'
 
 function AudioChooseButton({

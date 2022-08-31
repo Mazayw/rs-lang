@@ -1,6 +1,7 @@
 import styles from './styles.module.scss'
 import { IAnswer } from '../../../../types/audioGame-interface'
 import DrawTable from './drawTable/index'
+import { Link, NavLink } from 'react-router-dom'
 
 function GameResults({
   setGameState,
@@ -23,9 +24,11 @@ function GameResults({
           <DrawTable key={index} word={el} index={index} />
         ))}
       </div>
-      <button type='button' className={styles.button} onClick={newGame}>
-        Играть снова
-      </button>
+      <NavLink className={styles.link} to={'/audiocall'}>
+        <button type='button' className={styles.button} onClick={newGame}>
+          Играть снова
+        </button>
+      </NavLink>
     </div>
   )
 }
