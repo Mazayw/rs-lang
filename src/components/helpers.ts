@@ -84,15 +84,15 @@ class Helpers {
       const userId = localStorage.getItem('userId') as string
       const userWord = await apiService.getUserWord(userId, wordId, token)
 
-      let body = newWordData
-
       if (userWord === 404) {
-        await apiService.createUserWord(userId, wordId, body, token)
+        await apiService.createUserWord(userId, wordId, newWordData, token)
         return true // New word
       }
       if (userWord?.status === 200) {
-        body = this.optionalUnion(userWord.data, newWordData)
-        if (difficulty !== 'unknown') body.difficulty = difficulty
+        delete userWord.data.wordId
+        delete userWord.data.id
+        const body = this.optionalUnion(userWord.data, newWordData)
+        if (difficulty) body.difficulty = difficulty
         await apiService.updateUserWord(userId, wordId, body, token)
         return false // Word is already known
       }
