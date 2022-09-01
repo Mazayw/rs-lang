@@ -7,9 +7,10 @@ import { settings } from '../../../../../settings'
 import { useParams } from 'react-router-dom'
 import apiService from '../../../../api/api-service'
 import GameResults from '../results'
+import helpers from '../../../../helpers'
 
 function AudioGameMain() {
-  const { groupUrl, pageUrl } = useParams()
+  const { group, page } = useParams()
   const [current, setCurrent] = useState(0)
   const [answers, setAnswers] = useState<Array<string>>([])
   const [isShowAnswer, setShowAnswer] = useState(false)
@@ -18,15 +19,14 @@ function AudioGameMain() {
   const [answersArr, setAnswersArr] = useState<IAnswer[]>([])
 
   const currentWord = words[current]
-  const group = Number(groupUrl) > settings.maxGroup ? '0' : groupUrl
-  const page = Number(pageUrl) > settings.maxPage ? '0' : groupUrl
 
   const shuffleArray = (array: string[]) => {
     return array && array.sort(() => Math.random() - 0.5)
   }
 
   const getWords = async () => {
-    const wordsArr = await apiService.getAllWords(group, page)
+    const [groupUrl, pageUrl] = urlCheck()
+    const wordsArr = await apiService.getAllWords(groupUrl, pageUrl)
     wordsArr && setWords(wordsArr)
   }
 
@@ -36,6 +36,16 @@ function AudioGameMain() {
       currentAudio.play()
     }
   }
+
+  const urlCheck = () => {
+    const groupChk = typeof group === 'string' ? group : '0'
+    const pageChk = typeof page === 'string' ? page : '0'
+
+    const groupUrl = Number(groupChk) > settings.maxGroup ? '0' : groupChk
+    const pageUrl = Number(pageChk) > settings.maxPage ? '0' : pageChk
+    return [groupUrl, pageUrl]
+  }
+
   useEffect(() => {
     if (current) {
       newWord()
@@ -43,6 +53,7 @@ function AudioGameMain() {
   }, [current])
 
   useEffect(() => {
+    helpers.checkUser()
     setGameState(0)
     setAnswersArr([])
     getWords()

@@ -1,7 +1,8 @@
 import styles from './styles.module.scss'
 import { IAnswer } from '../../../../types/audioGame-interface'
 import DrawTable from './drawTable/index'
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import helpers from '../../../../helpers'
 
 function GameResults({
   setGameState,
@@ -16,6 +17,8 @@ function GameResults({
     setAnswersArr([])
     setGameState(0)
   }
+
+  const newWords = helpers.seenNewWords(answersArr)
   return (
     <div className={styles.content}>
       <h1 className={styles.title}>Ваши результаты</h1>

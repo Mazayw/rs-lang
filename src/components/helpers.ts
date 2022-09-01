@@ -1,29 +1,29 @@
 import apiService from './api/api-service'
-import { IUserSignInResponse, IWord, IUserWord } from './types/interface'
-
-interface IAnswer {
-  word: IWord
-  answer: boolean
-}
+import { IUserSignInResponse, IUserWord } from './types/interface'
+import { IAnswer } from './types/audioGame-interface'
 
 class Helpers {
-  optionalUnion = (obj1: IUserWord, obj2: IUserWord) => {
-    const o1 = obj1.optional
-    const o2 = obj2.optional
-    const obj3 = Object.assign({}, obj1)
-    Object.keys(o2).map(
-      (key) =>
-        (o1[key as keyof typeof o1] = `${
-          Number(o2[key as keyof typeof o2]) + Number(o1[key as keyof typeof o1] || 0)
-        }`),
-    )
-    return obj3
+  optionalUnion(oldWord: IUserWord, newWord: IUserWord) {
+    const oldShadow = JSON.parse(JSON.stringify(oldWord))
+    const new2Shadow = JSON.parse(JSON.stringify(newWord))
+
+    const o1 = oldShadow.optional
+    const o2 = new2Shadow.optional
+
+    Object.keys(o2).map((key) => {
+      if (o2[key] === '0' && key === 'guessedInLine') {
+        o1[key] = '0'
+      } else {
+        o1[key] = `${Number(o2[key]) + Number(o1[key] || 0)}`
+      }
+    })
+    return oldShadow
   }
 
   authorize(data: IUserSignInResponse) {
-    localStorage.setItem('token', data.token)
-    localStorage.setItem('refreshToken', data.refreshToken)
-    localStorage.setItem('userId', data.userId)
+    data.token && localStorage.setItem('token', data.token)
+    data.refreshToken && localStorage.setItem('refreshToken', data.refreshToken)
+    data.userId && localStorage.setItem('userId', data.userId)
     localStorage.setItem('tokenTime', Date())
   }
 
@@ -35,15 +35,16 @@ class Helpers {
   }
 
   async checkUser() {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('refreshToken')
     const id = localStorage.getItem('userId')
+
     if (token && id) {
       const res = await apiService.getUserToken(id, token)
       if (res?.status === 200) {
         this.authorize(res.data)
         return true
       } else {
-        this.logaut()
+        // this.logaut()
         return false
       }
     }
@@ -65,6 +66,10 @@ class Helpers {
       .split('0')
       .map((el) => el.length)
     return Math.max.apply(null, arrAnswers)
+  }
+
+  seenNewWords(arr: IAnswer[]) {
+    return arr.reduce((acc, el) => acc + Number(el.isNewWord), 0)
   }
 
   async updateUserWord(
@@ -89,6 +94,7 @@ class Helpers {
         return true // New word
       }
     }
+    return false
   }
 }
 
