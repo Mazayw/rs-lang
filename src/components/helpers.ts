@@ -44,7 +44,7 @@ class Helpers {
         this.authorize(res.data)
         return true
       } else {
-        // this.logaut()
+        this.logaut()
         return false
       }
     }
@@ -83,15 +83,18 @@ class Helpers {
       const token = localStorage.getItem('token') as string
       const userId = localStorage.getItem('userId') as string
       const userWord = await apiService.getUserWord(userId, wordId, token)
+
+      let body = newWordData
+
+      if (userWord === 404) {
+        await apiService.createUserWord(userId, wordId, body, token)
+        return true // New word
+      }
       if (userWord?.status === 200) {
-        const body = this.optionalUnion(userWord.data, newWordData)
-        if (difficulty) body.difficulty = difficulty
+        body = this.optionalUnion(userWord.data, newWordData)
+        if (difficulty !== 'unknown') body.difficulty = difficulty
         await apiService.updateUserWord(userId, wordId, body, token)
         return false // Word is already known
-      }
-      if (userWord?.status === 404) {
-        await apiService.createUserWord(userId, wordId, newWordData, token)
-        return true // New word
       }
     }
     return false

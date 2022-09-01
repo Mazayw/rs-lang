@@ -21,7 +21,7 @@ function AudioChooseButton({
   const buttonClick = async () => {
     const isCorrect = choose === answer.wordTranslate
     const newWord: IUserWord = {
-      difficulty: '',
+      difficulty: 'unknown',
       optional: {
         totalGuessedAudio: `${Number(isCorrect)}`,
         totalMistakesAudio: `${Number(isCorrect)}`,

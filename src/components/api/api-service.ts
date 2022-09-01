@@ -17,8 +17,10 @@ class ApiService {
       console.log(error.response.data)
       console.log(error.response.status)
       console.log(error.response.headers)
+      return error.response.status
     } else if (error.request) {
       console.log(error.request)
+      return error.request
     } else {
       console.log('Error', error.message)
     }
@@ -128,7 +130,7 @@ class ApiService {
       const response = await http.get<IUserWord>(`/users/${id}/words/${wordId}`, this.header(token))
       return response
     } catch (error) {
-      this.errorHandler(error as AxiosError)
+      return this.errorHandler(error as AxiosError)
     }
   }
 
