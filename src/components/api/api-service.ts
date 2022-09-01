@@ -105,7 +105,7 @@ class ApiService {
   async getAllUserWords(id: string, token: string) {
     try {
       const response = await http.get<Array<IUserWord>>(`/users/${id}/words`, this.header(token))
-      return response.data
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -113,7 +113,12 @@ class ApiService {
 
   async createUserWord(id: string, wordId: string, body: IUserWord, token: string) {
     try {
-      await http.post<IUserWord>(`/users/${id}/words/${wordId}`, body, this.header(token))
+      const response = await http.post<IUserWord>(
+        `/users/${id}/words/${wordId}`,
+        body,
+        this.header(token),
+      )
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -122,7 +127,7 @@ class ApiService {
   async getUserWord(id: string, wordId: string, token: string) {
     try {
       const response = await http.get<IUserWord>(`/users/${id}/words/${wordId}`, this.header(token))
-      return response.data
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -130,7 +135,12 @@ class ApiService {
 
   async updateUserWord(id: string, wordId: string, body: IUserWord, token: string) {
     try {
-      await http.put<IUserWord>(`/users/${id}/words/${wordId}`, body, this.header(token))
+      const response = await http.put<IUserWord>(
+        `/users/${id}/words/${wordId}`,
+        body,
+        this.header(token),
+      )
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -138,7 +148,11 @@ class ApiService {
 
   async deleteUserWord(id: string, wordId: string, token: string) {
     try {
-      await http.delete<IUserWord>(`/users/${id}/words/${wordId}`, this.header(token))
+      const response = await http.delete<IUserWord>(
+        `/users/${id}/words/${wordId}`,
+        this.header(token),
+      )
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }

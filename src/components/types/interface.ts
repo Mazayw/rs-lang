@@ -30,8 +30,14 @@ export interface IToken {
 }
 
 export interface IUserWord {
-  difficulty: string
-  optional: unknown
+  difficulty?: string
+  optional: {
+    totalGuessedSprint?: string
+    totalMistakesSprint?: string
+    totalGuessedAudio?: string
+    totalMistakesAudio?: string
+    guessedInLine?: string
+  }
 }
 
 export interface IUserStat {
