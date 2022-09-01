@@ -30,8 +30,14 @@ export interface IToken {
 }
 
 export interface IUserWord {
-  difficulty: string
-  optional: unknown
+  difficulty?: string
+  optional: {
+    totalGuessedSprint?: string
+    totalMistakesSprint?: string
+    totalGuessedAudio?: string
+    totalMistakesAudio?: string
+    guessedInLine?: string
+  }
 }
 
 export interface IUserStat {
@@ -66,9 +72,4 @@ export interface IMenu {
   title: string
   url: string
   submenu?: Array<IMenuMain>
-}
-
-export interface IButton {
-  name: string
-  group: number
 }

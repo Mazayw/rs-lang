@@ -1,6 +1,6 @@
 import styles from './styles.module.scss'
-import { IButton, IWord } from '../../../../../types/interface'
 import { Link } from 'react-router-dom'
+import { IButton } from '../../../../../types/audioGame-interface'
 
 function ChooseButton({ data }: { data: IButton }) {
   const page = `${Math.floor(Math.random() * 30)}`

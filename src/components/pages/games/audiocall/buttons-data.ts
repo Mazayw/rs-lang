@@ -1,4 +1,4 @@
-import { IButton } from '../../../types/interface'
+import { IButton } from '../../../types/audioGame-interface'
 
 export const buttonsData: IButton[] = [
   {

@@ -1,5 +1,5 @@
 import styles from './styles.module.scss'
-import { IWord, IButton } from '../../../../../types/interface'
+import { IWord } from '../../../../../types/interface'
 import { IAnswer } from '../../../../../types/audioGame-interface'
 
 function AudioChooseButton({
