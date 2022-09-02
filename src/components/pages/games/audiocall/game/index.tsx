@@ -46,6 +46,8 @@ function AudioGameMain() {
     return [groupUrl, pageUrl]
   }
 
+  /* helpers.updateStatistic() */
+
   useEffect(() => {
     if (current) {
       newWord()
@@ -101,6 +103,7 @@ function AudioGameMain() {
               answers.map((el, index) => (
                 <AudioChooseButton
                   key={index}
+                  index={index}
                   setAnswersArr={setAnswersArr}
                   answer={currentWord}
                   choose={el}

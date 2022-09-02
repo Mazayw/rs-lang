@@ -19,6 +19,7 @@ function GameResults({
   }
 
   const newWords = helpers.seenNewWords(answersArr)
+
   return (
     <div className={styles.content}>
       <h1 className={styles.title}>Ваши результаты</h1>

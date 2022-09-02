@@ -1,5 +1,5 @@
 import apiService from './api/api-service'
-import { IUserSignInResponse, IUserWord } from './types/interface'
+import { IUserSignInResponse, IUserWord, IUserStat } from './types/interface'
 import { IAnswer } from './types/audioGame-interface'
 
 class Helpers {
@@ -99,6 +99,27 @@ class Helpers {
     }
     return false
   }
+  /*
+  async updateStatistic(checkLocal = true, learnedWords = 0) {
+    const checker = checkLocal ? this.checkUserLocal() : await this.checkUser()
+    if (checker) {
+      const token = localStorage.getItem('token') as string
+      const userId = localStorage.getItem('userId') as string
+      const body = {
+        learnedWords: learnedWords,
+        optional: {},
+      }
+
+      const stat = await apiService.getUserStatistic(userId, token)
+      console.log('stat', stat, typeof stat)
+
+      if (stat) {
+        await apiService.setUserStatistic(userId, stat, token)
+      } else {
+        await apiService.setUserStatistic(userId, body, token)
+      }
+    }
+  }*/
 }
 
 export default new Helpers()

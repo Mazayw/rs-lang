@@ -13,7 +13,7 @@ function Description() {
         <h3 className={styles.description}>Пожалуйста, выберите уровень сложности:</h3>
         <div className={styles['buttons-block']}>
           {buttonsData.map((el, index) => (
-            <ChooseButton data={el} key={index} />
+            <ChooseButton data={el} key={index} index={index} />
           ))}
         </div>
       </div>

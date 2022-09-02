@@ -199,7 +199,7 @@ class ApiService {
   async getUserStatistic(id: string, token: string) {
     try {
       const response = await http.get<IUserStat>(`/users/${id}/statistics`, this.header(token))
-      return response.data
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -207,7 +207,8 @@ class ApiService {
 
   async setUserStatistic(id: string, obj: IUserStat, token: string) {
     try {
-      await http.put<IUserStat>(`/users/${id}/statistics`, obj, this.header(token))
+      const response = await http.put<IUserStat>(`/users/${id}/statistics`, obj, this.header(token))
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -220,7 +221,7 @@ class ApiService {
       const response = await http.get<IUserStat>(`/users/${id}/settings`, this.header(token))
       return response.data
     } catch (error) {
-      this.errorHandler(error as AxiosError)
+      return this.errorHandler(error as AxiosError)
     }
   }
 
