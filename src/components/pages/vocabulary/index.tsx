@@ -79,7 +79,7 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
   }, [])
 
 
-  const handlerClickCreateUserWord = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, wordId: string) => {
+  const handlerClickHardWord = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, wordId: string) => {
     const userId = localStorage.getItem('userId') as string;
     const token = localStorage.getItem('token') as string;
 
@@ -370,7 +370,7 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
 
   return <div className={`${styles.texbook} ${check20WordsInPage.length === 20 ? styles['texbook_active'] : ''}`} >
     <CreateTextbookSectionsButtons sections={sectionsButtonsText} buttonSectionCurrentIndex={buttonSectionCurrentIndex} onClickSectionButton={handlerClickSectionButton} onClickSectionHardButton={handlerClickHardButton} />
-    <Word {...word} ClickStudiedWord={handlerClickStudiedWord} ClickCreateUserWord={handlerClickCreateUserWord} hardWordsId={hardWordsId} easyWordsId={easyWordsId} ClickAudio={handlerClickAudio} token={token} buttonSectionCurrentIndex={buttonSectionCurrentIndex} gramophoneButtonDisabled={gramophoneButtonDisabled} setGramophoneButtonDisabled={setGramophoneButtonDisabled} />
+    <Word {...word} ClickStudiedWord={handlerClickStudiedWord} ClickHardWord={handlerClickHardWord} hardWordsId={hardWordsId} easyWordsId={easyWordsId} ClickAudio={handlerClickAudio} token={token} buttonSectionCurrentIndex={buttonSectionCurrentIndex} gramophoneButtonDisabled={gramophoneButtonDisabled} setGramophoneButtonDisabled={setGramophoneButtonDisabled} />
     <WordButtons words={words} buttonWordCurrentIndex={buttonWordCurrentIndex} clickWordButtons={handlerClickWordButtons} hardWord={hardWord} hardWordsId={hardWordsId} easyWordsId={easyWordsId} allWordsId={allWordsId} token={token} dbUserWords={dbUserWords} easyWord={easyWord} />
     <TextbookPagesButtons textbookNumberPage={textbookNumberPage} buttonSectionCurrentIndex={buttonSectionCurrentIndex} clickPrevPage={handlerClickPrevPage} clickNextPage={handlerClickNextPage} check20WordsInPage={check20WordsInPage} />
   </div>
