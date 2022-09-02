@@ -39,7 +39,7 @@ function App() {
             index
             element={<MainPage setActive={setModalActive} setAuthType={setAuthType} />}
           />
-          <Route path='vocabulary' element={<Vocabulary isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} check20WordsInPage={check20WordsInPage} setCheck20WordsInPage={setCheck20WordsInPage} />} />
+          <Route path='vocabulary' element={<Vocabulary check20WordsInPage={check20WordsInPage} setCheck20WordsInPage={setCheck20WordsInPage} />} />
           <Route path='audiocall' element={<Audiocall />} />
           <Route path='sprint' element={<Sprint />} />
           <Route path='statistics' element={<Statistics />} />

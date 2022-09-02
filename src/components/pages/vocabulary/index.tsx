@@ -10,7 +10,7 @@ import { base } from '../../settings';
 
 export const INDEX_STAR_SECTION_BUTTON = 10;
 
-function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setCheck20WordsInPage }: { isAuthorized: boolean, setIsAuthorized: React.Dispatch<React.SetStateAction<boolean>>, check20WordsInPage: IWord[], setCheck20WordsInPage: React.Dispatch<React.SetStateAction<IWord[]>> }) {
+function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20WordsInPage: IWord[], setCheck20WordsInPage: React.Dispatch<React.SetStateAction<IWord[]>> }) {
 
   const [word, setWord] = useState({} as IWord)
   const [words, setWords] = useState([] as IWord[]);
@@ -23,7 +23,8 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
   const [buttonSectionCurrentIndex, setButtonSectionCurrentIndex] = useState(0);
   const [buttonWordCurrentIndex, setButtonWordCurrentIndex] = useState(0);
   const [textbookNumberPage, setTextbookNumberPage] = useState(0);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(localStorage.getItem('token') as string);
+  const [gramophoneButtonDisabled, setGramophoneButtonDisabled] = useState(false);
 
   const [allWordsId, setAllWordsId] = useState([] as string[]);
   let filterAllWordsId = [] as string[];
@@ -39,16 +40,17 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
     (async function () {
       const sessionStorageSectionButton = sessionStorage.getItem('sectionButtonNumber') as string || '0';
       const sessionStoragePageButton = sessionStorage.getItem('pageButtonNumber') as string || '0';
+      const token = localStorage.getItem('token') as string;
+
+      setToken(token);
 
       let data: IWord[];
       if (sessionStorage.getItem('sectionButtonNumber') || sessionStorage.getItem('pageButtonNumber')) {
-        console.log('yes');
         data = await apiService.getAllWords(sessionStorageSectionButton, sessionStoragePageButton) as IWord[];
         setButtonWordCurrentIndex(0);
         setButtonSectionCurrentIndex(+sessionStorageSectionButton);
         setTextbookNumberPage(() => +sessionStoragePageButton);
       } else {
-        console.log('no');
         sessionStorage.setItem('sectionButtonNumber', '0');
         sessionStorage.setItem('pageButtonNumber', '0');
         data = await apiService.getAllWords() as IWord[];
@@ -56,12 +58,11 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
       setWords(() => data);
       setWord(() => data[0]);
 
-      if (isAuthorized) {
+      if (token) {
         const authUserWords = await apiService.getAllUserWords(localStorage.getItem('userId') as string, localStorage.getItem('token') as string) as IUserWord[];
         if (authUserWords) {
           const id = authUserWords.reduce((acc, item) => item.difficulty === 'hard' ? [...acc, item.optional.wordId] : acc, [] as string[]) as string[];
           const studiedWordsId = authUserWords.reduce((acc, item) => item.optional.isStudied ? [...acc, item.optional.wordId] : acc, [] as string[]) as string[];
-          console.log('studiedWordsId ', studiedWordsId);
 
           filterAllWordsId = [...id, ...studiedWordsId];
           setAllWordsId(() => filterAllWordsId);
@@ -136,9 +137,10 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
       setHardWordsId([...hardWordsId, wordId]);
 
       const arrWordsInPage = await apiService.getAllWords(buttonSectionCurrentIndex.toString(), textbookNumberPage.toString()) as IWord[];
-      const check = chek20EasyWords(deleteEasyWordsId, arrWordsInPage);
+      const check = chek20EasyWords(allWordsId, arrWordsInPage);
       setCheck20WordsInPage(() => check);
     } else {
+      setCheck20WordsInPage([]);
       const body = {
         difficulty: 'hard',
         optional: {
@@ -155,6 +157,10 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
 
       filterAllWordsId = [...allWordsId, wordId];
       setAllWordsId(() => filterAllWordsId);
+
+      const arrWordsInPage = await apiService.getAllWords(buttonSectionCurrentIndex.toString(), textbookNumberPage.toString()) as IWord[];
+      const check = chek20EasyWords(filterAllWordsId, arrWordsInPage);
+      setCheck20WordsInPage(() => check);
     }
   }
 
@@ -164,7 +170,7 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
     setButtonSectionCurrentIndex(index);
     setTextbookNumberPage(0);
     const data = await apiService.getAllWords(index.toString(), '0') as IWord[];
-    const check = chek20EasyWords(easyWordsId, data);
+    const check = chek20EasyWords(allWordsId, data);
     setCheck20WordsInPage(() => check);
     setWords(() => data);
     setWord(() => data[0]);
@@ -172,13 +178,15 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
   }
 
   const handlerClickHardButton = async () => {
+    setCheck20WordsInPage([]);
     setButtonWordCurrentIndex(0);
     setButtonSectionCurrentIndex(10);
     setTextbookNumberPage(0);
     const userId = localStorage.getItem('userId') as string;
     const token = localStorage.getItem('token') as string;
+    setToken(token);
 
-    if (!isAuthorized) {
+    if (!token) {
       setWords(() => []);
       setWord({} as IWord);
       sessionStorage.setItem('sectionButtonNumber', '10');
@@ -204,11 +212,11 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
     setButtonWordCurrentIndex(index);
   }
 
-  const handlerClickPrevPage = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handlerClickPrevPage = async () => {
     setCheck20WordsInPage([]);
     const page = textbookNumberPage - 1;
     const data = await apiService.getAllWords(buttonSectionCurrentIndex.toString(), page.toString()) as IWord[];
-    const check = chek20EasyWords(easyWordsId, data);
+    const check = chek20EasyWords(allWordsId, data);
     setCheck20WordsInPage(() => check);
     setWords(() => data);
     setWord(() => data[0]);
@@ -217,11 +225,11 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
     sessionStorage.setItem('pageButtonNumber', page.toString());
   }
 
-  const handlerClickNextPage = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handlerClickNextPage = async () => {
     setCheck20WordsInPage([]);
     const page = textbookNumberPage + 1;
     const data = await apiService.getAllWords(buttonSectionCurrentIndex.toString(), page.toString()) as IWord[];
-    const check = chek20EasyWords(easyWordsId, data);
+    const check = chek20EasyWords(allWordsId, data);
     setCheck20WordsInPage(() => check);
     setWords(() => data);
     setWord(() => data[0]);
@@ -317,11 +325,10 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
 
       setDbUserWords(() => [...dbDelWord, data]);
       setEasyWord([...easyWord, word]);
-      const addEasyWordsId = [...easyWordsId, wordId];
       setEasyWordsId([...easyWordsId, wordId]);
 
       const arrWordsInPage = await apiService.getAllWords(buttonSectionCurrentIndex.toString(), textbookNumberPage.toString()) as IWord[];
-      const check = chek20EasyWords(addEasyWordsId, arrWordsInPage);
+      const check = chek20EasyWords(allWordsId, arrWordsInPage);
       setCheck20WordsInPage(() => check);
     } else {
       const body = {
@@ -336,7 +343,6 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
 
       setDbUserWords(() => [...dbUserWords, data]);
       setEasyWord([...easyWord, word]);
-      const addEasyWordsId = [...easyWordsId, wordId];
       setEasyWordsId(() => [...easyWordsId, wordId]);
 
       filterAllWordsId = [...allWordsId, wordId];
@@ -348,6 +354,7 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
   }
 
   const handlerClickAudio = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, audio: string, audioMeaning: string, audioExample: string) => {
+    setGramophoneButtonDisabled(true);
     const audioPlayer = new Audio(`${base}/${audio}`);
     audioPlayer.play();
     audioPlayer.onended = function () {
@@ -356,16 +363,16 @@ function Vocabulary({ isAuthorized, setIsAuthorized, check20WordsInPage, setChec
       audioPlayer.onended = function () {
         const audioPlayer = new Audio(`${base}/${audioExample}`);
         audioPlayer.play();
+        setGramophoneButtonDisabled(false);
       }
     }
   }
 
-  console.log('currentIndex', buttonSectionCurrentIndex, words, textbookNumberPage, hardWord);
-  return <main className={styles.main}>
+  return <div className={`${styles.texbook} ${check20WordsInPage.length === 20 ? styles['texbook_active'] : ''}`} >
     <CreateTextbookSectionsButtons sections={sectionsButtonsText} buttonSectionCurrentIndex={buttonSectionCurrentIndex} onClickSectionButton={handlerClickSectionButton} onClickSectionHardButton={handlerClickHardButton} />
-    <Word {...word} ClickStudiedWord={handlerClickStudiedWord} ClickCreateUserWord={handlerClickCreateUserWord} hardWordsId={hardWordsId} easyWordsId={easyWordsId} ClickAudio={handlerClickAudio} isAuthorized={isAuthorized} buttonSectionCurrentIndex={buttonSectionCurrentIndex} />
-    <WordButtons words={words} buttonWordCurrentIndex={buttonWordCurrentIndex} clickWordButtons={handlerClickWordButtons} hardWord={hardWord} hardWordsId={hardWordsId} easyWordsId={easyWordsId} allWordsId={allWordsId} isAuthorized={isAuthorized} dbUserWords={dbUserWords} easyWord={easyWord} />
+    <Word {...word} ClickStudiedWord={handlerClickStudiedWord} ClickCreateUserWord={handlerClickCreateUserWord} hardWordsId={hardWordsId} easyWordsId={easyWordsId} ClickAudio={handlerClickAudio} token={token} buttonSectionCurrentIndex={buttonSectionCurrentIndex} gramophoneButtonDisabled={gramophoneButtonDisabled} setGramophoneButtonDisabled={setGramophoneButtonDisabled} />
+    <WordButtons words={words} buttonWordCurrentIndex={buttonWordCurrentIndex} clickWordButtons={handlerClickWordButtons} hardWord={hardWord} hardWordsId={hardWordsId} easyWordsId={easyWordsId} allWordsId={allWordsId} token={token} dbUserWords={dbUserWords} easyWord={easyWord} />
     <TextbookPagesButtons textbookNumberPage={textbookNumberPage} buttonSectionCurrentIndex={buttonSectionCurrentIndex} clickPrevPage={handlerClickPrevPage} clickNextPage={handlerClickNextPage} check20WordsInPage={check20WordsInPage} />
-  </main>
+  </div>
 }
 export default Vocabulary

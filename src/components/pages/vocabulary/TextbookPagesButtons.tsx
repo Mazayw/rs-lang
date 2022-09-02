@@ -9,7 +9,6 @@ export function TextbookPagesButtons({ textbookNumberPage, buttonSectionCurrentI
     disabled: '#1F2143',
     active: 'rgba(255, 255, 255, 0.3)',
   };
-  console.log('INDEX_STAR_SECTION_BUTTON', check20WordsInPage.length);
 
   return (
     <div className={INDEX_STAR_SECTION_BUTTON === buttonSectionCurrentIndex ? styles['page-buttons_none'] : styles['page-buttons']}>
