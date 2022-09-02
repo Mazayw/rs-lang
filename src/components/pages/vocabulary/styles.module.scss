@@ -41,6 +41,8 @@
   transition: .5s;
 }
 
+
+
 .word-card {
   display: flex;
   max-width: 1270px;
@@ -143,6 +145,30 @@
   color: #ffffff;
   font-family: 'Inter';
   border: none;
+}
+
+.word-button-background-A1 {
+  background-color: #812929;
+}
+
+.word-button-background-A2 {
+  background-color: #c85f0b;
+}
+
+.word-button-background-B1 {
+  background-color: #e7ab2c;
+}
+
+.word-button-background-B2 {
+  background-color: #248324;
+}
+
+.word-button-background-C1 {
+  background-color: #282886;
+}
+
+.word-button-background-C2 {
+  background-color: #7119a2;
 }
 
 .word-button_active {

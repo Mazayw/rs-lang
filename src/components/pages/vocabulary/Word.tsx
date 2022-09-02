@@ -3,9 +3,9 @@ import { INDEX_STAR_SECTION_BUTTON } from '.';
 import { base } from '../../settings';
 
 export function Word({ id, _id, image, audio, audioMeaning, audioExample, textExample, textExampleTranslate, textMeaning, textMeaningTranslate, transcription, word, wordTranslate, ClickStudiedWord, ClickHardWord, hardWordsId, easyWordsId, ClickAudio, token, buttonSectionCurrentIndex, gramophoneButtonDisabled }: { id: string, _id: string, image: string, audio: string, audioMeaning: string, audioExample: string, textExample: string, textExampleTranslate: string, textMeaning: string, textMeaningTranslate: string, transcription: string, word: string, wordTranslate: string, ClickStudiedWord: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => void, ClickHardWord: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => void, hardWordsId: string[], easyWordsId: string[], ClickAudio: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, audio: string, audioMeaning: string, audioExample: string) => void, token: string, buttonSectionCurrentIndex: number, gramophoneButtonDisabled: boolean, setGramophoneButtonDisabled: React.Dispatch<React.SetStateAction<boolean>> }) {
-
+  const wordButtonBackground = ['word-button-background-A1', 'word-button-background-A2', 'word-button-background-B1', 'word-button-background-B2', 'word-button-background-C1', 'word-button-background-C2'];
   return (
-    <div className={word ? styles['word-card'] : styles['word-card_none']}>
+    <div className={`${word ? styles['word-card'] : styles['word-card_none']} ${styles[wordButtonBackground[buttonSectionCurrentIndex]]}`}>
       <img src={`${base}/${image}`} alt="word" className={styles['word-img']} />
       <div>
         <h3 className={styles['word-title']}>{word}<button className={`${styles['word-gramophone']} ${gramophoneButtonDisabled ? styles['word-gramophone_disabled'] : ''}`} onClick={(e) => ClickAudio(e, audio, audioMeaning, audioExample)}><svg width="40" height="32" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
