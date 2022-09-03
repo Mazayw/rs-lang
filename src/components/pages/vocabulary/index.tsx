@@ -40,6 +40,7 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
     (async function () {
       const sessionStorageSectionButton = sessionStorage.getItem('sectionButtonNumber') as string || '0';
       const sessionStoragePageButton = sessionStorage.getItem('pageButtonNumber') as string || '0';
+      const userId = localStorage.getItem('userId') as string;
       const token = localStorage.getItem('token') as string;
 
       setToken(token);
@@ -59,19 +60,27 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
       setWord(() => data[0]);
 
       if (token) {
+        setCheck20WordsInPage([]);
         const authUserWords = await apiService.getAllUserWords(localStorage.getItem('userId') as string, localStorage.getItem('token') as string) as IUserWord[];
         if (authUserWords) {
           const id = authUserWords.reduce((acc, item) => item.difficulty === 'hard' ? [...acc, item.optional.wordId] : acc, [] as string[]) as string[];
           const studiedWordsId = authUserWords.reduce((acc, item) => item.optional.isStudied ? [...acc, item.optional.wordId] : acc, [] as string[]) as string[];
-
           filterAllWordsId = [...id, ...studiedWordsId];
+
           setAllWordsId(() => filterAllWordsId);
 
           setHardWordsId(() => id);
           setEasyWordsId(() => studiedWordsId);
-          const arrWordsInPage = await apiService.getAllWords(buttonSectionCurrentIndex.toString(), textbookNumberPage.toString()) as IWord[];
+          const arrWordsInPage = await apiService.getAllWords(sessionStorageSectionButton, sessionStoragePageButton) as IWord[];
           const check = chek20EasyWords(filterAllWordsId, arrWordsInPage);
+
           setCheck20WordsInPage(() => check);
+
+          if (+sessionStorageSectionButton === INDEX_STAR_SECTION_BUTTON) {
+            const data = await apiService.getAllAgregatedWordsFilterHard(userId, '3600', token) as [{ paginatedResults: IWord[], totalCount: [{ count: number }] }];
+            setWords(() => data[0].paginatedResults);
+            setWord(() => data[0].paginatedResults[0]);
+          }
         }
         setDbUserWords(() => authUserWords)
       }
@@ -175,6 +184,7 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
     setWords(() => data);
     setWord(() => data[0]);
     sessionStorage.setItem('sectionButtonNumber', index.toString());
+    sessionStorage.setItem('pageButtonNumber', '0');
   }
 
   const handlerClickHardButton = async () => {
@@ -184,6 +194,7 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
     setTextbookNumberPage(0);
     const userId = localStorage.getItem('userId') as string;
     const token = localStorage.getItem('token') as string;
+
     setToken(token);
 
     if (!token) {
@@ -369,6 +380,9 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
   }
 
   return <div className={`${styles.texbook} ${check20WordsInPage.length === 20 ? styles['texbook_active'] : ''}`} >
+    <div className={`${styles['textbook-games-buttons']} ${buttonSectionCurrentIndex === INDEX_STAR_SECTION_BUTTON ? styles['textbook-games-buttons_none'] : ''} ${check20WordsInPage.length === 20 ? styles['textbook-games-buttons__link_disabled'] : ''}`}>
+      <a href={`http:audiocall/${sessionStorage.getItem('sectionButtonNumber')}/${sessionStorage.getItem('pageButtonNumber')}`} className={styles['textbook-games-buttons__link']}>Аудиовызов</a><a href={`http:audiocall/${sessionStorage.getItem('sectionButtonNumber')}/${sessionStorage.getItem('pageButtonNumber')}`} className={styles['textbook-games-buttons__link']}>Спринт</a>
+    </div>
     <CreateTextbookSectionsButtons sections={sectionsButtonsText} buttonSectionCurrentIndex={buttonSectionCurrentIndex} onClickSectionButton={handlerClickSectionButton} onClickSectionHardButton={handlerClickHardButton} />
     <Word {...word} ClickStudiedWord={handlerClickStudiedWord} ClickHardWord={handlerClickHardWord} hardWordsId={hardWordsId} easyWordsId={easyWordsId} ClickAudio={handlerClickAudio} token={token} buttonSectionCurrentIndex={buttonSectionCurrentIndex} gramophoneButtonDisabled={gramophoneButtonDisabled} setGramophoneButtonDisabled={setGramophoneButtonDisabled} />
     <WordButtons words={words} buttonWordCurrentIndex={buttonWordCurrentIndex} clickWordButtons={handlerClickWordButtons} hardWord={hardWord} hardWordsId={hardWordsId} easyWordsId={easyWordsId} allWordsId={allWordsId} token={token} dbUserWords={dbUserWords} easyWord={easyWord} />

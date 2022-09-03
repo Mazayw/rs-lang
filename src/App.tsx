@@ -30,8 +30,6 @@ function App() {
               setIsAuthorized={setIsAuthorized}
               authType={authType}
               setAuthType={setAuthType}
-              check20WordsInPage={check20WordsInPage}
-              setCheck20WordsInPage={setCheck20WordsInPage}
             />
           }
         >

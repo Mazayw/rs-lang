@@ -8,6 +8,39 @@
   background-color: rgb(6, 68, 252);
 }
 
+.textbook-games-buttons {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1270px;
+  font-family: 'Inter';
+  font-size: 20px;
+  margin: auto;
+  padding: 19px 0;
+}
+
+.textbook-games-buttons_none {
+  display: none;
+}
+
+.textbook-games-buttons__link {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.textbook-games-buttons__link:hover {
+  cursor: pointer;
+  color: #ffffff;
+  transition: .5s;
+}
+
+.textbook-games-buttons__link_active {
+  color: #ffffff;
+}
+
+.textbook-games-buttons__link_disabled {
+  pointer-events: none;
+}
+
 .textbook-sections {
   display: flex;
   justify-content: center;
@@ -46,6 +79,7 @@
 .word-card {
   display: flex;
   max-width: 1270px;
+  font-family: 'Inter';
   background-color: #1F2143;
   color: #ffffff;
   margin: 1% auto;
@@ -93,14 +127,16 @@
 .text-meaning {
   font-size: 18px;
   line-height: 22px;
+  margin-bottom: 2px;
 }
 
 .text-meaning-translate {
   font-weight: 800;
   font-size: 18px;
   line-height: 22px;
-  margin-bottom: 2%;
-  padding: 0 0 2% 0;
+  margin-right: 15px;
+  margin-bottom: 12px;
+  padding: 0 0 12px 0;
   border-bottom: 1px solid #d1d1d7;
 }
 
@@ -126,11 +162,43 @@
   margin-bottom: 1rem;
 }
 
+.word-card__empty {
+  font-family: 'Inter';
+  font-size: 25px;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.word-card-background-A1 {
+  background-color: #812929;
+}
+
+.word-card-background-A2 {
+  background-color: #c85f0b;
+}
+
+.word-card-background-B1 {
+  background-color: #e7ab2c;
+}
+
+.word-card-background-B2 {
+  background-color: #248324;
+}
+
+.word-card-background-C1 {
+  background-color: #282886;
+}
+
+.word-card-background-C2 {
+  background-color: #7119a2;
+}
+
 .word-buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   max-width: 1270px;
+  font-family: 'Inter';
   margin: auto;
   gap: 19px 23px;
   padding: 1.3% 0;
@@ -147,29 +215,7 @@
   border: none;
 }
 
-.word-button-background-A1 {
-  background-color: #812929;
-}
 
-.word-button-background-A2 {
-  background-color: #c85f0b;
-}
-
-.word-button-background-B1 {
-  background-color: #e7ab2c;
-}
-
-.word-button-background-B2 {
-  background-color: #248324;
-}
-
-.word-button-background-C1 {
-  background-color: #282886;
-}
-
-.word-button-background-C2 {
-  background-color: #7119a2;
-}
 
 .word-button_active {
   background-color: #F5443B;
@@ -207,6 +253,7 @@
   height: 100%;
   row-gap: 7px;
   padding: 6px;
+  margin-right: 1px;
 }
 
 .word-button-container-icon_active {
