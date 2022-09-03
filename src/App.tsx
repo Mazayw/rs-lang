@@ -11,11 +11,14 @@ import NotFound from './components/pages/notfound/index'
 import { useState } from 'react'
 import AudioGameMain from './components/pages/games/audiocall/game/index'
 import Description from './components/pages/games/audiocall/description/index'
+import { IWord } from './components/types/interface'
 
 function App() {
   const [isModalActive, setModalActive] = useState(false)
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [authType, setAuthType] = useState('')
+  const [check20WordsInPage, setCheck20WordsInPage] = useState([] as IWord[])
+
   return (
     <div className='App'>
       <Routes>
@@ -35,7 +38,15 @@ function App() {
             index
             element={<MainPage setActive={setModalActive} setAuthType={setAuthType} />}
           />
-          <Route path='vocabulary' element={<Vocabulary />} />
+          <Route
+            path='vocabulary'
+            element={
+              <Vocabulary
+                check20WordsInPage={check20WordsInPage}
+                setCheck20WordsInPage={setCheck20WordsInPage}
+              />
+            }
+          />
           <Route path='audiocall' element={<Description />} />
           <Route path='audiocall/:group/:page' element={<AudioGameMain />} />
           <Route path='sprint/' element={<Sprint />} />

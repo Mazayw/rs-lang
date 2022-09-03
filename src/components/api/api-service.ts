@@ -105,7 +105,7 @@ class ApiService {
 
   async getAllUserWords(id: string, token: string) {
     try {
-      const response = await http.get<Array<IUserWord>>(`/users/${id}/words`, this.header(token))
+      const response = await http.get(`/users/${id}/words`, this.header(token))
       return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
@@ -177,6 +177,19 @@ class ApiService {
 
     try {
       return (await http.get(urlStr, this.header(token))).data[0].paginatedResults as IWord[]
+    } catch (error) {
+      this.errorHandler(error as AxiosError)
+    }
+  }
+  async getAllAgregatedWordsFilterHard(id: string, wordsPerPage = '3600', token: string) {
+    try {
+      const response = await http.get<
+        [{ paginatedResults: IWord[]; totalCount: [{ count: number }] }]
+      >(
+        `/users/${id}/aggregatedWords?wordsPerPage=${wordsPerPage}&filter={"userWord.difficulty":"hard"}`,
+        this.header(token),
+      )
+      return response.data
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }

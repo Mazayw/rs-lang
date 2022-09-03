@@ -55,7 +55,7 @@ export const MenuItems = ({ items }: { items: IMenu }) => {
           <Dropdown submenus={items.submenu} setActive={setActive} dropdown={dropdown} />
         </>
       ) : (
-        <NavLink className={setActive} to={items.url}>
+        <NavLink className={setActive} to={items.url} >
           {items.title}
         </NavLink>
       )}

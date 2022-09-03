@@ -39,7 +39,7 @@
   opacity: 0;
   display: flex;
 
-  & > .menu__item {
+  &>.menu__item {
     padding: 15px;
   }
 
@@ -48,12 +48,17 @@
   }
 }
 
-.menu-items > a {
+.menu__item_disabled {
+  pointer-events: none;
+}
+
+.menu-items>a {
   display: block;
   font-size: inherit;
   color: inherit;
   text-decoration: none;
 }
+
 
 .arrow::after {
   content: '';

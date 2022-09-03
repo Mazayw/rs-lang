@@ -1,5 +1,6 @@
 export interface IWord {
   id: string
+  _id: string
   group: number
   page: number
   word: string
@@ -37,6 +38,9 @@ export interface IUserWord {
     totalGuessedAudio?: string
     totalMistakesAudio?: string
     guessedInLine?: string
+    isStudied?: boolean
+    activeColor?: string
+    wordId?: string
   }
 }
 
