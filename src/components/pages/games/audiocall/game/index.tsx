@@ -35,7 +35,6 @@ function AudioGameMain() {
   const onWordPlay = () => {
     if (currentWord && gameState === 0) {
       const currentAudio = new Audio(`${settings.url}${currentWord.audio}`)
-      console.log(currentAudio)
       currentAudio.play()
     }
   }
@@ -93,7 +92,6 @@ function AudioGameMain() {
     const heartLoose = answersArr.filter((el) => el.answer === false).length
     arr.fill(0, 0, heartLoose)
     setHeart(arr)
-    console.log(words)
   }
 
   return (
