@@ -10,11 +10,14 @@ import Statistics from './components/pages/statistics/index'
 import About from './components/pages/about'
 import NotFound from './components/pages/notfound/index'
 import { useState } from 'react'
+import { IWord } from './components/types/interface'
 
 function App() {
   const [isModalActive, setModalActive] = useState(false)
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [authType, setAuthType] = useState('')
+  const [check20WordsInPage, setCheck20WordsInPage] = useState([] as IWord[]);
+
   return (
     <div className='App'>
       <Routes>
@@ -34,7 +37,7 @@ function App() {
             index
             element={<MainPage setActive={setModalActive} setAuthType={setAuthType} />}
           />
-          <Route path='vocabulary' element={<Vocabulary />} />
+          <Route path='vocabulary' element={<Vocabulary check20WordsInPage={check20WordsInPage} setCheck20WordsInPage={setCheck20WordsInPage} />} />
           <Route path='audiocall' element={<Audiocall />} />
           <Route path='sprint' element={<Sprint />} />
           <Route path='statistics' element={<Statistics />} />

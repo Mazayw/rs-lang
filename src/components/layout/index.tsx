@@ -3,7 +3,6 @@ import { NavLink, Outlet } from 'react-router-dom'
 import Footer from '../footer'
 import Navbar from '../navbar'
 import Auth from '../authorization/index'
-import { useState } from 'react'
 
 function Layout({
   isModalActive,

@@ -68,6 +68,8 @@ function Auth({
     if (authResult?.status === 200) {
       localStorage.setItem('token', authResult?.data.token)
       localStorage.setItem('tokenTime', Date())
+      localStorage.setItem('refreshToken', authResult?.data.refreshToken)
+      localStorage.setItem('userId', authResult?.data.userId)
       setEmail('')
       setPassword('')
       setActive(false)

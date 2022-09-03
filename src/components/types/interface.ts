@@ -1,5 +1,6 @@
 export interface IWord {
   id: string
+  _id: string
   group: number
   page: number
   word: string
@@ -31,7 +32,11 @@ export interface IToken {
 
 export interface IUserWord {
   difficulty: string
-  optional: unknown
+  optional: {
+    isStudied: boolean,
+    activeColor: string,
+    wordId: string;
+  }
 }
 
 export interface IUserStat {
