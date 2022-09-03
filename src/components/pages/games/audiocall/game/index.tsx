@@ -17,6 +17,7 @@ function AudioGameMain() {
   const [gameState, setGameState] = useState(0)
   const [words, setWords] = useState<Array<IWord | never>>([])
   const [answersArr, setAnswersArr] = useState<IAnswer[]>([])
+  const [heart, setHeart] = useState<number[]>([])
 
   const currentWord = words[current]
 
@@ -27,12 +28,14 @@ function AudioGameMain() {
   const getWords = async () => {
     const [groupUrl, pageUrl] = urlCheck()
     const wordsArr = await apiService.getAllWords(groupUrl, pageUrl)
+    wordsArr?.sort(() => Math.random() - 0.5)
     wordsArr && setWords(wordsArr)
   }
 
   const onWordPlay = () => {
-    if (currentWord) {
+    if (currentWord && gameState === 0) {
       const currentAudio = new Audio(`${settings.url}${currentWord.audio}`)
+      console.log(currentAudio)
       currentAudio.play()
     }
   }
@@ -46,10 +49,9 @@ function AudioGameMain() {
     return [groupUrl, pageUrl]
   }
 
-  /* helpers.updateStatistic() */
-
   useEffect(() => {
     if (current) {
+      heartCount()
       newWord()
     }
   }, [current])
@@ -59,6 +61,7 @@ function AudioGameMain() {
     setGameState(0)
     setAnswersArr([])
     getWords()
+    heartCount()
   }, [])
 
   useEffect(() => {
@@ -66,11 +69,11 @@ function AudioGameMain() {
   }, [words])
 
   const newWord = () => {
-    if (words.length) {
-      onWordPlay()
+    if (words.length && gameState === 0) {
       if (current === words.length) {
         setGameState(1)
       } else {
+        onWordPlay()
         const filtered = () => {
           return words
             .filter((el) => el.id !== currentWord.id)
@@ -85,6 +88,14 @@ function AudioGameMain() {
     }
   }
 
+  const heartCount = () => {
+    const arr = heart.length ? heart : Array(5).fill(1)
+    const heartLoose = answersArr.filter((el) => el.answer === false).length
+    arr.fill(0, 0, heartLoose)
+    setHeart(arr)
+    console.log(words)
+  }
+
   return (
     <div className={styles['game-main']}>
       {gameState ? (
@@ -95,8 +106,23 @@ function AudioGameMain() {
         />
       ) : (
         <div className={styles.content}>
-          <img src='../../icons/audio.svg' alt='Listen word' onClick={onWordPlay} />
+          <img
+            src='../../icons/audio.svg'
+            alt='Listen word'
+            onClick={onWordPlay}
+            className={styles.audio}
+          />
           <h1 className={styles.title}>Игра Аудиовызов</h1>
+          <div className={styles.lifes}>
+            {heart.map((el, index) => (
+              <img
+                src={el ? '../../icons/hearth-filled.svg' : '../../icons/hearth.svg'}
+                alt='heart'
+                className={styles.heart}
+                key={index}
+              />
+            ))}
+          </div>
           <h3 className={styles.subtitle}>Выберите перевод услышанного слова</h3>
           <div className={styles['buttons-block']}>
             {currentWord &&
@@ -110,6 +136,8 @@ function AudioGameMain() {
                   isShowAnswer={isShowAnswer}
                   setShowAnswer={setShowAnswer}
                   setCurrent={setCurrent}
+                  answersArr={answersArr}
+                  setGameState={setGameState}
                 />
               ))}
           </div>

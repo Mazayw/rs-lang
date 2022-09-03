@@ -30,7 +30,7 @@ export interface IToken {
 }
 
 export interface IUserWord {
-  difficulty?: string
+  difficulty: string
   optional: {
     totalGuessedSprint?: string
     totalMistakesSprint?: string

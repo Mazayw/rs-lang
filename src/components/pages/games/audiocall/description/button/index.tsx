@@ -2,7 +2,6 @@ import styles from './styles.module.scss'
 import { Link } from 'react-router-dom'
 import { IButton } from '../../../../../types/audioGame-interface'
 import { useEffect } from 'react'
-import { settings } from '../../../../../../settings'
 
 function ChooseButton({ data, index }: { data: IButton; index: number }) {
   const page = `${Math.floor(Math.random() * 30)}`
