@@ -1,5 +1,5 @@
 import apiService from './api/api-service'
-import { IUserSignInResponse, IUserWord, IUserStat } from './types/interface'
+import { IUserSignInResponse, IUserWord, IUserStat, IWord } from './types/interface'
 import { IAnswer } from './types/audioGame-interface'
 
 class Helpers {
@@ -120,6 +120,27 @@ class Helpers {
       }
     }
   }*/
+
+  async getUnlearnedWords(group: string, page: string, arrSize: number, filter = '') {
+    const result = [] as IWord[]
+    const token = localStorage.getItem('refreshToken')
+    const id = localStorage.getItem('userId')
+    if (id && token)
+      do {
+        const dataResponse = await apiService.getAllAgregatedWords(
+          id!,
+          token!,
+          group,
+          page,
+          '20',
+          filter,
+        )
+        const dataResponseFiltered = dataResponse?.filter((el) => el.page === Number(page))
+        dataResponseFiltered && result.push(...dataResponseFiltered)
+        page = `${Number(page) - 1}`
+      } while (result.length < arrSize && Number(page) > -1)
+    return result
+  }
 }
 
 export default new Helpers()

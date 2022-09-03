@@ -167,12 +167,26 @@ class ApiService {
     group = '',
     page = '',
     wordsPerPage = '20',
+    filterType = '',
   ) {
+    switch (filterType) {
+      case 'easyOrUnknown':
+        filterType = '{"$or":[{"userWord.difficulty":"easy"},{"userWord":null}]}'
+        break
+
+      case 'hard':
+        filterType = '{"userWord.difficulty":"hard"}'
+        break
+    }
+    let filter = '{"$or":[{"userWord.difficulty":"easy"},{"userWord":null}]}'
+
     const url: string[] = []
     url.push(`/users/${id}/aggregatedWords?`)
     group && url.push(`group=${group}`)
     page && url.push(`page=${page}`)
     wordsPerPage && url.push(`wordsPerPage=${wordsPerPage}`)
+    filter && url.push(`filter=${filterType}`)
+
     const urlStr = url.join('&').replace('&', '')
 
     try {
@@ -181,6 +195,7 @@ class ApiService {
       this.errorHandler(error as AxiosError)
     }
   }
+
   async getAllAgregatedWordsFilterHard(id: string, wordsPerPage = '3600', token: string) {
     try {
       const response = await http.get<

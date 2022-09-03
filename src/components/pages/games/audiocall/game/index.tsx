@@ -48,6 +48,8 @@ function AudioGameMain() {
     return [groupUrl, pageUrl]
   }
 
+  helpers.getUnlearnedWords(group!, page!, 20, 'easyOrUnknown')
+
   useEffect(() => {
     if (current) {
       heartCount()
