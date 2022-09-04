@@ -18,6 +18,7 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
   const [easyWord, setEasyWord] = useState([] as IWord[]);
   const [hardWordsId, setHardWordsId] = useState([] as string[]);
   const [easyWordsId, setEasyWordsId] = useState([] as string[]);
+  const [commonWordsId, setCommonWordsId] = useState([] as string[]);
   const [dbUserWords, setDbUserWords] = useState([] as IUserWord[]);
   const sectionsButtonsText = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
   const [buttonSectionCurrentIndex, setButtonSectionCurrentIndex] = useState(0);
@@ -65,12 +66,14 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
         if (authUserWords) {
           const id = authUserWords.reduce((acc, item) => item.difficulty === 'hard' ? [...acc, item.optional.wordId] : acc, [] as string[]) as string[];
           const studiedWordsId = authUserWords.reduce((acc, item) => item.optional.isStudied ? [...acc, item.optional.wordId] : acc, [] as string[]) as string[];
+          const commonId = authUserWords.reduce((acc, item) => item.difficulty === 'common' ? [...acc, item.optional.wordId] : acc, [] as string[]) as string[];
           filterAllWordsId = [...id, ...studiedWordsId];
 
           setAllWordsId(() => filterAllWordsId);
 
           setHardWordsId(() => id);
           setEasyWordsId(() => studiedWordsId);
+          setCommonWordsId(() => commonId);
           const arrWordsInPage = await apiService.getAllWords(sessionStorageSectionButton, sessionStoragePageButton) as IWord[];
           const check = chek20EasyWords(filterAllWordsId, arrWordsInPage);
 
@@ -95,16 +98,27 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
     setToken(token);
     if (INDEX_STAR_SECTION_BUTTON === buttonSectionCurrentIndex) {
 
-      await apiService.deleteUserWord(userId, wordId, token);
+      const body = {
+        difficulty: 'common',
+        optional: {
+          isStudied: false,
+          activeColor: '#F5443B',
+          wordId: wordId
+        }
+      };
+      const put = await apiService.updateUserWord(userId, wordId, body, token) as IUserWord;
 
       const dbDelWord = dbUserWords.filter((word) => word.optional.wordId !== wordId) as IUserWord[];
-      setDbUserWords(() => dbDelWord);
+      setDbUserWords(() => [...dbDelWord, put]);
+
       const deleteHardWordsId = hardWordsId.filter((id) => id !== wordId);
+      setHardWordsId(deleteHardWordsId);
+
+      setCommonWordsId(() => [...commonWordsId, wordId]);
 
       filterAllWordsId = allWordsId.filter((id) => id !== wordId);
       setAllWordsId(() => filterAllWordsId);
 
-      setHardWordsId(deleteHardWordsId);
       const data = await apiService.getAllAgregatedWordsFilterHard(userId, '3600', token) as [{ paginatedResults: Array<IWord>, totalCount: [{ count: number } | []] }];
 
       if (data[0].paginatedResults.length !== 0) {
@@ -148,6 +162,36 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
       const arrWordsInPage = await apiService.getAllWords(buttonSectionCurrentIndex.toString(), textbookNumberPage.toString()) as IWord[];
       const check = chek20EasyWords(allWordsId, arrWordsInPage);
       setCheck20WordsInPage(() => check);
+
+    } else if (commonWordsId.includes(wordId)) {
+
+      setCheck20WordsInPage([]);
+
+      const dbDelWord = dbUserWords.filter((word) => word.optional.wordId !== wordId) as IUserWord[];
+      const deleteCommonId = commonWordsId.filter((id) => id !== wordId);
+      setCommonWordsId(deleteCommonId);
+
+      const body = {
+        difficulty: 'hard',
+        optional: {
+          isStudied: false,
+          activeColor: '#F5443B',
+          wordId: wordId
+        }
+      };
+      const data = await apiService.updateUserWord(userId, wordId, body, token) as IUserWord;
+
+      setDbUserWords(() => [...dbDelWord, data])
+      setHardWord([...hardWord, word]);
+      setHardWordsId([...hardWordsId, wordId]);
+
+      filterAllWordsId = [...allWordsId, wordId];
+      setAllWordsId(() => filterAllWordsId);
+
+      const arrWordsInPage = await apiService.getAllWords(buttonSectionCurrentIndex.toString(), textbookNumberPage.toString()) as IWord[];
+      const check = chek20EasyWords(filterAllWordsId, arrWordsInPage);
+      setCheck20WordsInPage(() => check);
+
     } else {
       setCheck20WordsInPage([]);
       const body = {
@@ -297,16 +341,27 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
 
     if (easyWordsId.includes(wordId)) {
 
-      await apiService.deleteUserWord(userId, wordId, token);
+      const body = {
+        difficulty: 'common',
+        optional: {
+          isStudied: false,
+          activeColor: '#F5443B',
+          wordId: wordId
+        }
+      };
+      const put = await apiService.updateUserWord(userId, wordId, body, token) as IUserWord;
 
       const dbDelWord = dbUserWords.filter((word) => word.optional.wordId !== wordId) as IUserWord[];
-      setDbUserWords(() => dbDelWord);
+      setDbUserWords(() => [...dbDelWord, put]);
+
+      setCommonWordsId(() => [...commonWordsId, wordId]);
+
       const deleteEasyWordsId = easyWordsId.filter((id) => id !== wordId);
+      setEasyWordsId(deleteEasyWordsId);
 
       filterAllWordsId = allWordsId.filter((id) => id !== wordId);
       setAllWordsId(() => filterAllWordsId);
 
-      setEasyWordsId(deleteEasyWordsId);
       const deleteEasyWord = easyWord.filter((word) => (word.id || word._id) !== wordId);
       setEasyWord(deleteEasyWord);
       setWords(() => words);
@@ -341,6 +396,34 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
       const arrWordsInPage = await apiService.getAllWords(buttonSectionCurrentIndex.toString(), textbookNumberPage.toString()) as IWord[];
       const check = chek20EasyWords(allWordsId, arrWordsInPage);
       setCheck20WordsInPage(() => check);
+
+    } else if (commonWordsId.includes(wordId)) {
+
+      const dbDelWord = dbUserWords.filter((word) => word.optional.wordId !== wordId) as IUserWord[];
+      const deleteCommonWordsId = commonWordsId.filter((id) => id !== wordId);
+      setCommonWordsId(deleteCommonWordsId);
+
+      const body = {
+        difficulty: 'easy',
+        optional: {
+          isStudied: true,
+          activeColor: '#F5443B',
+          wordId: wordId
+        }
+      };
+      const data = await apiService.updateUserWord(userId, wordId, body, token) as IUserWord;
+
+      setDbUserWords(() => [...dbDelWord, data]);
+      setEasyWord([...easyWord, word]);
+      setEasyWordsId([...easyWordsId, wordId]);
+
+      filterAllWordsId = [...allWordsId, wordId];
+      setAllWordsId(() => filterAllWordsId);
+
+      const arrWordsInPage = await apiService.getAllWords(buttonSectionCurrentIndex.toString(), textbookNumberPage.toString()) as IWord[];
+      const check = chek20EasyWords(filterAllWordsId, arrWordsInPage);
+      setCheck20WordsInPage(() => check);
+
     } else {
       const body = {
         difficulty: 'easy',
@@ -385,7 +468,7 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
     </div>
     <CreateTextbookSectionsButtons sections={sectionsButtonsText} buttonSectionCurrentIndex={buttonSectionCurrentIndex} onClickSectionButton={handlerClickSectionButton} onClickSectionHardButton={handlerClickHardButton} />
     <Word {...word} ClickStudiedWord={handlerClickStudiedWord} ClickHardWord={handlerClickHardWord} hardWordsId={hardWordsId} easyWordsId={easyWordsId} ClickAudio={handlerClickAudio} token={token} buttonSectionCurrentIndex={buttonSectionCurrentIndex} gramophoneButtonDisabled={gramophoneButtonDisabled} setGramophoneButtonDisabled={setGramophoneButtonDisabled} />
-    <WordButtons words={words} buttonWordCurrentIndex={buttonWordCurrentIndex} clickWordButtons={handlerClickWordButtons} hardWord={hardWord} hardWordsId={hardWordsId} easyWordsId={easyWordsId} allWordsId={allWordsId} token={token} dbUserWords={dbUserWords} easyWord={easyWord} />
+    <WordButtons words={words} buttonWordCurrentIndex={buttonWordCurrentIndex} clickWordButtons={handlerClickWordButtons} hardWordsId={hardWordsId} easyWordsId={easyWordsId} token={token} />
     <TextbookPagesButtons textbookNumberPage={textbookNumberPage} buttonSectionCurrentIndex={buttonSectionCurrentIndex} clickPrevPage={handlerClickPrevPage} clickNextPage={handlerClickNextPage} check20WordsInPage={check20WordsInPage} />
   </div>
 }
