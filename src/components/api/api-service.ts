@@ -177,6 +177,10 @@ class ApiService {
       case 'hard':
         filterType = '{"userWord.difficulty":"hard"}'
         break
+
+      case 'unknownOrUnlearned':
+        filterType = '{"$or":[{"userWord":null},{"userWord.optional.isStudied":false}]}'
+        break
     }
 
     const url: string[] = []

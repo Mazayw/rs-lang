@@ -18,7 +18,8 @@ function GameResults({
     setGameState(0)
   }
 
-  const newWords = helpers.seenNewWords(answersArr)
+  /* const newWords = helpers.seenNewWords(answersArr)
+  helpers.updateStatistic(true, newWords) */
 
   return (
     <div className={styles.content}>

@@ -91,16 +91,22 @@ class Helpers {
       if (userWord?.status === 200) {
         delete userWord.data.wordId
         delete userWord.data.id
-        const body = this.optionalUnion(userWord.data, newWordData)
+        const body = this.optionalUnion(userWord.data, newWordData) as IUserWord
         if (difficulty) body.difficulty = difficulty
+        if (body.optional.guessedInLine === '3') {
+          body.optional.isStudied = true
+          body.difficulty = 'common'
+        }
+        if (body.optional.guessedInLine === '0') body.optional.isStudied = false
         await apiService.updateUserWord(userId, wordId, body, token)
+
         return false // Word is already known
       }
     }
     return false
   }
-  /*
-  async updateStatistic(checkLocal = true, learnedWords = 0) {
+
+  /* async updateStatistic(checkLocal = true, learnedWords = 0) {
     const checker = checkLocal ? this.checkUserLocal() : await this.checkUser()
     if (checker) {
       const token = localStorage.getItem('token') as string
@@ -119,8 +125,8 @@ class Helpers {
         await apiService.setUserStatistic(userId, body, token)
       }
     }
-  }*/
-
+  }
+*/
   async getUnlearnedWords(group: string, page: string, arrSize: number, filter = '') {
     const result = [] as IWord[]
     const token = localStorage.getItem('refreshToken')
@@ -138,8 +144,8 @@ class Helpers {
         const dataResponseFiltered = dataResponse?.filter((el) => el.page === Number(page))
         dataResponseFiltered && result.push(...dataResponseFiltered)
         page = `${Number(page) - 1}`
-      } while (result.length < arrSize && Number(page) > -1)
-    return result
+      } while (result.length < arrSize && Number(page) >= 0)
+    return result.slice(0, arrSize)
   }
 }
 

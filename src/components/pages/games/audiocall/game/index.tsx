@@ -32,7 +32,7 @@ function AudioGameMain() {
     const isVocabularyGame = pageChkSplited.length > 1
 
     const groupUrl = Number(groupChk) > settings.maxGroup ? '0' : groupChk
-    const pageUrl = Number(pageChkSplited[0]) > settings.maxPage ? '0' : pageChk
+    const pageUrl = Number(pageChkSplited[0]) > settings.maxPage ? '0' : pageChkSplited[0]
     return [groupUrl, pageUrl, isVocabularyGame]
   }
 
@@ -40,16 +40,17 @@ function AudioGameMain() {
     const [groupUrl, pageUrl, isVocabularyGame] = urlCheck()
     let wordsArr
     if (isVocabularyGame) {
-      wordsArr = await apiService.getAllWords(groupUrl as string, pageUrl as string)
-      console.log('game')
+      wordsArr = await helpers.getUnlearnedWords(
+        groupUrl as string,
+        pageUrl as string,
+        20,
+        'unknownOrUnlearned',
+      )
     } else {
       wordsArr = await apiService.getAllWords(groupUrl as string, pageUrl as string)
-      console.log('common')
     }
-    wordsArr?.splice
     wordsArr?.sort(() => Math.random() - 0.5)
     wordsArr && setWords(wordsArr)
-    console.log(wordsArr)
   }
 
   const onWordPlay = () => {
@@ -58,8 +59,6 @@ function AudioGameMain() {
       currentAudio.play()
     }
   }
-
-  helpers.getUnlearnedWords(group!, page!, 20, 'easyOrUnknown')
 
   useEffect(() => {
     if (current) {
@@ -86,15 +85,17 @@ function AudioGameMain() {
         setGameState(1)
       } else {
         onWordPlay()
+
         const filtered = () => {
           return words
-            .filter((el) => el.id !== currentWord.id)
+            .filter((el) => el.id !== currentWord.id || el._id !== currentWord._id)
             .reduce((acc: string[], el) => acc.concat(el.wordTranslate), [])
             .sort(() => Math.random() - 0.5)
         }
         const answersArray = shuffleArray(
           filtered().slice(0, 4).concat([currentWord.wordTranslate]),
         )
+
         setAnswers(answersArray!)
       }
     }
