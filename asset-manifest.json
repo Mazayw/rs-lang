@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/rs-lang/static/css/main.8931b15c.css",
+    "main.js": "/rs-lang/static/js/main.58c1075f.js",
+    "index.html": "/rs-lang/index.html",
+    "main.8931b15c.css.map": "/rs-lang/static/css/main.8931b15c.css.map",
+    "main.58c1075f.js.map": "/rs-lang/static/js/main.58c1075f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8931b15c.css",
+    "static/js/main.58c1075f.js"
+  ]
+}
