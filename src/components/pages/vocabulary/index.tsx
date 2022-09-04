@@ -468,7 +468,7 @@ function Vocabulary({
         <a
           href={`http:audiocall/${sessionStorage.getItem(
             'sectionButtonNumber',
-          )}/${sessionStorage.getItem('pageButtonNumber')}`}
+          )}/${sessionStorage.getItem('pageButtonNumber')}&startgame`}
           className={styles['textbook-games-buttons__link']}
         >
           Аудиовызов

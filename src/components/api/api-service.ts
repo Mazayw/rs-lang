@@ -178,19 +178,22 @@ class ApiService {
         filterType = '{"userWord.difficulty":"hard"}'
         break
     }
-    let filter = '{"$or":[{"userWord.difficulty":"easy"},{"userWord":null}]}'
 
     const url: string[] = []
     url.push(`/users/${id}/aggregatedWords?`)
     group && url.push(`group=${group}`)
     page && url.push(`page=${page}`)
     wordsPerPage && url.push(`wordsPerPage=${wordsPerPage}`)
-    filter && url.push(`filter=${filterType}`)
+    filterType && url.push(`filter=${filterType}`)
 
     const urlStr = url.join('&').replace('&', '')
 
     try {
-      return (await http.get(urlStr, this.header(token))).data[0].paginatedResults as IWord[]
+      const response = (await http.get(urlStr, this.header(token))).data[0]
+        .paginatedResults as IWord[]
+
+      console.log(response)
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }

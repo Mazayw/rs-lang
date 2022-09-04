@@ -25,11 +25,31 @@ function AudioGameMain() {
     return array && array.sort(() => Math.random() - 0.5)
   }
 
+  const urlCheck = () => {
+    const groupChk = typeof group === 'string' ? group : '0'
+    const pageChk = typeof page === 'string' ? page : '0'
+    const pageChkSplited = pageChk.split('&')
+    const isVocabularyGame = pageChkSplited.length > 1
+
+    const groupUrl = Number(groupChk) > settings.maxGroup ? '0' : groupChk
+    const pageUrl = Number(pageChkSplited[0]) > settings.maxPage ? '0' : pageChk
+    return [groupUrl, pageUrl, isVocabularyGame]
+  }
+
   const getWords = async () => {
-    const [groupUrl, pageUrl] = urlCheck()
-    const wordsArr = await apiService.getAllWords(groupUrl, pageUrl)
+    const [groupUrl, pageUrl, isVocabularyGame] = urlCheck()
+    let wordsArr
+    if (isVocabularyGame) {
+      wordsArr = await apiService.getAllWords(groupUrl as string, pageUrl as string)
+      console.log('game')
+    } else {
+      wordsArr = await apiService.getAllWords(groupUrl as string, pageUrl as string)
+      console.log('common')
+    }
+    wordsArr?.splice
     wordsArr?.sort(() => Math.random() - 0.5)
     wordsArr && setWords(wordsArr)
+    console.log(wordsArr)
   }
 
   const onWordPlay = () => {
@@ -37,15 +57,6 @@ function AudioGameMain() {
       const currentAudio = new Audio(`${settings.url}${currentWord.audio}`)
       currentAudio.play()
     }
-  }
-
-  const urlCheck = () => {
-    const groupChk = typeof group === 'string' ? group : '0'
-    const pageChk = typeof page === 'string' ? page : '0'
-
-    const groupUrl = Number(groupChk) > settings.maxGroup ? '0' : groupChk
-    const pageUrl = Number(pageChk) > settings.maxPage ? '0' : pageChk
-    return [groupUrl, pageUrl]
   }
 
   helpers.getUnlearnedWords(group!, page!, 20, 'easyOrUnknown')
