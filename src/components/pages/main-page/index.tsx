@@ -9,7 +9,11 @@ function MainPage({
 }) {
   return (
     <div className={styles.main}>
-      <img src={'./img/hero-img.png'} alt='Girl with books' className={styles['hero-img']} />
+      <img
+        src='./../rs-lang/img/hero-img.png'
+        alt='Girl with books'
+        className={styles['hero-img']}
+      />
       <div className={styles.info}>
         <div className={styles['text-block']}>
           <h1 className={styles.title}>Изучай английский язык вместе с RsLang!</h1>

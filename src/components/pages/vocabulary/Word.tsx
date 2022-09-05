@@ -1,6 +1,6 @@
 import styles from './styles.module.scss'
 import { INDEX_STAR_SECTION_BUTTON } from '.'
-import { settings } from '../../../settings'
+import { base } from '../../settings'
 
 export function Word({
   id,
@@ -67,7 +67,7 @@ export function Word({
         styles[wordButtonBackground[buttonSectionCurrentIndex]]
       }`}
     >
-      <img src={`${settings.url}${image}`} alt='word' className={styles['word-img']} />
+      <img src={`${base}/${image}`} alt='word' className={styles['word-img']} />
       <div className={styles['word-card__content']}>
         <h3 className={styles['word-title']}>
           {word}

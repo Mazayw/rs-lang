@@ -5,7 +5,8 @@ export const aboutData: IAboutData = {
     name: 'Igor Dronishinets',
     photo: './img/Mazayw.jpg',
     title: 'JavaScript/Frontend Developer',
-    content: 'some works some works some works some works some works some works some works some works some works some works some works some works some',
+    content:
+      'some works some works some works some works some works some works some works some works some works some works some works some works some',
     link: 'https://github.com/Mazayw/',
   },
   niknikolay: {

@@ -119,7 +119,7 @@ function AudioGameMain() {
       ) : (
         <div className={styles.content}>
           <img
-            src='../../icons/audio.svg'
+            src='./../../rs-lang/icons/audio.svg'
             alt='Listen word'
             onClick={onWordPlay}
             className={styles.audio}
@@ -128,7 +128,9 @@ function AudioGameMain() {
           <div className={styles.lifes}>
             {heart.map((el, index) => (
               <img
-                src={el ? '../../icons/hearth-filled.svg' : '../../icons/hearth.svg'}
+                src={
+                  el ? '../../rs-lang/icons/hearth-filled.svg' : '../../rs-lang/icons/hearth.svg'
+                }
                 alt='heart'
                 className={styles.heart}
                 key={index}
