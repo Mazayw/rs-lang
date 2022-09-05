@@ -1,3 +1,4 @@
+
 export interface IWord {
   id: string
   _id: string

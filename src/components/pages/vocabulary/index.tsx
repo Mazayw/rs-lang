@@ -1,3 +1,4 @@
+
 import styles from './styles.module.scss'
 import { CreateTextbookSectionsButtons } from './CreateTextbookSectionsButtons'
 import { useEffect, useState } from 'react'
@@ -43,7 +44,7 @@ function Vocabulary({
   }
 
   useEffect(() => {
-    ;(async function () {
+    (async function () {
       const sessionStorageSectionButton =
         (sessionStorage.getItem('sectionButtonNumber') as string) || '0'
       const sessionStoragePageButton = (sessionStorage.getItem('pageButtonNumber') as string) || '0'
@@ -543,18 +544,15 @@ function Vocabulary({
 
   return (
     <div
-      className={`${styles.texbook} ${
-        check20WordsInPage.length === 20 ? styles['texbook_active'] : ''
-      }`}
+      className={`${styles.texbook} ${check20WordsInPage.length === 20 ? styles['texbook_active'] : ''
+        }`}
     >
       <div
-        className={`${styles['textbook-games-buttons']} ${
-          buttonSectionCurrentIndex === INDEX_STAR_SECTION_BUTTON
-            ? styles['textbook-games-buttons_none']
-            : ''
-        } ${
-          check20WordsInPage.length === 20 ? styles['textbook-games-buttons__link_disabled'] : ''
-        }`}
+        className={`${styles['textbook-games-buttons']} ${buttonSectionCurrentIndex === INDEX_STAR_SECTION_BUTTON
+          ? styles['textbook-games-buttons_none']
+          : ''
+          } ${check20WordsInPage.length === 20 ? styles['textbook-games-buttons__link_disabled'] : ''
+          }`}
       >
         <a
           href={`http:audiocall/${sessionStorage.getItem(

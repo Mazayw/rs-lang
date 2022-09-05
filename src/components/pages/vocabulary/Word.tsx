@@ -1,3 +1,4 @@
+
 import styles from './styles.module.scss'
 import { INDEX_STAR_SECTION_BUTTON } from '.'
 import { base } from '../../settings'
@@ -63,18 +64,16 @@ export function Word({
   ]
   return id || _id ? (
     <div
-      className={`${word ? styles['word-card'] : styles['word-card_none']} ${
-        styles[wordButtonBackground[buttonSectionCurrentIndex]]
-      }`}
+      className={`${word ? styles['word-card'] : styles['word-card_none']} ${styles[wordButtonBackground[buttonSectionCurrentIndex]]
+        }`}
     >
       <img src={`${base}/${image}`} alt='word' className={styles['word-img']} />
       <div className={styles['word-card__content']}>
         <h3 className={styles['word-title']}>
           {word}
           <button
-            className={`${styles['word-gramophone']} ${
-              gramophoneButtonDisabled ? styles['word-gramophone_disabled'] : ''
-            }`}
+            className={`${styles['word-gramophone']} ${gramophoneButtonDisabled ? styles['word-gramophone_disabled'] : ''
+              }`}
             onClick={(e) => ClickAudio(e, audio, audioMeaning, audioExample)}
           >
             <svg
@@ -109,9 +108,8 @@ export function Word({
         <p className={styles['text-example-translate']}>{textExampleTranslate}</p>
       </div>
       <div
-        className={`${styles['words-image-auth']} ${
-          token ? styles['words-image-auth_active'] : ''
-        }`}
+        className={`${styles['words-image-auth']} ${token ? styles['words-image-auth_active'] : ''
+          }`}
       >
         <button
           className={styles['words-image-auth__button']}
@@ -142,13 +140,13 @@ export function Word({
           className={styles['words-image-auth__button']}
           title={
             hardWordsId.includes(id || _id) &&
-            buttonSectionCurrentIndex !== INDEX_STAR_SECTION_BUTTON
+              buttonSectionCurrentIndex !== INDEX_STAR_SECTION_BUTTON
               ? 'Перейдите в раздел сложные слова или отметьте как изученное'
               : ''
           }
           disabled={
             hardWordsId.includes(id || _id) &&
-            buttonSectionCurrentIndex !== INDEX_STAR_SECTION_BUTTON
+              buttonSectionCurrentIndex !== INDEX_STAR_SECTION_BUTTON
               ? true
               : false
           }
