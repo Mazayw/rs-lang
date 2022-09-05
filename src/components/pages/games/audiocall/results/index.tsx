@@ -3,6 +3,7 @@ import { IAnswer } from '../../../../types/audioGame-interface'
 import DrawTable from './drawTable/index'
 import { NavLink } from 'react-router-dom'
 import helpers from '../../../../helpers'
+import { IUserStat } from '../../../../types/interface'
 
 function GameResults({
   setGameState,
@@ -18,8 +19,30 @@ function GameResults({
     setGameState(0)
   }
 
-  /* const newWords = helpers.seenNewWords(answersArr)
-  helpers.updateStatistic(true, newWords) */
+  const createStat = () => {
+    const newWords = helpers.seenNewWords(answersArr)
+    const shareGuessed = helpers.shareGuessed(answersArr)
+    const audioLongestseries = helpers.calcRow(answersArr)
+    const date = new Date().toDateString()
+
+    const result: IUserStat = {
+      learnedWords: newWords,
+      optional: {
+        statByDate: [
+          {
+            date: date,
+            audioNewWords: newWords,
+            audioShareGuessed: shareGuessed,
+            audioLongestseries: audioLongestseries,
+          },
+        ],
+      },
+    }
+
+    return result
+  }
+
+  helpers.updateStatistic(true, createStat())
 
   return (
     <div className={styles.content}>

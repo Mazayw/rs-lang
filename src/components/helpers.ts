@@ -1,6 +1,7 @@
 import apiService from './api/api-service'
 import { IUserSignInResponse, IUserWord, IUserStat, IWord } from './types/interface'
 import { IAnswer } from './types/audioGame-interface'
+import { AxiosResponse, AxiosResponseHeaders } from 'axios'
 
 class Helpers {
   optionalUnion(oldWord: IUserWord, newWord: IUserWord) {
@@ -72,6 +73,12 @@ class Helpers {
     return arr.reduce((acc, el) => acc + Number(el.isNewWord), 0)
   }
 
+  shareGuessed(arr: IAnswer[]) {
+    const length = arr.length
+    const rightAnswers = arr.reduce((acc, el) => acc + Number(el.answer), 0)
+    return (rightAnswers / length) * 100
+  }
+
   async updateUserWord(
     wordId: string,
     newWordData: IUserWord,
@@ -106,27 +113,25 @@ class Helpers {
     return false
   }
 
-  /* async updateStatistic(checkLocal = true, learnedWords = 0) {
+  async updateStatistic(checkLocal = true, body: IUserStat) {
     const checker = checkLocal ? this.checkUserLocal() : await this.checkUser()
     if (checker) {
       const token = localStorage.getItem('token') as string
       const userId = localStorage.getItem('userId') as string
-      const body = {
-        learnedWords: learnedWords,
-        optional: {},
-      }
+      const date = new Date().getDate()
 
-      const stat = await apiService.getUserStatistic(userId, token)
+      const statResponse = (await apiService.getUserStatistic(userId, token)) as AxiosResponse
+      const stat = statResponse.data
       console.log('stat', stat, typeof stat)
 
-      if (stat) {
-        await apiService.setUserStatistic(userId, stat, token)
-      } else {
+      if (statResponse.status === 200) {
         await apiService.setUserStatistic(userId, body, token)
+      } else {
+        await apiService.setUserStatistic(userId, stat, token)
       }
     }
   }
-*/
+
   async getUnlearnedWords(group: string, page: string, arrSize: number, filter = '') {
     const result = [] as IWord[]
     const token = localStorage.getItem('refreshToken')
