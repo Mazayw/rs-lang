@@ -48,7 +48,14 @@ export interface IUserWord {
 export interface IUserStat {
   learnedWords: number
   optional: {
-    statByDate?: IGameStat[]
+    [key: string]: {
+      sprintNewWords?: number
+      sprintShareGuessed?: number
+      sprintLongestseries?: number
+      audioNewWords?: number
+      audioShareGuessed?: number
+      audioLongestseries?: number
+    }
   }
 }
 

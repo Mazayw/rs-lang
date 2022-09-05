@@ -28,14 +28,11 @@ function GameResults({
     const result: IUserStat = {
       learnedWords: newWords,
       optional: {
-        statByDate: [
-          {
-            date: date,
-            audioNewWords: newWords,
-            audioShareGuessed: shareGuessed,
-            audioLongestseries: audioLongestseries,
-          },
-        ],
+        [`${date}`]: {
+          audioNewWords: newWords,
+          audioShareGuessed: shareGuessed,
+          audioLongestseries: audioLongestseries,
+        },
       },
     }
 

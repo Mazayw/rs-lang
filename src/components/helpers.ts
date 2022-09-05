@@ -1,5 +1,5 @@
 import apiService from './api/api-service'
-import { IUserSignInResponse, IUserWord, IUserStat, IWord } from './types/interface'
+import { IUserSignInResponse, IUserWord, IUserStat, IWord, IGameStat } from './types/interface'
 import { IAnswer } from './types/audioGame-interface'
 import { AxiosResponse, AxiosResponseHeaders } from 'axios'
 
@@ -113,21 +113,68 @@ class Helpers {
     return false
   }
 
+  private joinStat = (oldStat: IUserStat, newStat: IUserStat) => {
+    const result = JSON.parse(JSON.stringify(oldStat))
+    result.learnedWords += newStat.learnedWords
+    const date = new Date().toDateString()
+    if (typeof result.optional[date] !== 'undefined') {
+      const current = result.optional[date]
+      const currentNewStat = result.optional[date]
+
+      current.sprintNewWords = result.sprintNewWords || 0 + currentNewStat.sprintNewWords || 0
+
+      current.sprintFractionGuessed = Math.round(
+        (result.sprintFractionGuessed ||
+          currentNewStat.sprintFractionGuessed ||
+          0 + currentNewStat.sprintFractionGuessed ||
+          result.sprintFractionGuessed ||
+          0) / 2,
+      )
+
+      current.sprintLongestseries = Math.max(
+        result.sprintLongestseries || 0,
+        currentNewStat.sprintLongestseries || 0,
+      )
+
+      current.audioNewWords = result.audioNewWords || 0 + currentNewStat.audioNewWords || 0
+
+      current.audioFractionGuessed = Math.round(
+        (result.audioFractionGuessed ||
+          currentNewStat.audioFractionGuessed ||
+          0 + currentNewStat.audioFractionGuessed ||
+          result.audioFractionGuessed ||
+          0) / 2,
+      )
+
+      current.audioLongestseries = Math.max(
+        result.audioLongestseries || 0,
+        currentNewStat.audioLongestseries || 0,
+      )
+    } else {
+      result.optional[date] = newStat.optional[date]
+    }
+
+    return result
+  }
+
   async updateStatistic(checkLocal = true, body: IUserStat) {
     const checker = checkLocal ? this.checkUserLocal() : await this.checkUser()
     if (checker) {
       const token = localStorage.getItem('token') as string
       const userId = localStorage.getItem('userId') as string
-      const date = new Date().getDate()
 
       const statResponse = (await apiService.getUserStatistic(userId, token)) as AxiosResponse
       const stat = statResponse.data
+      delete stat.id
       console.log('stat', stat, typeof stat)
 
       if (statResponse.status === 200) {
-        await apiService.setUserStatistic(userId, body, token)
+        const result = this.joinStat(stat, body)
+        console.log('result', result)
+        await apiService.setUserStatistic(userId, result, token)
       } else {
-        await apiService.setUserStatistic(userId, stat, token)
+        console.log('body', body)
+        await apiService.setUserStatistic(userId, body, token)
       }
     }
   }
@@ -155,20 +202,3 @@ class Helpers {
 }
 
 export default new Helpers()
-
-/*
-obj
-{
-  "difficulty": "string",
-  "optional": {
-    "totalGuessedSprint": 
-    "totalMistakesSprint":
-    "totalGuessedAudio": 
-    "totalMistakesAudio":
-    "guessedInLine":
-  }
-}
-
-learned words
-.reduce((acc: string[], el) => acc.concat(el.wordTranslate), [])
-*/
