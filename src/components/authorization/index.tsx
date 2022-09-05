@@ -67,6 +67,7 @@ function Auth({
   const authorization = async (obj: IUser) => {
     const authResult = await apiService.signIn(obj)
     if (authResult?.status === 200) {
+
       helpers.authorize(authResult.data)
       setEmail('')
       setPassword('')

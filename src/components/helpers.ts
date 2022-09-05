@@ -102,7 +102,7 @@ class Helpers {
         if (difficulty) body.difficulty = difficulty
         if (body.optional.guessedInLine === '3') {
           body.optional.isStudied = true
-          body.difficulty = 'common'
+          body.difficulty = 'easy'
         }
         if (body.optional.guessedInLine === '0') body.optional.isStudied = false
         await apiService.updateUserWord(userId, wordId, body, token)

@@ -115,6 +115,7 @@ function Vocabulary({
         }
         setDbUserWords(() => authUserWords)
       }
+
     })()
   }, [])
 
@@ -169,6 +170,7 @@ function Vocabulary({
         optional: {
           isStudied: false,
           activeColor: '#F5443B',
+
           wordId: wordId,
         },
       }
@@ -187,11 +189,13 @@ function Vocabulary({
       setCheck20WordsInPage(() => check)
     } else {
       setCheck20WordsInPage([])
+
       const body = {
         difficulty: 'hard',
         optional: {
           isStudied: false,
           activeColor: '#F5443B',
+
           wordId: wordId,
         },
       }
@@ -446,6 +450,7 @@ function Vocabulary({
         const audioPlayer = new Audio(`${settings.url}${audioExample}`)
         audioPlayer.play()
         setGramophoneButtonDisabled(false)
+
       }
     }
   }
