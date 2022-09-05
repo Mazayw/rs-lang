@@ -3,22 +3,35 @@ import { useState } from 'react';
 import { INDEX_STAR_SECTION_BUTTON } from '.';
 import { base } from '../../settings';
 import { IUserWord } from '../../types/interface';
+import apiService from '../../api/api-service';
 
 export function Word({ id, _id, image, audio, audioMeaning, audioExample, textExample, textExampleTranslate, textMeaning, textMeaningTranslate, transcription, word, wordTranslate, ClickStudiedWord, ClickHardWord, hardWordsId, easyWordsId, ClickAudio, token, buttonSectionCurrentIndex, gramophoneButtonDisabled, dbUserWords }: { id: string, _id: string, image: string, audio: string, audioMeaning: string, audioExample: string, textExample: string, textExampleTranslate: string, textMeaning: string, textMeaningTranslate: string, transcription: string, word: string, wordTranslate: string, ClickStudiedWord: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => void, ClickHardWord: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => void, hardWordsId: string[], easyWordsId: string[], ClickAudio: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, audio: string, audioMeaning: string, audioExample: string) => void, token: string, buttonSectionCurrentIndex: number, gramophoneButtonDisabled: boolean, setGramophoneButtonDisabled: React.Dispatch<React.SetStateAction<boolean>>, dbUserWords: IUserWord[] }) {
   const wordButtonBackground = ['word-card-background-A1', 'word-card-background-A2', 'word-card-background-B1', 'word-card-background-B2', 'word-card-background-C1', 'word-card-background-C2'];
-  const games = dbUserWords.find((word) => word.optional.wordId === id || _id);
-  const [totalGuessedAudio, setTotalGuessedAudio] = useState(games?.optional.totalGuessedAudio || 0);
-  const [totalGuessedSprint, setTotalGuessedSprint] = useState(games?.optional.totalGuessedSprint || 0);
-  const [totalMistakesAudio, setTotalMistakesAudio] = useState(games?.optional.totalMistakesAudio || 0);
-  const [totalMistakesSprint, setTotalMistakesSprint] = useState(games?.optional.totalMistakesSprint || 0);
+
+  const [totalGuessedAudio, setTotalGuessedAudio] = useState('' || 0);
+  const [totalGuessedSprint, setTotalGuessedSprint] = useState('' || 0);
+  const [totalMistakesAudio, setTotalMistakesAudio] = useState('' || 0);
+  const [totalMistakesSprint, setTotalMistakesSprint] = useState('' || 0);
   const sumMistakes = +totalMistakesAudio + +totalMistakesSprint;
   const sumGuessed = +totalGuessedAudio + +totalGuessedSprint;
+  (async function () {
+    const data = await apiService.getUserWord(localStorage.getItem('userId') as string, id || _id, localStorage.getItem('token') as string)
+    console.log(data);
+    const guessedAudio = data?.optional.totalGuessedAudio as string;
+    const guessedSprint = data?.optional.totalGuessedSprint as string;
+    const mistakesAudio = data?.optional.totalMistakesAudio as string;
+    const mistakeSprint = data?.optional.totalMistakesSprint as string;
+    setTotalGuessedAudio(+guessedAudio || 0)
+    setTotalMistakesAudio(+mistakesAudio || 0)
+    setTotalGuessedSprint(+guessedSprint || 0)
+    setTotalMistakesSprint(+mistakeSprint || 0)
+  })()
 
   return (
     id || _id
       ?
       <>
-        <div className={token && totalGuessedAudio || totalGuessedSprint || totalMistakesAudio || totalMistakesSprint ? styles['word-game-results'] : styles['word-game-results_none']}>
+        <div className={token && (+totalGuessedAudio) || (+totalGuessedSprint) || (+totalMistakesAudio) || (+totalMistakesSprint) ? styles['word-game-results'] : styles['word-game-results_none']}>
           <p>{`Угадано: ${sumGuessed}`}</p>
           <p>{`Не угадано: ${sumMistakes}`}</p>
         </div>
