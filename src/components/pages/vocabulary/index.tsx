@@ -66,7 +66,7 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
         if (authUserWords) {
           const id = authUserWords.reduce((acc, item) => item.difficulty === 'hard' ? [...acc, item.optional.wordId] : acc, [] as string[]) as string[];
           const studiedWordsId = authUserWords.reduce((acc, item) => item.optional.isStudied ? [...acc, item.optional.wordId] : acc, [] as string[]) as string[];
-          const commonId = authUserWords.reduce((acc, item) => item.difficulty === 'common' ? [...acc, item.optional.wordId] : acc, [] as string[]) as string[];
+          const commonId = authUserWords.reduce((acc, item) => item.difficulty !== 'hard' && !item.optional.isStudied ? [...acc, item.optional.wordId] : acc, [] as string[]) as string[];
           filterAllWordsId = [...id, ...studiedWordsId];
 
           setAllWordsId(() => filterAllWordsId);
@@ -99,7 +99,7 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
     if (INDEX_STAR_SECTION_BUTTON === buttonSectionCurrentIndex) {
 
       const body = {
-        difficulty: 'common',
+        difficulty: 'easy',
         optional: {
           isStudied: false,
           activeColor: '#F5443B',
@@ -342,7 +342,7 @@ function Vocabulary({ check20WordsInPage, setCheck20WordsInPage }: { check20Word
     if (easyWordsId.includes(wordId)) {
 
       const body = {
-        difficulty: 'common',
+        difficulty: 'easy',
         optional: {
           isStudied: false,
           activeColor: '#F5443B',
