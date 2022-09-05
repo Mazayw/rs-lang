@@ -1,4 +1,5 @@
 
+
 export interface IWord {
   id: string
   _id: string
@@ -98,3 +99,4 @@ export interface IMenu {
   url: string
   submenu?: Array<IMenuMain>
 }
+

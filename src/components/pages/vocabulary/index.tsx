@@ -1,4 +1,5 @@
 
+
 import styles from './styles.module.scss'
 import { CreateTextbookSectionsButtons } from './CreateTextbookSectionsButtons'
 import { useEffect, useState } from 'react'
@@ -588,6 +589,7 @@ function Vocabulary({
         buttonSectionCurrentIndex={buttonSectionCurrentIndex}
         gramophoneButtonDisabled={gramophoneButtonDisabled}
         setGramophoneButtonDisabled={setGramophoneButtonDisabled}
+        dbUserWords={dbUserWords}
       />
       <WordButtons
         words={words}
