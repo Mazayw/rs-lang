@@ -13,6 +13,7 @@ import { IWord } from './components/types/interface'
 import AudioGameMain from './components/pages/games/audiocall/game/index'
 import Description from './components/pages/games/audiocall/description/index'
 
+
 function App() {
   const [isModalActive, setModalActive] = useState(false)
   const [isAuthorized, setIsAuthorized] = useState(false)
