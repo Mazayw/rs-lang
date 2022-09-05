@@ -17,8 +17,10 @@ class ApiService {
       console.log(error.response.data)
       console.log(error.response.status)
       console.log(error.response.headers)
+      return error.response.status
     } else if (error.request) {
       console.log(error.request)
+      return error.request
     } else {
       console.log('Error', error.message)
     }
@@ -30,7 +32,6 @@ class ApiService {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/json',
-        'Content-Type': 'application/json',
       },
     }
   }
@@ -94,7 +95,7 @@ class ApiService {
   async getUserToken(id: string, token: string) {
     try {
       const response = await http.get<IToken>(`/users/${id}/tokens`, this.header(token))
-      return response.data
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -104,8 +105,8 @@ class ApiService {
 
   async getAllUserWords(id: string, token: string) {
     try {
-      const response = await http.get<Array<IUserWord>>(`/users/${id}/words`, this.header(token))
-      return response.data
+      const response = await http.get(`/users/${id}/words`, this.header(token))
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -113,8 +114,12 @@ class ApiService {
 
   async createUserWord(id: string, wordId: string, body: IUserWord, token: string) {
     try {
-      const response = await http.post<IUserWord>(`/users/${id}/words/${wordId}`, body, this.header(token))
-      return response.data
+      const response = await http.post<IUserWord>(
+        `/users/${id}/words/${wordId}`,
+        body,
+        this.header(token),
+      )
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -123,16 +128,20 @@ class ApiService {
   async getUserWord(id: string, wordId: string, token: string) {
     try {
       const response = await http.get<IUserWord>(`/users/${id}/words/${wordId}`, this.header(token))
-      return response.data
+      return response
     } catch (error) {
-      this.errorHandler(error as AxiosError)
+      return this.errorHandler(error as AxiosError)
     }
   }
 
   async updateUserWord(id: string, wordId: string, body: IUserWord, token: string) {
     try {
-      const response = await http.put<IUserWord>(`/users/${id}/words/${wordId}`, body, this.header(token))
-      return response.data
+      const response = await http.put<IUserWord>(
+        `/users/${id}/words/${wordId}`,
+        body,
+        this.header(token),
+      )
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -140,7 +149,11 @@ class ApiService {
 
   async deleteUserWord(id: string, wordId: string, token: string) {
     try {
-      await http.delete<IUserWord>(`/users/${id}/words/${wordId}`, this.header(token))
+      const response = await http.delete<IUserWord>(
+        `/users/${id}/words/${wordId}`,
+        this.header(token),
+      )
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -154,27 +167,47 @@ class ApiService {
     group = '',
     page = '',
     wordsPerPage = '20',
+    filterType = '',
   ) {
+    switch (filterType) {
+      case 'easyOrUnknown':
+        filterType = '{"$or":[{"userWord.difficulty":"easy"},{"userWord":null}]}'
+        break
+
+      case 'hard':
+        filterType = '{"userWord.difficulty":"hard"}'
+        break
+
+      case 'unknownOrUnlearned':
+        filterType = '{"$or":[{"userWord":null},{"userWord.optional.isStudied":false}]}'
+        break
+    }
+
     const url: string[] = []
     url.push(`/users/${id}/aggregatedWords?`)
     group && url.push(`group=${group}`)
     page && url.push(`page=${page}`)
     wordsPerPage && url.push(`wordsPerPage=${wordsPerPage}`)
+    filterType && url.push(`filter=${filterType}`)
+
     const urlStr = url.join('&').replace('&', '')
 
     try {
-      return (await http.get(urlStr, this.header(token))).data[0].paginatedResults as IWord[]
+      const response = (await http.get(urlStr, this.header(token))).data[0]
+        .paginatedResults as IWord[]
+
+      console.log(response)
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
   }
-  async getAllAgregatedWordsFilterHard(
-    id: string,
-    wordsPerPage = '3600',
-    token: string,
-  ) {
+
+  async getAllAgregatedWordsFilterHard(id: string, wordsPerPage = '3600', token: string) {
     try {
-      const response = await http.get<[{ paginatedResults: IWord[], totalCount: [{ count: number }] }]>(
+      const response = await http.get<
+        [{ paginatedResults: IWord[]; totalCount: [{ count: number }] }]
+      >(
         `/users/${id}/aggregatedWords?wordsPerPage=${wordsPerPage}&filter={"userWord.difficulty":"hard"}`,
         this.header(token),
       )
@@ -201,7 +234,7 @@ class ApiService {
   async getUserStatistic(id: string, token: string) {
     try {
       const response = await http.get<IUserStat>(`/users/${id}/statistics`, this.header(token))
-      return response.data
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -209,7 +242,8 @@ class ApiService {
 
   async setUserStatistic(id: string, obj: IUserStat, token: string) {
     try {
-      await http.put<IUserStat>(`/users/${id}/statistics`, obj, this.header(token))
+      const response = await http.put<IUserStat>(`/users/${id}/statistics`, obj, this.header(token))
+      return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
     }
@@ -222,7 +256,7 @@ class ApiService {
       const response = await http.get<IUserStat>(`/users/${id}/settings`, this.header(token))
       return response.data
     } catch (error) {
-      this.errorHandler(error as AxiosError)
+      return this.errorHandler(error as AxiosError)
     }
   }
 
@@ -247,3 +281,4 @@ class ApiService {
 }
 
 export default new ApiService()
+

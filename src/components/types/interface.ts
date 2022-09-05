@@ -14,6 +14,7 @@ export interface IWord {
   wordTranslate: string
   textMeaningTranslate: string
   textExampleTranslate: string
+  userWord: IUserWord
 }
 
 export interface IUser {
@@ -33,15 +34,39 @@ export interface IToken {
 export interface IUserWord {
   difficulty: string
   optional: {
-    isStudied: boolean,
-    activeColor: string,
-    wordId: string;
+    totalGuessedSprint?: string
+    totalMistakesSprint?: string
+    totalGuessedAudio?: string
+    totalMistakesAudio?: string
+    guessedInLine?: string
+    isStudied?: boolean
+    activeColor?: string
+    wordId?: string
   }
 }
 
 export interface IUserStat {
   learnedWords: number
-  optional: unknown
+  optional: {
+    [key: string]: {
+      sprintNewWords?: number
+      sprintShareGuessed?: number
+      sprintLongestseries?: number
+      audioNewWords?: number
+      audioShareGuessed?: number
+      audioLongestseries?: number
+    }
+  }
+}
+
+export interface IGameStat {
+  date?: string
+  sprintNewWords?: number
+  sprintShareGuessed?: number
+  sprintLongestseries?: number
+  audioNewWords?: number
+  audioShareGuessed?: number
+  audioLongestseries?: number
 }
 
 export interface IUserSettings {

@@ -2,6 +2,7 @@ import apiService from '../api/api-service'
 import { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import { IUser } from '../types/interface'
+import helpers from '../helpers'
 
 function Auth({
   active,
@@ -66,10 +67,7 @@ function Auth({
   const authorization = async (obj: IUser) => {
     const authResult = await apiService.signIn(obj)
     if (authResult?.status === 200) {
-      localStorage.setItem('token', authResult?.data.token)
-      localStorage.setItem('tokenTime', Date())
-      localStorage.setItem('refreshToken', authResult?.data.refreshToken)
-      localStorage.setItem('userId', authResult?.data.userId)
+      helpers.authorize(authResult.data)
       setEmail('')
       setPassword('')
       setActive(false)
@@ -142,3 +140,4 @@ function Auth({
 }
 
 export default Auth
+

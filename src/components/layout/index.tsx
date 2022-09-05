@@ -28,14 +28,14 @@ function Layout({
       <header className={styles.header}>
         <div className={styles['header-wrapper']}>
           <NavLink to='/'>
-            <img className={styles.logo__img} src='/icons/logo.svg' alt='Logo' />
+            <img className={styles.logo__img} src='./icons/logo.svg' alt='Logo' />
           </NavLink>
           <div className={styles.menu}>
             <Navbar />
           </div>
           <img
             className={styles.user__img}
-            src='/icons/user.svg'
+            src='./icons/user.svg'
             alt='Logo'
             onClick={() => {
               setModalActive(true)

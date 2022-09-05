@@ -43,7 +43,11 @@ function Footer() {
           target='_blank'
           rel='noopener noreferrer'
         >
-          <img className={styles.rss__img} src='/icons/logo-rsschool3.svg' alt='RS School Logo' />
+          <img
+            className={styles.rss__img}
+            src='./../../rs-lang/icons/logo-rsschool3.svg'
+            alt='RS School Logo'
+          />
         </a>
       </div>
     </footer>
