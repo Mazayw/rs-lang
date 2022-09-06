@@ -95,8 +95,7 @@ function AudioGameMain() {
         const answersArray = shuffleArray(
           filtered().slice(0, 4).concat([currentWord.wordTranslate]),
         )
-
-        setAnswers(answersArray!)
+        setAnswers(answersArray)
       }
     }
   }

@@ -1,7 +1,7 @@
 import apiService from './api/api-service'
-import { IUserSignInResponse, IUserWord, IUserStat, IWord, IGameStat } from './types/interface'
+import { IUserSignInResponse, IUserWord, IUserStat, IWord } from './types/interface'
 import { IAnswer } from './types/audioGame-interface'
-import { AxiosResponse, AxiosResponseHeaders } from 'axios'
+import { AxiosResponse } from 'axios'
 
 class Helpers {
   optionalUnion(oldWord: IUserWord, newWord: IUserWord) {
@@ -49,6 +49,7 @@ class Helpers {
         return false
       }
     }
+    return false
   }
 
   checkUserLocal() {
@@ -76,7 +77,7 @@ class Helpers {
   shareGuessed(arr: IAnswer[]) {
     const length = arr.length
     const rightAnswers = arr.reduce((acc, el) => acc + Number(el.answer), 0)
-    return (rightAnswers / length) * 100
+    return Math.round((rightAnswers / length) * 100)
   }
 
   async updateUserWord(
@@ -123,11 +124,11 @@ class Helpers {
 
       current.sprintNewWords = result.sprintNewWords || 0 + currentNewStat.sprintNewWords || 0
 
-      current.sprintFractionGuessed = Math.round(
-        (result.sprintFractionGuessed ||
-          currentNewStat.sprintFractionGuessed ||
-          0 + currentNewStat.sprintFractionGuessed ||
-          result.sprintFractionGuessed ||
+      current.sprintShareGuessed = Math.round(
+        (result.sprintShareGuessed ||
+          currentNewStat.sprintShareGuessed ||
+          0 + currentNewStat.sprintShareGuessed ||
+          result.sprintShareGuessed ||
           0) / 2,
       )
 
@@ -138,11 +139,11 @@ class Helpers {
 
       current.audioNewWords = result.audioNewWords || 0 + currentNewStat.audioNewWords || 0
 
-      current.audioFractionGuessed = Math.round(
-        (result.audioFractionGuessed ||
-          currentNewStat.audioFractionGuessed ||
-          0 + currentNewStat.audioFractionGuessed ||
-          result.audioFractionGuessed ||
+      current.audioShareGuessed = Math.round(
+        (result.audioShareGuessed ||
+          currentNewStat.audioShareGuessed ||
+          0 + currentNewStat.audioShareGuessed ||
+          result.audioShareGuessed ||
           0) / 2,
       )
 
@@ -181,13 +182,13 @@ class Helpers {
 
   async getUnlearnedWords(group: string, page: string, arrSize: number, filter = '') {
     const result = [] as IWord[]
-    const token = localStorage.getItem('refreshToken')
+    const token = localStorage.getItem('token')
     const id = localStorage.getItem('userId')
     if (id && token)
       do {
         const dataResponse = await apiService.getAllAgregatedWords(
-          id!,
-          token!,
+          id,
+          token,
           group,
           page,
           '20',

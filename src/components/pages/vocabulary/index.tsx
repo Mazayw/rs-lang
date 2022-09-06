@@ -6,7 +6,9 @@ import { Word } from './Word'
 import { TextbookPagesButtons } from './TextbookPagesButtons'
 import { IWord, IUserWord } from '../../types/interface'
 import apiService from '../../api/api-service'
-import { base } from '../../settings'
+import { settings } from '../../../settings'
+import { NavLink } from 'react-router-dom'
+import helpers from '../../helpers'
 
 export const INDEX_STAR_SECTION_BUTTON = 10
 
@@ -528,13 +530,13 @@ function Vocabulary({
     audioExample: string,
   ) => {
     setGramophoneButtonDisabled(true)
-    const audioPlayer = new Audio(`${base}/${audio}`)
+    const audioPlayer = new Audio(`${settings.url}${audio}`)
     audioPlayer.play()
     audioPlayer.onended = function () {
-      const audioPlayer = new Audio(`${base}/${audioMeaning}`)
+      const audioPlayer = new Audio(`${settings.url}${audioMeaning}`)
       audioPlayer.play()
       audioPlayer.onended = function () {
-        const audioPlayer = new Audio(`${base}/${audioExample}`)
+        const audioPlayer = new Audio(`${settings.url}${audioExample}`)
         audioPlayer.play()
         setGramophoneButtonDisabled(false)
       }
@@ -547,32 +549,34 @@ function Vocabulary({
         check20WordsInPage.length === 20 ? styles['texbook_active'] : ''
       }`}
     >
-      <div
-        className={`${styles['textbook-games-buttons']} ${
-          buttonSectionCurrentIndex === INDEX_STAR_SECTION_BUTTON
-            ? styles['textbook-games-buttons_none']
-            : ''
-        } ${
-          check20WordsInPage.length === 20 ? styles['textbook-games-buttons__link_disabled'] : ''
-        }`}
-      >
-        <a
-          href={`http:audiocall/${sessionStorage.getItem(
-            'sectionButtonNumber',
-          )}/${sessionStorage.getItem('pageButtonNumber')}`}
-          className={styles['textbook-games-buttons__link']}
+      {helpers.checkUserLocal() && (
+        <div
+          className={`${styles['textbook-games-buttons']} ${
+            buttonSectionCurrentIndex === INDEX_STAR_SECTION_BUTTON
+              ? styles['textbook-games-buttons_none']
+              : ''
+          } ${
+            check20WordsInPage.length === 20 ? styles['textbook-games-buttons__link_disabled'] : ''
+          }`}
         >
-          Аудиовызов
-        </a>
-        <a
-          href={`http:sprint/${sessionStorage.getItem(
-            'sectionButtonNumber',
-          )}/${sessionStorage.getItem('pageButtonNumber')}`}
-          className={styles['textbook-games-buttons__link']}
-        >
-          Спринт
-        </a>
-      </div>
+          <NavLink
+            to={`./../audiocall/${sessionStorage.getItem(
+              'sectionButtonNumber',
+            )}/${sessionStorage.getItem('pageButtonNumber')}&startgame`}
+            className={styles['textbook-games-buttons__link']}
+          >
+            Аудиовызов
+          </NavLink>
+          <a
+            href={`http:sprint/${sessionStorage.getItem(
+              'sectionButtonNumber',
+            )}/${sessionStorage.getItem('pageButtonNumber')}`}
+            className={styles['textbook-games-buttons__link']}
+          >
+            Спринт
+          </a>
+        </div>
+      )}
       <CreateTextbookSectionsButtons
         sections={sectionsButtonsText}
         buttonSectionCurrentIndex={buttonSectionCurrentIndex}

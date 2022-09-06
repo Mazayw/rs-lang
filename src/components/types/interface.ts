@@ -60,8 +60,7 @@ export interface IUserStat {
 }
 
 export interface IGameStat {
-  date?: string
-  sprintNewWords?: number
+  [sprintNewWords: string]: number | undefined
   sprintShareGuessed?: number
   sprintLongestseries?: number
   audioNewWords?: number

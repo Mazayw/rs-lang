@@ -46,7 +46,7 @@ function AudioChooseButton({
       difficulty: 'easy',
       optional: {
         totalGuessedAudio: `${Number(isCorrect)}`,
-        totalMistakesAudio: `${Number(isCorrect)}`,
+        totalMistakesAudio: `${Number(!isCorrect)}`,
         guessedInLine: `${Number(isCorrect)}`,
       },
     }

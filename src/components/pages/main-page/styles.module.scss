@@ -1,7 +1,8 @@
 .main {
   background: #171836;
-  height: calc(100vh - 100px - 140px);
+  min-height: calc(100vh - 100px - 140px);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
 }
 
@@ -21,8 +22,8 @@
   width: 550px;
   font-family: 'Inter';
   font-style: normal;
-  font-weight: 500;
-  font-size: 64px;
+  font-weight: 700;
+  font-size: 50px;
   line-height: 130%;
   letter-spacing: -0.01em;
   text-transform: capitalize;
@@ -30,7 +31,7 @@
 }
 
 .subtitle {
-  width: 550px;
+  width: 440px;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
@@ -38,10 +39,11 @@
   line-height: 130%;
   color: rgba(255, 255, 255, 0.4);
   margin-top: 25px;
+  margin-bottom: 100px;
 }
 
 .buttons-block {
-  margin-top: 100px;
+  margin-bottom: 100px;
 }
 
 .button {
