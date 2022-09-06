@@ -7,8 +7,8 @@ import { TextbookPagesButtons } from './TextbookPagesButtons'
 import { IWord, IUserWord } from '../../types/interface'
 import apiService from '../../api/api-service'
 import { settings } from '../../../settings'
-import { NavLink } from 'react-router-dom'
 import helpers from '../../helpers'
+import { NavLink } from 'react-router-dom'
 
 export const INDEX_STAR_SECTION_BUTTON = 10
 
@@ -567,14 +567,15 @@ function Vocabulary({
           >
             Аудиовызов
           </NavLink>
-          <a
-            href={`http:sprint/${sessionStorage.getItem(
-              'sectionButtonNumber',
-            )}/${sessionStorage.getItem('pageButtonNumber')}`}
+          <NavLink
+            to={'./../sprint'}
             className={styles['textbook-games-buttons__link']}
+            onClick={() => {
+              sessionStorage.setItem('startGame', '1')
+            }}
           >
             Спринт
-          </a>
+          </NavLink>
         </div>
       )}
       <CreateTextbookSectionsButtons

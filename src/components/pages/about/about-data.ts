@@ -20,7 +20,7 @@ export const aboutData: IAboutData = {
     name: 'Alexander Verbitsky',
     photo: './img/rydvone.jpg',
     title: 'JavaScript/Frontend Developer',
-    content: 'Страница о команде',
+    content: 'Страница о команде, Игра «Спринт»',
     link: 'https://github.com/rydvone/',
   },
 }
