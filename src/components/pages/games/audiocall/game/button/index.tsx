@@ -26,17 +26,19 @@ function AudioChooseButton({
   setGameState: React.Dispatch<React.SetStateAction<number>>
 }) {
   const [isClicked, setIsClicked] = useState(false)
+  const [filteredArrLength, setFilteredArrLength] = useState(0)
+
+  const onKeypress = (e: KeyboardEvent) => {
+    if (e.key === `${index + 1}`) {
+      buttonClick()
+      setIsClicked(true)
+    }
+  }
 
   useEffect(() => {
-    const onKeypress = (e: KeyboardEvent) => {
-      if (e.key === `${index + 1}`) {
-        buttonClick()
-        setIsClicked(true)
-      }
-    }
-    document.addEventListener('keypress', onKeypress)
+    document.addEventListener('keyup', onKeypress)
     return () => {
-      document.removeEventListener('keypress', onKeypress)
+      document.removeEventListener('keyup', onKeypress)
     }
   }, [])
 
@@ -56,9 +58,8 @@ function AudioChooseButton({
 
     setAnswersArr((prev) => [...prev, { word: answer, answer: isCorrect, isNewWord: isNewWord }])
 
-    const filteredArr = answersArr.filter((el) => el.answer === false).length
-
-    if (filteredArr === 4) {
+    setFilteredArrLength(answersArr.filter((el) => el.answer === false).length)
+    if (filteredArrLength === 4) {
       setGameState(1)
     } else {
       setTimeout(() => {

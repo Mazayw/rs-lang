@@ -32,10 +32,10 @@ function Statistics({
     if (typeof dayStat.learnedWords !== 'undefined') {
       if (typeof dayStat.optional[date] === 'undefined') {
         return 0
-      } else {
-        const dateObj = dayStat.optional[date] as IGameStat
-        return dateObj[key] as number
       }
+      const dateObj = dayStat.optional[date] as IGameStat
+      if (typeof dateObj[key] === 'undefined') return 0
+      return dateObj[key] as number
     } else return 0
   }
 

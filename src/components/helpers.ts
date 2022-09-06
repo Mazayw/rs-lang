@@ -123,6 +123,10 @@ class Helpers {
     const result = JSON.parse(JSON.stringify(oldStat))
     result.learnedWords += newStat.learnedWords
     const date = new Date().toDateString()
+    if (typeof result.optional === 'undefined') {
+      result.optional = {}
+    }
+
     if (typeof result.optional[date] !== 'undefined') {
       const current = result.optional[date]
       const currentNewStat = newStat.optional[date] as IGameStat
@@ -175,10 +179,12 @@ class Helpers {
       const userId = localStorage.getItem('userId') as string
 
       const statResponse = (await apiService.getUserStatistic(userId, token)) as AxiosResponse
-      const stat = statResponse.data
-      delete stat.id
 
-      if (statResponse.status === 200) {
+      if (typeof statResponse === 'undefined') {
+        await apiService.setUserStatistic(userId, body, token)
+      } else if (statResponse.status === 200) {
+        const stat = statResponse.data
+        delete stat.id
         const result = this.joinStat(stat, body)
         await apiService.setUserStatistic(userId, result, token)
       } else {
