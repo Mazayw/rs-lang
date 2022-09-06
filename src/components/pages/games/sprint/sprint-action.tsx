@@ -73,7 +73,7 @@ export function SprintAction(props: IPropsSprintAction) {
 
   return (
     <div className={styles['sprint__action']}>
-      <h3 className={styles['sprint__action-current-result']}>Score: {displayScore}</h3>
+      <h3 className={styles['sprint__action-current-result']}>Баллы: {displayScore}</h3>
       <div
         className={styles['sprint__action-card']}
         style={{

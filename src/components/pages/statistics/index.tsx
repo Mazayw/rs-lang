@@ -24,7 +24,6 @@ function Statistics({
     const token = localStorage.getItem('token') as string
     const userId = localStorage.getItem('userId') as string
     const stat = (await apiService.getUserStatistic(userId, token)) as AxiosResponse
-    console.log(stat.data)
     stat.status === 200 && setDayStat(stat.data)
   }
 
@@ -49,7 +48,6 @@ function Statistics({
       audioShareGuessed: Math.round(updateStatText('audioShareGuessed')),
       audioLongestseries: updateStatText('audioLongestseries'),
     }
-    console.log(res)
     setGameStat(res)
     return res
   }

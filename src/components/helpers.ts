@@ -1,5 +1,5 @@
 import apiService from './api/api-service'
-import { IUserSignInResponse, IUserWord, IUserStat, IWord } from './types/interface'
+import { IUserSignInResponse, IUserWord, IUserStat, IWord, IGameStat } from './types/interface'
 import { IAnswer } from './types/audioGame-interface'
 import { AxiosResponse } from 'axios'
 
@@ -114,42 +114,53 @@ class Helpers {
     return false
   }
 
+  private undefinedCheck = (data: number | undefined) => {
+    if (typeof data === 'undefined') {
+      return 0
+    } else return data
+  }
+
   private joinStat = (oldStat: IUserStat, newStat: IUserStat) => {
     const result = JSON.parse(JSON.stringify(oldStat))
     result.learnedWords += newStat.learnedWords
     const date = new Date().toDateString()
     if (typeof result.optional[date] !== 'undefined') {
       const current = result.optional[date]
-      const currentNewStat = result.optional[date]
+      const currentNewStat = newStat.optional[date] as IGameStat
 
-      current.sprintNewWords = result.sprintNewWords || 0 + currentNewStat.sprintNewWords || 0
+      current.sprintNewWords =
+        current.sprintNewWords || 0 + this.undefinedCheck(currentNewStat.sprintNewWords)
 
-      current.sprintShareGuessed = Math.round(
-        (result.sprintShareGuessed ||
-          currentNewStat.sprintShareGuessed ||
-          0 + currentNewStat.sprintShareGuessed ||
-          result.sprintShareGuessed ||
-          0) / 2,
-      )
+      current.sprintShareGuessed = this.undefinedCheck(currentNewStat.sprintShareGuessed)
+        ? Math.round(
+            (this.undefinedCheck(currentNewStat.sprintShareGuessed) ||
+              this.undefinedCheck(current.sprintShareGuessed) +
+                this.undefinedCheck(currentNewStat.sprintShareGuessed) ||
+              this.undefinedCheck(current.sprintShareGuessed)) / 2,
+          )
+        : this.undefinedCheck(current.sprintShareGuessed)
 
       current.sprintLongestseries = Math.max(
-        result.sprintLongestseries || 0,
-        currentNewStat.sprintLongestseries || 0,
+        this.undefinedCheck(current.sprintLongestseries),
+        this.undefinedCheck(currentNewStat.sprintLongestseries),
       )
 
-      current.audioNewWords = result.audioNewWords || 0 + currentNewStat.audioNewWords || 0
+      current.audioNewWords =
+        this.undefinedCheck(current.audioNewWords) +
+        this.undefinedCheck(currentNewStat.audioNewWords)
 
-      current.audioShareGuessed = Math.round(
-        (result.audioShareGuessed ||
-          currentNewStat.audioShareGuessed ||
-          0 + currentNewStat.audioShareGuessed ||
-          result.audioShareGuessed ||
-          0) / 2,
-      )
+      current.audioShareGuessed = this.undefinedCheck(currentNewStat.audioShareGuessed)
+        ? Math.round(
+            (this.undefinedCheck(currentNewStat.audioShareGuessed) ||
+              this.undefinedCheck(current.audioShareGuessed) +
+                this.undefinedCheck(currentNewStat.audioShareGuessed) ||
+              this.undefinedCheck(current.audioShareGuessed)) / 2,
+          )
+        : this.undefinedCheck(current.sprintShareGuessed)
 
       current.audioLongestseries = Math.max(
-        result.audioLongestseries || 0,
-        currentNewStat.audioLongestseries || 0,
+        this.undefinedCheck(current.audioLongestseries),
+        this.undefinedCheck(currentNewStat.audioLongestseries),
       )
     } else {
       result.optional[date] = newStat.optional[date]
@@ -167,14 +178,11 @@ class Helpers {
       const statResponse = (await apiService.getUserStatistic(userId, token)) as AxiosResponse
       const stat = statResponse.data
       delete stat.id
-      console.log('stat', stat, typeof stat)
 
       if (statResponse.status === 200) {
         const result = this.joinStat(stat, body)
-        console.log('result', result)
         await apiService.setUserStatistic(userId, result, token)
       } else {
-        console.log('body', body)
         await apiService.setUserStatistic(userId, body, token)
       }
     }

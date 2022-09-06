@@ -20,22 +20,22 @@ export function SprintResult(props: IPropsSprintResult) {
     dataResultSprint.learned.countWords = wordsRight.length
     dataResultSprint.unlearned.countWords = wordsWrong.length
     dataResultSprint.learned.words = wordsRight.reduce((acc, { word }) => {
-      const key = `${word.word}`;
+      const key = `${word.word}`
       return {
         ...acc,
-        [key]: `${word.wordTranslate}`
+        [key]: `${word.wordTranslate}`,
       }
     }, {})
     dataResultSprint.unlearned.words = wordsWrong.reduce((acc, { word }) => {
-      const key = `${word.word}`;
+      const key = `${word.word}`
       return {
         ...acc,
-        [key]: `${word.wordTranslate}`
+        [key]: `${word.wordTranslate}`,
       }
     }, {})
   }
   getResult()
-  helpers.updateStatistic(true, createStat())
+  helpers.updateStatistic(true, createStat(sprintAnswers))
 
   return (
     <div className={styles['sprint__result']}>
