@@ -7,6 +7,7 @@ import { TextbookPagesButtons } from './TextbookPagesButtons'
 import { IWord, IUserWord } from '../../types/interface'
 import apiService from '../../api/api-service'
 import { base } from '../../settings'
+import { NavLink } from 'react-router-dom'
 
 export const INDEX_STAR_SECTION_BUTTON = 10
 
@@ -556,22 +557,23 @@ function Vocabulary({
           check20WordsInPage.length === 20 ? styles['textbook-games-buttons__link_disabled'] : ''
         }`}
       >
-        <a
-          href={`http:audiocall/${sessionStorage.getItem(
+        <NavLink
+          to={`./../audiocall/${sessionStorage.getItem(
             'sectionButtonNumber',
           )}/${sessionStorage.getItem('pageButtonNumber')}`}
           className={styles['textbook-games-buttons__link']}
         >
           Аудиовызов
-        </a>
-        <a
-          href={`http:sprint/${sessionStorage.getItem(
-            'sectionButtonNumber',
-          )}/${sessionStorage.getItem('pageButtonNumber')}`}
+        </NavLink>
+        <NavLink
+          to={'./../sprint'}
           className={styles['textbook-games-buttons__link']}
+          onClick={() => {
+            sessionStorage.setItem('startGame', '1')
+          }}
         >
           Спринт
-        </a>
+        </NavLink>
       </div>
       <CreateTextbookSectionsButtons
         sections={sectionsButtonsText}

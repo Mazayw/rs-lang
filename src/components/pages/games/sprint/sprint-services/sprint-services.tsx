@@ -1,5 +1,6 @@
 import apiService from '../../../../api/api-service'
-import { IWord } from '../../../../types/interface'
+import helpers from '../../../../helpers'
+import { IUserStat, IUserWord, IWord } from '../../../../types/interface'
 import { IAnswer } from '../../../../types/sprint-interface'
 import { dataSprintWords } from '../sprint-data'
 
@@ -44,10 +45,11 @@ export const getWordsAllForGroupSprint = async (group: number, page = 0) => {
 
 export const getWordsVocabularySprint = async (group: number, page = 0) => {
   dataSprintWords.length = 0
-  const words = await helpers.getUnlearnedWords(`${group}`, `${page}`, 600)
+  const words = await helpers.getUnlearnedWords(`${group}`, `${page}`, 600, 'unknownOrUnlearned')
 
   if (words.length === 0) {
-    getWordsAllForGroupSprint(group)
+    console.log(group, page)
+    await getWordsAllForGroupSprint(group)
   } else {
     dataSprintWords.push(...words)
   }
@@ -93,10 +95,37 @@ export const getWordSprint = async () => {
   return checkAvailableWords
 }
 
-export const saveSatatisticsSprint = (ans: boolean) => {
-  sprintAnswer.answer = ans
-
-  // there is need check in-row
-
+export const saveSatatisticsSprint = async (answer: boolean) => {
+  sprintAnswer.answer = answer
+  const newWord: IUserWord = {
+    difficulty: 'easy',
+    optional: {
+      totalGuessedSprint: `${Number(answer)}`,
+      totalMistakesSprint: `${Number(answer)}`,
+      guessedInLine: `${Number(answer)}`,
+    },
+  }
+  const isNewWord = await helpers.updateUserWord(sprintAnswer.word.id, newWord, '', true)
+  sprintAnswer.isNewWord = isNewWord
+  
   sprintAnswers.push({ ...sprintAnswer })
+}
+
+export const createStat = () => {
+  const newWords = helpers.seenNewWords(sprintAnswers)
+  const shareGuessed = helpers.shareGuessed(sprintAnswers)
+  const longestSeries = helpers.calcRow(sprintAnswers)
+  const date = new Date().toDateString()
+
+  const result: IUserStat = {
+    learnedWords: newWords,
+    optional: {
+      [date]: {
+        sprintNewWords: newWords,
+        sprintShareGuessed: shareGuessed,
+        sprintLongestseries: longestSeries,
+      },
+    },
+  }
+  return result
 }

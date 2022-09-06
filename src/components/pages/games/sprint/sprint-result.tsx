@@ -4,7 +4,8 @@ import { ButtonRepeatSprint } from './sprint-components/button-repeat-sprint'
 import { dataResultSprint } from './sprint-data'
 import { SprintResultWords } from './sprint-components/sprint-result-words'
 import styles from './styles.module.scss'
-import { sprintAnswers } from './sprint-services/sprint-services'
+import { createStat, sprintAnswers } from './sprint-services/sprint-services'
+import helpers from '../../../helpers'
 
 interface IPropsSprintResult {
   part: React.Dispatch<React.SetStateAction<number>>
@@ -34,10 +35,11 @@ export function SprintResult(props: IPropsSprintResult) {
     }, {})
   }
   getResult()
+  helpers.updateStatistic(true, createStat())
 
   return (
     <div className={styles['sprint__result']}>
-      <h3 className={styles['sprint__result-title']}>Result: {props.displayScore} point</h3>
+      <h3 className={styles['sprint__result-title']}>Результат: {props.displayScore}</h3>
       <div className={styles['sprint__result-buttons']}>
         <ButtonCloseGame part={props.part} />
         <ButtonRepeatSprint part={props.part} />

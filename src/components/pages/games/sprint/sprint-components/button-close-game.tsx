@@ -15,7 +15,7 @@ export function ButtonCloseGame({part}: {part: React.Dispatch<React.SetStateActi
     <>
       <NavLink to={backUrl}>
         <button className={`button ${styles['button_close-game']}`} onClick={click}>
-          Close
+          Закрыть
         </button>
       </NavLink>
     </>

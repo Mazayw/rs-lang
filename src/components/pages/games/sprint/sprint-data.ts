@@ -4,13 +4,13 @@ import { IDataResultSprint } from '../../../types/sprint-interface'
 export const dataResultSprint: IDataResultSprint = {
   score: 0,
   learned: {
-    stateWords: 'You learned',
+    stateWords: 'Верно',
     countWords: 0,
     words: {},
     color: 'green',
   },
   unlearned: {
-    stateWords: 'You unlearned',
+    stateWords: 'Не верно',
     countWords: 0,
     words: {},
     color: 'red',
@@ -24,16 +24,10 @@ export interface ISprintDescription {
 }
 
 export const sprintDescription: ISprintDescription = {
-  audiocall: {
-    name: 'Audiocall',
-    image: './img/games/audiocall-icon.png',
-    content: 'Check your listening skills, trying to pick the right meaning after hearing a word. Be careful, as you just have one guess.',
-    url: '/audiocall',
-  },
   sprint: {
-    name: 'Sprint',
-    image: './img/games/sprint-icon.png',
-    content: 'Check how much points you can get in one minute, making educated guesses about what is right and what is wrong.',
+    name: 'Спринт',
+    image: './../../rs-lang/img/games/sprint-icon.png',
+    content: 'Проверьте, сколько очков вы можете набрать за одну минуту, делая обоснованные предположения о том, что правильно, а что нет',
     url: '/sprint',
   },
 }

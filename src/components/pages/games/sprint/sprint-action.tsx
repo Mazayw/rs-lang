@@ -10,7 +10,7 @@ interface IPropsSprintAction {
   displayScore: React.Dispatch<React.SetStateAction<number>>
   partEnd: React.Dispatch<React.SetStateAction<boolean>>
 }
-const url = base
+const url = `${base}`
 
 export function SprintAction(props: IPropsSprintAction) {
   const [answerButton, setButton] = useState(-1)

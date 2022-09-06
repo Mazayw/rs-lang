@@ -38,7 +38,7 @@ export function SptintSelectLevel(props: IPropsSprintSelectLevel) {
         />
         <div className={styles['sptint__description-content']}>{sprintDescription[keyData].content}</div>
       </div>
-      <h3 className={styles['sprint__h3']}>Select level to start:</h3>
+      <h3 className={styles['sprint__h3']}>Выберите уровень:</h3>
       <SptintSelectList sprintLevel={setLevel} />
     </div>
   )

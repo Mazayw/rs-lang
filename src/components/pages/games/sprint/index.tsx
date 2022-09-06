@@ -7,7 +7,6 @@ import styles from './styles.module.scss'
 import { GameTimer } from './game-timer'
 import { ButtonAudioState } from './sprint-components/button-audio'
 import {
-  getWordsAllForGroupSprint,
   getWordSprint,
   getWordsVocabularySprint,
   sprintService,
@@ -17,10 +16,10 @@ interface ISprintTimes {
   [key: string]: number
 }
 
-const SPRINT_BG = '../img/games/game-sprint-bg.jpg'
+const SPRINT_BG = './../../rs-lang/img/games/game-sprint-bg.jpg'
 const SPRINT_TIMES: ISprintTimes = {
-  start: 3,
-  action: 10,
+  start: 5,
+  action: 60,
 }
 
 function Sprint() {
