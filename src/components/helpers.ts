@@ -10,7 +10,6 @@ class Helpers {
 
     const o1 = oldShadow.optional
     const o2 = new2Shadow.optional
-
     Object.keys(o2).map((key) => {
       if (o2[key] === '0' && key === 'guessedInLine') {
         o1[key] = '0'
@@ -114,7 +113,7 @@ class Helpers {
     return false
   }
 
-  private undefinedCheck = (data: number | undefined) => {
+  undefinedCheck = (data: number | undefined) => {
     if (typeof data === 'undefined') {
       return 0
     } else return data
