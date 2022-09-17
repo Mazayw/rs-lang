@@ -1,0 +1,74 @@
+.game-main {
+  background: #171836;
+  min-height: calc(100vh - 100px - 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+}
+
+.content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.audio {
+  height: 60px;
+  cursor: pointer;
+  transition: all ease-in-out 1s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.title {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 45px;
+  line-height: 130%;
+  letter-spacing: -0.01em;
+  text-transform: capitalize;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 40px;
+}
+
+.description,
+.subtitle {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 130%;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 50px;
+}
+
+.description {
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 80px;
+}
+
+.buttons-block {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.lifes {
+  position: absolute;
+  top: 0px;
+  right: 30%;
+}
+
+.heart {
+  height: 30px;
+}

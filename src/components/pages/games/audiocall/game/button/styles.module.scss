@@ -1,0 +1,30 @@
+.choose-button {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  align-items: center;
+  border-radius: 6px;
+  border: 1px solid;
+  border-color: #1f2143;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  text-transform: uppercase;
+  background: #1f2143;
+  color: #ffffff;
+
+  &:hover {
+    border: 1px solid #ffffff;
+    background: #171836;
+    cursor: pointer;
+  }
+}
+
+.button-active {
+  background: #f5443b;
+}
+
+.clicked {
+  border: 1px solid #ffffff;
+}
