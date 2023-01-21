@@ -1,3 +1,5 @@
+
+
 export interface IWord {
   id: string
   _id: string
@@ -60,8 +62,7 @@ export interface IUserStat {
 }
 
 export interface IGameStat {
-  date?: string
-  sprintNewWords?: number
+  [sprintNewWords: string]: number | undefined
   sprintShareGuessed?: number
   sprintLongestseries?: number
   audioNewWords?: number
@@ -97,3 +98,4 @@ export interface IMenu {
   url: string
   submenu?: Array<IMenuMain>
 }
+

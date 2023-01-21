@@ -28,6 +28,16 @@ function Auth({
     emailError || passwordError ? setFormValid(false) : setFormValid(true)
   })
 
+  useEffect(() => {
+    const onKeypress = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') authHandler({ name: email, email: email, password: password })
+    }
+    document.addEventListener('keypress', onKeypress)
+    return () => {
+      document.removeEventListener('keypress', onKeypress)
+    }
+  }, [authType, email, password])
+
   const passwordHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setRegInfo('')
     setPassword(e.target.value)
@@ -140,4 +150,3 @@ function Auth({
 }
 
 export default Auth
-

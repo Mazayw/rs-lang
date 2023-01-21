@@ -1,3 +1,5 @@
+
+
 import styles from './styles.module.scss'
 import { CreateTextbookSectionsButtons } from './CreateTextbookSectionsButtons'
 import { useEffect, useState } from 'react'
@@ -6,7 +8,9 @@ import { Word } from './Word'
 import { TextbookPagesButtons } from './TextbookPagesButtons'
 import { IWord, IUserWord } from '../../types/interface'
 import apiService from '../../api/api-service'
-import { base } from '../../settings'
+import { settings } from '../../../settings'
+import helpers from '../../helpers'
+import { NavLink } from 'react-router-dom'
 
 export const INDEX_STAR_SECTION_BUTTON = 10
 
@@ -43,7 +47,7 @@ function Vocabulary({
   }
 
   useEffect(() => {
-    ;(async function () {
+    (async function () {
       const sessionStorageSectionButton =
         (sessionStorage.getItem('sectionButtonNumber') as string) || '0'
       const sessionStoragePageButton = (sessionStorage.getItem('pageButtonNumber') as string) || '0'
@@ -528,13 +532,13 @@ function Vocabulary({
     audioExample: string,
   ) => {
     setGramophoneButtonDisabled(true)
-    const audioPlayer = new Audio(`${base}/${audio}`)
+    const audioPlayer = new Audio(`${settings.url}${audio}`)
     audioPlayer.play()
     audioPlayer.onended = function () {
-      const audioPlayer = new Audio(`${base}/${audioMeaning}`)
+      const audioPlayer = new Audio(`${settings.url}${audioMeaning}`)
       audioPlayer.play()
       audioPlayer.onended = function () {
-        const audioPlayer = new Audio(`${base}/${audioExample}`)
+        const audioPlayer = new Audio(`${settings.url}${audioExample}`)
         audioPlayer.play()
         setGramophoneButtonDisabled(false)
       }
@@ -543,36 +547,38 @@ function Vocabulary({
 
   return (
     <div
-      className={`${styles.texbook} ${
-        check20WordsInPage.length === 20 ? styles['texbook_active'] : ''
-      }`}
-    >
-      <div
-        className={`${styles['textbook-games-buttons']} ${
-          buttonSectionCurrentIndex === INDEX_STAR_SECTION_BUTTON
-            ? styles['textbook-games-buttons_none']
-            : ''
-        } ${
-          check20WordsInPage.length === 20 ? styles['textbook-games-buttons__link_disabled'] : ''
+      className={`${styles.texbook} ${check20WordsInPage.length === 20 ? styles['texbook_active'] : ''
         }`}
-      >
-        <a
-          href={`http:audiocall/${sessionStorage.getItem(
-            'sectionButtonNumber',
-          )}/${sessionStorage.getItem('pageButtonNumber')}`}
-          className={styles['textbook-games-buttons__link']}
+    >
+      {helpers.checkUserLocal() && (
+        <div
+          className={`${styles['textbook-games-buttons']} ${
+            buttonSectionCurrentIndex === INDEX_STAR_SECTION_BUTTON
+              ? styles['textbook-games-buttons_none']
+              : ''
+          } ${
+            check20WordsInPage.length === 20 ? styles['textbook-games-buttons__link_disabled'] : ''
+          }`}
         >
-          Аудиовызов
-        </a>
-        <a
-          href={`http:sprint/${sessionStorage.getItem(
-            'sectionButtonNumber',
-          )}/${sessionStorage.getItem('pageButtonNumber')}`}
-          className={styles['textbook-games-buttons__link']}
-        >
-          Спринт
-        </a>
-      </div>
+          <NavLink
+            to={`./../audiocall/${sessionStorage.getItem(
+              'sectionButtonNumber',
+            )}/${sessionStorage.getItem('pageButtonNumber')}&startgame`}
+            className={styles['textbook-games-buttons__link']}
+          >
+            Аудиовызов
+          </NavLink>
+          <NavLink
+            to={'./../sprint'}
+            className={styles['textbook-games-buttons__link']}
+            onClick={() => {
+              sessionStorage.setItem('startGame', '1')
+            }}
+          >
+            Спринт
+          </NavLink>
+        </div>
+      )}
       <CreateTextbookSectionsButtons
         sections={sectionsButtonsText}
         buttonSectionCurrentIndex={buttonSectionCurrentIndex}
@@ -590,6 +596,7 @@ function Vocabulary({
         buttonSectionCurrentIndex={buttonSectionCurrentIndex}
         gramophoneButtonDisabled={gramophoneButtonDisabled}
         setGramophoneButtonDisabled={setGramophoneButtonDisabled}
+        dbUserWords={dbUserWords}
       />
       <WordButtons
         words={words}

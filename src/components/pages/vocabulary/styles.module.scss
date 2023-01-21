@@ -74,7 +74,19 @@
   transition: .5s;
 }
 
+.word-game-results {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter';
+  font-size: 18px;
+  column-gap: 15px;
+  padding-top: 15px
+}
 
+.word-game-results_none {
+  display: none;
+}
 
 .word-card {
   display: flex;

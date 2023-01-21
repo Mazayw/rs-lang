@@ -1,5 +1,5 @@
 import styles from './styles.module.scss'
-import { IWord, IUserWord } from '../../types/interface'
+import { IWord } from '../../types/interface'
 
 export function WordButtons({
   words,
@@ -82,4 +82,3 @@ export function WordButtons({
     </ul>
   )
 }
-

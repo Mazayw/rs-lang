@@ -6,21 +6,21 @@ export const aboutData: IAboutData = {
     photo: './img/Mazayw.jpg',
     title: 'JavaScript/Frontend Developer',
     content:
-      'some works some works some works some works some works some works some works some works some works some works some works some works some',
+      'Игра «Аудиовызов», Общие компоненты для игр, Страница «404», Страница регистрации и логина, Создание API, Главная страница, Настройка роутинга, Дизайн, Статистика, Прогресс изучения ',
     link: 'https://github.com/Mazayw/',
   },
   niknikolay: {
     name: 'Nikolay Kyev',
     photo: './img/niknikolay.jpg',
     title: 'JavaScript/Frontend Developer',
-    content: 'some works',
+    content: 'Словарь',
     link: 'https://github.com/niknikolay/',
   },
   rydvone: {
     name: 'Alexander Verbitsky',
     photo: './img/rydvone.jpg',
     title: 'JavaScript/Frontend Developer',
-    content: 'some works',
+    content: 'Страница о команде, Игра «Спринт»',
     link: 'https://github.com/rydvone/',
   },
 }

@@ -1,13 +1,23 @@
-
 import styles from './styles.module.scss'
+import { useEffect } from 'react'
+import helpers from '../../helpers'
 
 function MainPage({
   setActive,
   setAuthType,
+  setIsAuthorized,
+  isAuthorized,
 }: {
   setActive: React.Dispatch<React.SetStateAction<boolean>>
   setAuthType: React.Dispatch<React.SetStateAction<string>>
+  setIsAuthorized: React.Dispatch<React.SetStateAction<boolean>>
+  isAuthorized: boolean
 }) {
+  useEffect(() => {
+    const isAuth = helpers.checkUserLocal()
+    setIsAuthorized(isAuth)
+  }, [])
+
   return (
     <div className={styles.main}>
       <img
@@ -23,28 +33,30 @@ function MainPage({
             новые слова и повторяйте их до закрепления результата!
           </h3>
         </div>
-        <div className={styles['buttons-block']}>
-          <button
-            type='button'
-            className={`${styles.button} ${styles.regbtn}`}
-            onClick={() => {
-              setActive(true)
-              setAuthType('Регистрация')
-            }}
-          >
-            регистрация
-          </button>
-          <button
-            type='button'
-            className={`${styles.button} ${styles.authbtn}`}
-            onClick={() => {
-              setActive(true)
-              setAuthType('Войти')
-            }}
-          >
-            войти
-          </button>
-        </div>
+        {!isAuthorized && (
+          <div className={styles['buttons-block']}>
+            <button
+              type='button'
+              className={`${styles.button} ${styles.regbtn}`}
+              onClick={() => {
+                setActive(true)
+                setAuthType('Регистрация')
+              }}
+            >
+              регистрация
+            </button>
+            <button
+              type='button'
+              className={`${styles.button} ${styles.authbtn}`}
+              onClick={() => {
+                setActive(true)
+                setAuthType('Войти')
+              }}
+            >
+              войти
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

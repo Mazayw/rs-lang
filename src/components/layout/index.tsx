@@ -3,6 +3,8 @@ import { NavLink, Outlet } from 'react-router-dom'
 import Footer from '../footer'
 import Navbar from '../navbar'
 import Auth from '../authorization/index'
+import helpers from '../helpers'
+import { useEffect } from 'react'
 
 function Layout({
   isModalActive,
@@ -10,13 +12,30 @@ function Layout({
   setIsAuthorized,
   authType,
   setAuthType,
+  isAuthorized,
 }: {
   isModalActive: boolean
   setModalActive: React.Dispatch<React.SetStateAction<boolean>>
   setIsAuthorized: React.Dispatch<React.SetStateAction<boolean>>
   authType: string
   setAuthType: React.Dispatch<React.SetStateAction<string>>
+  isAuthorized: boolean
 }) {
+  useEffect(() => {
+    const isAuth = helpers.checkUserLocal()
+    setIsAuthorized(isAuth)
+  }, [])
+
+  const headerUserHandler = () => {
+    if (isAuthorized) {
+      helpers.logaut()
+      setIsAuthorized(false)
+    } else {
+      setModalActive(true)
+      setAuthType('Войти')
+    }
+  }
+
   return (
     <>
       <Auth
@@ -35,12 +54,9 @@ function Layout({
           </div>
           <img
             className={styles.user__img}
-            src='./icons/user.svg'
-            alt='Logo'
-            onClick={() => {
-              setModalActive(true)
-              setAuthType('Регистрация')
-            }}
+            src={isAuthorized ? './icons/exit.svg' : './icons/user.svg'}
+            alt={isAuthorized ? 'Exit' : 'Login'}
+            onClick={headerUserHandler}
           />
         </div>
       </header>

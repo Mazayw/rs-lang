@@ -13,7 +13,6 @@ import { IWord } from './components/types/interface'
 import AudioGameMain from './components/pages/games/audiocall/game/index'
 import Description from './components/pages/games/audiocall/description/index'
 
-
 function App() {
   const [isModalActive, setModalActive] = useState(false)
   const [isAuthorized, setIsAuthorized] = useState(false)
@@ -32,12 +31,20 @@ function App() {
               setIsAuthorized={setIsAuthorized}
               authType={authType}
               setAuthType={setAuthType}
+              isAuthorized={isAuthorized}
             />
           }
         >
           <Route
             index
-            element={<MainPage setActive={setModalActive} setAuthType={setAuthType} />}
+            element={
+              <MainPage
+                setIsAuthorized={setIsAuthorized}
+                isAuthorized={isAuthorized}
+                setActive={setModalActive}
+                setAuthType={setAuthType}
+              />
+            }
           />
           <Route path='audiocall' element={<Description />} />
           <Route path='audiocall/:group/:page' element={<AudioGameMain />} />
@@ -51,7 +58,10 @@ function App() {
               />
             }
           />
-          <Route path='statistics' element={<Statistics />} />
+          <Route
+            path='statistics'
+            element={<Statistics isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} />}
+          />
           <Route path='about' element={<About />} />
           <Route path='*' element={<NotFound />} />
         </Route>

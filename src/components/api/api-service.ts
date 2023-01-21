@@ -233,7 +233,7 @@ class ApiService {
 
   async getUserStatistic(id: string, token: string) {
     try {
-      const response = await http.get<IUserStat>(`/users/${id}/statistics`, this.header(token))
+      const response = await http.get(`/users/${id}/statistics`, this.header(token))
       return response
     } catch (error) {
       this.errorHandler(error as AxiosError)
@@ -281,4 +281,3 @@ class ApiService {
 }
 
 export default new ApiService()
-

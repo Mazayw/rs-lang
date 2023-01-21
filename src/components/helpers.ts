@@ -1,7 +1,7 @@
 import apiService from './api/api-service'
 import { IUserSignInResponse, IUserWord, IUserStat, IWord, IGameStat } from './types/interface'
 import { IAnswer } from './types/audioGame-interface'
-import { AxiosResponse, AxiosResponseHeaders } from 'axios'
+import { AxiosResponse } from 'axios'
 
 class Helpers {
   optionalUnion(oldWord: IUserWord, newWord: IUserWord) {
@@ -10,7 +10,6 @@ class Helpers {
 
     const o1 = oldShadow.optional
     const o2 = new2Shadow.optional
-
     Object.keys(o2).map((key) => {
       if (o2[key] === '0' && key === 'guessedInLine') {
         o1[key] = '0'
@@ -49,6 +48,7 @@ class Helpers {
         return false
       }
     }
+    return false
   }
 
   checkUserLocal() {
@@ -76,7 +76,7 @@ class Helpers {
   shareGuessed(arr: IAnswer[]) {
     const length = arr.length
     const rightAnswers = arr.reduce((acc, el) => acc + Number(el.answer), 0)
-    return (rightAnswers / length) * 100
+    return Math.round((rightAnswers / length) * 100)
   }
 
   async updateUserWord(
@@ -113,42 +113,57 @@ class Helpers {
     return false
   }
 
+  undefinedCheck = (data: number | undefined) => {
+    if (typeof data === 'undefined') {
+      return 0
+    } else return data
+  }
+
   private joinStat = (oldStat: IUserStat, newStat: IUserStat) => {
     const result = JSON.parse(JSON.stringify(oldStat))
     result.learnedWords += newStat.learnedWords
     const date = new Date().toDateString()
+    if (typeof result.optional === 'undefined') {
+      result.optional = {}
+    }
+
     if (typeof result.optional[date] !== 'undefined') {
       const current = result.optional[date]
-      const currentNewStat = result.optional[date]
+      const currentNewStat = newStat.optional[date] as IGameStat
 
-      current.sprintNewWords = result.sprintNewWords || 0 + currentNewStat.sprintNewWords || 0
+      current.sprintNewWords =
+        current.sprintNewWords || 0 + this.undefinedCheck(currentNewStat.sprintNewWords)
 
-      current.sprintFractionGuessed = Math.round(
-        (result.sprintFractionGuessed ||
-          currentNewStat.sprintFractionGuessed ||
-          0 + currentNewStat.sprintFractionGuessed ||
-          result.sprintFractionGuessed ||
-          0) / 2,
-      )
+      current.sprintShareGuessed = this.undefinedCheck(currentNewStat.sprintShareGuessed)
+        ? Math.round(
+            (this.undefinedCheck(currentNewStat.sprintShareGuessed) ||
+              this.undefinedCheck(current.sprintShareGuessed) +
+                this.undefinedCheck(currentNewStat.sprintShareGuessed) ||
+              this.undefinedCheck(current.sprintShareGuessed)) / 2,
+          )
+        : this.undefinedCheck(current.sprintShareGuessed)
 
       current.sprintLongestseries = Math.max(
-        result.sprintLongestseries || 0,
-        currentNewStat.sprintLongestseries || 0,
+        this.undefinedCheck(current.sprintLongestseries),
+        this.undefinedCheck(currentNewStat.sprintLongestseries),
       )
 
-      current.audioNewWords = result.audioNewWords || 0 + currentNewStat.audioNewWords || 0
+      current.audioNewWords =
+        this.undefinedCheck(current.audioNewWords) +
+        this.undefinedCheck(currentNewStat.audioNewWords)
 
-      current.audioFractionGuessed = Math.round(
-        (result.audioFractionGuessed ||
-          currentNewStat.audioFractionGuessed ||
-          0 + currentNewStat.audioFractionGuessed ||
-          result.audioFractionGuessed ||
-          0) / 2,
-      )
+      current.audioShareGuessed = this.undefinedCheck(currentNewStat.audioShareGuessed)
+        ? Math.round(
+            (this.undefinedCheck(currentNewStat.audioShareGuessed) ||
+              this.undefinedCheck(current.audioShareGuessed) +
+                this.undefinedCheck(currentNewStat.audioShareGuessed) ||
+              this.undefinedCheck(current.audioShareGuessed)) / 2,
+          )
+        : this.undefinedCheck(current.sprintShareGuessed)
 
       current.audioLongestseries = Math.max(
-        result.audioLongestseries || 0,
-        currentNewStat.audioLongestseries || 0,
+        this.undefinedCheck(current.audioLongestseries),
+        this.undefinedCheck(currentNewStat.audioLongestseries),
       )
     } else {
       result.optional[date] = newStat.optional[date]
@@ -164,16 +179,15 @@ class Helpers {
       const userId = localStorage.getItem('userId') as string
 
       const statResponse = (await apiService.getUserStatistic(userId, token)) as AxiosResponse
-      const stat = statResponse.data
-      delete stat.id
-      console.log('stat', stat, typeof stat)
 
-      if (statResponse.status === 200) {
+      if (typeof statResponse === 'undefined') {
+        await apiService.setUserStatistic(userId, body, token)
+      } else if (statResponse.status === 200) {
+        const stat = statResponse.data
+        delete stat.id
         const result = this.joinStat(stat, body)
-        console.log('result', result)
         await apiService.setUserStatistic(userId, result, token)
       } else {
-        console.log('body', body)
         await apiService.setUserStatistic(userId, body, token)
       }
     }
@@ -181,13 +195,13 @@ class Helpers {
 
   async getUnlearnedWords(group: string, page: string, arrSize: number, filter = '') {
     const result = [] as IWord[]
-    const token = localStorage.getItem('refreshToken')
+    const token = localStorage.getItem('token')
     const id = localStorage.getItem('userId')
     if (id && token)
       do {
         const dataResponse = await apiService.getAllAgregatedWords(
-          id!,
-          token!,
+          id,
+          token,
           group,
           page,
           '20',
