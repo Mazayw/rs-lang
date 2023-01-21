@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom'
 import apiService from '../../../../api/api-service'
 import GameResults from '../results'
 import helpers from '../../../../helpers'
+import LoadingAnimation from '../../../../loadingAnimation'
 
 function AudioGameMain() {
   const { group, page } = useParams()
@@ -15,6 +16,7 @@ function AudioGameMain() {
   const [answers, setAnswers] = useState<Array<string>>([])
   const [isShowAnswer, setShowAnswer] = useState(false)
   const [gameState, setGameState] = useState(0)
+  const [looseCounter, setLooseCounter] = useState(0)
   const [words, setWords] = useState<Array<IWord | never>>([])
   const [answersArr, setAnswersArr] = useState<IAnswer[]>([])
   const [heart, setHeart] = useState<number[]>([])
@@ -39,6 +41,8 @@ function AudioGameMain() {
   const getWords = async () => {
     const [groupUrl, pageUrl, isVocabularyGame] = urlCheck()
     let wordsArr
+    console.log('Words loading, please wait')
+
     if (isVocabularyGame) {
       wordsArr = await helpers.getUnlearnedWords(
         groupUrl as string,
@@ -54,7 +58,7 @@ function AudioGameMain() {
   }
 
   const onWordPlay = () => {
-    if (currentWord && gameState === 0) {
+    if (currentWord && gameState === 0 && looseCounter <= 4) {
       const currentAudio = new Audio(`${settings.url}${currentWord.audio}`)
       currentAudio.play()
     }
@@ -63,17 +67,21 @@ function AudioGameMain() {
   useEffect(() => {
     if (current) {
       heartCount()
-      newWord()
+      if (looseCounter <= 4) newWord()
     }
   }, [current])
 
   useEffect(() => {
+    heartCount()
     helpers.checkUser()
     setGameState(0)
     setAnswersArr([])
     getWords()
-    heartCount()
   }, [])
+
+  useEffect(() => {
+    if (looseCounter > 4) setGameState(1)
+  }, [looseCounter])
 
   useEffect(() => {
     newWord()
@@ -81,7 +89,10 @@ function AudioGameMain() {
 
   const newWord = () => {
     if (words.length && gameState === 0) {
-      if (current === words.length) {
+      console.log(looseCounter, '11')
+
+      if (current === words.length || looseCounter > 4) {
+        console.log(looseCounter, '22')
         setGameState(1)
       } else {
         onWordPlay()
@@ -103,6 +114,7 @@ function AudioGameMain() {
   const heartCount = () => {
     const arr = heart.length ? heart : Array(5).fill(1)
     const heartLoose = answersArr.filter((el) => el.answer === false).length
+    setLooseCounter(heartLoose)
     arr.fill(0, 0, heartLoose)
     setHeart(arr)
   }
@@ -115,7 +127,7 @@ function AudioGameMain() {
           answersArr={answersArr}
           setAnswersArr={setAnswersArr}
         />
-      ) : (
+      ) : currentWord ? (
         <div className={styles.content}>
           <img
             src='./../../rs-lang/icons/audio.svg'
@@ -138,7 +150,7 @@ function AudioGameMain() {
           </div>
           <h3 className={styles.subtitle}>Выберите перевод услышанного слова</h3>
           <div className={styles['buttons-block']}>
-            {currentWord &&
+            {currentWord ? (
               answers.map((el, index) => (
                 <AudioChooseButton
                   key={index}
@@ -152,9 +164,14 @@ function AudioGameMain() {
                   answersArr={answersArr}
                   setGameState={setGameState}
                 />
-              ))}
+              ))
+            ) : (
+              <LoadingAnimation />
+            )}
           </div>
         </div>
+      ) : (
+        <LoadingAnimation />
       )}
     </div>
   )

@@ -33,13 +33,14 @@ function Sprint() {
   )
 
   const loadWords = async (group: number, page: number) => {
+    console.log()
     await getWordsVocabularySprint(group, page)
     await getWordSprint()
+    
   }
 
   React.useEffect(() => {
     if (checkVocabulary) {
-      
       setCheckVocabulary(0)
       sessionStorage.setItem('startGame', '0')
       sprintService.groupSprintCurrent = Number(sessionStorage.getItem('sectionButtonNumber'))

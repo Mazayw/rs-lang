@@ -2,7 +2,11 @@ import React, { useState } from 'react'
 import { sprintDescription } from './sprint-data'
 import { SptintSelectList } from './sprint-components/sprint-select-list'
 import styles from './styles.module.scss'
-import { getWordsAllForGroupSprint, getWordSprint, sprintService } from './sprint-services/sprint-services'
+import {
+  getWordsAllForGroupSprint,
+  getWordSprint,
+  sprintService,
+} from './sprint-services/sprint-services'
 
 interface IPropsSprintSelectLevel {
   sprintLevel: React.Dispatch<React.SetStateAction<number>>
@@ -21,7 +25,7 @@ export function SptintSelectLevel(props: IPropsSprintSelectLevel) {
 
   React.useEffect(() => {
     if (level) {
-      sprintService.groupSprintCurrent = level;      
+      sprintService.groupSprintCurrent = level
       props.partEnded(true)
       loadWords(sprintService.groupSprintCurrent)
       props.sprintLevel(level)
@@ -36,7 +40,9 @@ export function SptintSelectLevel(props: IPropsSprintSelectLevel) {
           src={sprintDescription[keyData].image}
           alt={`${keyData} game`}
         />
-        <div className={styles['sptint__description-content']}>{sprintDescription[keyData].content}</div>
+        <div className={styles['sptint__description-content']}>
+          {sprintDescription[keyData].content}
+        </div>
       </div>
       <h3 className={styles['sprint__h3']}>Выберите уровень:</h3>
       <SptintSelectList sprintLevel={setLevel} />

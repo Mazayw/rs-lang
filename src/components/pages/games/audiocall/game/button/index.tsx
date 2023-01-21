@@ -54,12 +54,15 @@ function AudioChooseButton({
     }
     const isNewWord = await helpers.updateUserWord(answer.id, newWord, '', true)
 
-    setShowAnswer(true)
+    await setShowAnswer(true)
 
-    setAnswersArr((prev) => [...prev, { word: answer, answer: isCorrect, isNewWord: isNewWord }])
+    await setAnswersArr((prev) => [
+      ...prev,
+      { word: answer, answer: isCorrect, isNewWord: isNewWord },
+    ])
 
-    setFilteredArrLength(answersArr.filter((el) => el.answer === false).length)
-    if (filteredArrLength === 4) {
+    await setFilteredArrLength(answersArr.filter((el) => el.answer === false).length)
+    if (filteredArrLength > 3) {
       setGameState(1)
     } else {
       setTimeout(() => {
