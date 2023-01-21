@@ -7,7 +7,7 @@ function ChooseButton({ data, index }: { data: IButton; index: number }) {
   const page = `${Math.floor(Math.random() * 30)}`
 
   const moveTopage = () => {
-    window.location.assign(`https://mazayw.github.io/rs-lang/#/audiocall/${data.group}/${page}`)
+    window.location.assign(`./audiocall/${data.group}/${page}`)
   }
 
   useEffect(() => {

@@ -51,7 +51,7 @@ function Footer() {
               >
                 <img
                   className={styles.rss__img}
-                  src='./../../rs-lang/icons/logo-rsschool3.svg'
+                  src='./icons/logo-rsschool3.svg'
                   alt='RS School Logo'
                 />
               </a>

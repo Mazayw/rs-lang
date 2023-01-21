@@ -26,8 +26,9 @@ export interface ISprintDescription {
 export const sprintDescription: ISprintDescription = {
   sprint: {
     name: 'Спринт',
-    image: './../../rs-lang/img/games/sprint-icon.png',
-    content: 'Проверьте, сколько очков вы можете набрать за одну минуту, делая обоснованные предположения о том, что правильно, а что нет',
+    image: './img/games/sprint-icon.png',
+    content:
+      'Проверьте, сколько очков вы можете набрать за одну минуту, делая обоснованные предположения о том, что правильно, а что нет',
     url: '/sprint',
   },
 }

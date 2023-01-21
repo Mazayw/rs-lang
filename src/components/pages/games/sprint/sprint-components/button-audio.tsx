@@ -22,8 +22,9 @@ export function ButtonAudioState({
     <button className={styles['button_sprint-audio']} onClick={click}>
       <img
         className={styles['button_sprint-audio-image']}
-        src={`./../../rs-lang/img/games/${sound ? 'volume-on.svg' : 'volume-off.svg'}`}
+        src={`./img/games/${sound ? 'volume-on.svg' : 'volume-off.svg'}`}
         alt={'sound on-off'}
-      /></button>
+      />
+    </button>
   )
 }

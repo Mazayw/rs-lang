@@ -16,7 +16,7 @@ interface ISprintTimes {
   [key: string]: number
 }
 
-const SPRINT_BG = './../../rs-lang/img/games/game-sprint-bg.jpg'
+const SPRINT_BG = './img/games/game-sprint-bg.jpg'
 const SPRINT_TIMES: ISprintTimes = {
   start: 5,
   action: 60,
@@ -39,7 +39,6 @@ function Sprint() {
 
   React.useEffect(() => {
     if (checkVocabulary) {
-      
       setCheckVocabulary(0)
       sessionStorage.setItem('startGame', '0')
       sprintService.groupSprintCurrent = Number(sessionStorage.getItem('sectionButtonNumber'))
