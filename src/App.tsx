@@ -1,23 +1,25 @@
+import { useContext, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
-
 import Layout from './components/layout'
-import MainPage from './components/pages/main-page/index'
-import Vocabulary from './components/pages/vocabulary/index'
-import Sprint from './components/pages/games/sprint/index'
-import Statistics from './components/pages/statistics/index'
-import About from './components/pages/about'
-import NotFound from './components/pages/notfound/index'
-import { useState } from 'react'
 import { IWord } from './components/types/interface'
-import AudioGameMain from './components/pages/games/audiocall/game/index'
-import Description from './components/pages/games/audiocall/description/index'
+import About from './pages/about'
+import Description from './pages/games/audiocall/description'
+import AudioGameMain from './pages/games/audiocall/game'
+import Sprint from './pages/games/sprint'
+import MainPage from './pages/main-page'
+import NotFound from './pages/notfound'
+import Statistics from './pages/statistics'
+import Vocabulary from './pages/vocabulary'
+import { Context } from './index'
 
 function App() {
   const [isModalActive, setModalActive] = useState(false)
-  const [isAuthorized, setIsAuthorized] = useState(false)
+  const { user } = useContext(Context)
   const [authType, setAuthType] = useState('')
   const [check20WordsInPage, setCheck20WordsInPage] = useState([] as IWord[])
+
+  console.log(user)
 
   return (
     <div className='App'>
@@ -28,23 +30,14 @@ function App() {
             <Layout
               isModalActive={isModalActive}
               setModalActive={setModalActive}
-              setIsAuthorized={setIsAuthorized}
               authType={authType}
               setAuthType={setAuthType}
-              isAuthorized={isAuthorized}
             />
           }
         >
           <Route
             index
-            element={
-              <MainPage
-                setIsAuthorized={setIsAuthorized}
-                isAuthorized={isAuthorized}
-                setActive={setModalActive}
-                setAuthType={setAuthType}
-              />
-            }
+            element={<MainPage setActive={setModalActive} setAuthType={setAuthType} />}
           />
           <Route path='audiocall' element={<Description />} />
           <Route path='audiocall/:group/:page' element={<AudioGameMain />} />
@@ -58,10 +51,7 @@ function App() {
               />
             }
           />
-          <Route
-            path='statistics'
-            element={<Statistics isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} />}
-          />
+          <Route path='statistics' element={<Statistics />} />
           <Route path='about' element={<About />} />
           <Route path='*' element={<NotFound />} />
         </Route>

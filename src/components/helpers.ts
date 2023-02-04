@@ -1,8 +1,14 @@
-import apiService from './api/api-service'
 import { IUserSignInResponse, IUserWord, IUserStat, IWord, IGameStat } from './types/interface'
 import { IAnswer } from './types/audioGame-interface'
 import { AxiosResponse } from 'axios'
+import apiService from '../api/api-service'
+import jwtDecode from 'jwt-decode'
 
+type userToken = {
+  id: string
+  iat: number
+  exp: number
+}
 class Helpers {
   optionalUnion(oldWord: IUserWord, newWord: IUserWord) {
     const oldShadow = JSON.parse(JSON.stringify(oldWord))
@@ -21,10 +27,15 @@ class Helpers {
   }
 
   authorize(data: IUserSignInResponse) {
-    data.token && localStorage.setItem('token', data.token)
+    if (data.token) {
+      localStorage.setItem('token', data.token)
+      const tokenDecoded: userToken = jwtDecode(data.token)
+      localStorage.setItem('userId', tokenDecoded.id)
+      localStorage.setItem('userAutExp', tokenDecoded.exp.toString())
+
+      console.log(tokenDecoded.exp, tokenDecoded.iat)
+    }
     data.refreshToken && localStorage.setItem('refreshToken', data.refreshToken)
-    data.userId && localStorage.setItem('userId', data.userId)
-    localStorage.setItem('tokenTime', Date())
   }
 
   logaut() {

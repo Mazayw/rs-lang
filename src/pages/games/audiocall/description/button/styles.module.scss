@@ -1,0 +1,51 @@
+.link {
+  text-decoration: none;
+}
+
+.choose-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  background: #1f2143;
+  border-radius: 6px;
+  border-color: #1f2143;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 29px;
+  text-transform: uppercase;
+  color: #ffffff;
+  box-shadow: 0px 4px 10px 10px rgba(0, 0, 0, 0.25);
+
+  &:hover {
+    border: 1px solid #ffffff;
+    cursor: pointer;
+  }
+}
+
+.button-a1 {
+  background: #812929;
+}
+
+.button-a2 {
+  background: #c85f0b;
+}
+
+.button-b1 {
+  background: #e7ab2c;
+}
+
+.button-b2 {
+  background: #248324;
+}
+
+.button-c1 {
+  background: #282886;
+}
+
+.button-c2 {
+  background: #7119a2;
+}

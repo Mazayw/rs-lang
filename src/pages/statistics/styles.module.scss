@@ -1,0 +1,47 @@
+.main {
+  padding: 40px;
+  background: #171836;
+  min-height: calc(100vh - 100px - 140px);
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 130%;
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  color: #f5443b;
+  font-size: 46px;
+  margin-bottom: 30px;
+}
+
+.subtitle-stat {
+  font-size: 24px;
+}
+
+.subtitle {
+  margin-top: 10px;
+}
+
+.games-wrapper {
+  margin-top: 50px;
+  display: flex;
+  gap: 70px;
+  flex-wrap: wrap;
+}
+
+.game-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-title {
+  margin-bottom: 20px;
+  color: #f5443b;
+}
