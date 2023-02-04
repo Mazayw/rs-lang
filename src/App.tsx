@@ -1,6 +1,7 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
+import Auth from './components/authorization'
 import Layout from './components/layout'
 import { IWord } from './components/types/interface'
 import About from './pages/about'
@@ -11,29 +12,19 @@ import MainPage from './pages/main-page'
 import NotFound from './pages/notfound'
 import Statistics from './pages/statistics'
 import Vocabulary from './pages/vocabulary'
-import { Context } from './index'
 
 function App() {
   const [isModalActive, setModalActive] = useState(false)
-  const { user } = useContext(Context)
   const [authType, setAuthType] = useState('')
   const [check20WordsInPage, setCheck20WordsInPage] = useState([] as IWord[])
 
-  console.log(user)
-
   return (
     <div className='App'>
+      <Auth active={isModalActive} setActive={setModalActive} authType={authType} />
       <Routes>
         <Route
           path='/'
-          element={
-            <Layout
-              isModalActive={isModalActive}
-              setModalActive={setModalActive}
-              authType={authType}
-              setAuthType={setAuthType}
-            />
-          }
+          element={<Layout setModalActive={setModalActive} setAuthType={setAuthType} />}
         >
           <Route
             index
