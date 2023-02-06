@@ -1,10 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import { IUser } from '../types/interface'
-import helpers from '../helpers'
-import apiService from '../../api/api-service'
 import { Context } from '../../index'
 import { observer } from 'mobx-react-lite'
+import { createUser, signIn } from '../../http/userApi'
 
 const Auth = observer(
   ({
@@ -16,7 +15,7 @@ const Auth = observer(
     setActive: React.Dispatch<React.SetStateAction<boolean>>
     authType: string
   }) => {
-    const { user } = useContext(Context)
+    const { store } = useContext(Context)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [emailDirty, setEmailDirty] = useState(false)
@@ -76,26 +75,33 @@ const Auth = observer(
       }
     }
 
-    const authorization = async (obj: IUser) => {
-      const authResult = await apiService.signIn(obj)
-      if (authResult?.status === 200) {
-        helpers.authorize(authResult.data)
+    const authorization = async (body: IUser) => {
+      store.setIsLoading(true)
+      try {
+        const resp = await signIn(body)
         setEmail('')
         setPassword('')
         setActive(false)
-        user.setIsAuth(true)
-      } else {
+        console.log(resp)
+        store.setIsAuth(true)
+      } catch (error) {
         setRegInfo('Такое сочетание E-mail/пароль не найдено')
+      } finally {
+        store.setIsLoading(false)
       }
     }
 
     const authHandler = async (obj: IUser) => {
+      store.setIsLoading(true)
       switch (authType) {
         case 'Регистрация': {
-          const regResult = await apiService.createUser(obj)
-          if (regResult?.status !== 200) setRegInfo('Пользователь с таким E-mail уже существует')
-          if (regResult?.status === 200) {
+          try {
+            await createUser(obj)
             await authorization(obj)
+          } catch (error) {
+            setRegInfo('Пожалуйста проверьте email/пароль')
+          } finally {
+            store.setIsLoading(false)
           }
           break
         }

@@ -14,11 +14,16 @@ const Layout = observer(
     setModalActive: React.Dispatch<React.SetStateAction<boolean>>
     setAuthType: React.Dispatch<React.SetStateAction<string>>
   }) => {
-    const { user } = useContext(Context)
+    const { store } = useContext(Context)
 
     const modalHandler = () => {
-      setModalActive(true)
-      setAuthType('Войти')
+      if (store.isAuth) {
+        store.setIsAuth(false)
+        localStorage.clear()
+      } else {
+        setModalActive(true)
+        setAuthType('Войти')
+      }
     }
 
     return (
@@ -33,8 +38,8 @@ const Layout = observer(
             </div>
             <img
               className={styles.user__img}
-              src={user.isAuth ? './icons/exit.svg' : './icons/user.svg'}
-              alt={user.isAuth ? 'Exit' : 'Login'}
+              src={store.isAuth ? './icons/exit.svg' : './icons/user.svg'}
+              alt={store.isAuth ? 'Exit' : 'Login'}
               onClick={modalHandler}
             />
           </div>

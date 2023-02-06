@@ -1,24 +1,22 @@
-import { useState, useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useState, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import apiService from '../../../../api/api-service'
 import helpers from '../../../../components/helpers'
 import LoadingAnimation from '../../../../components/loadingAnimation'
-import { IAnswer } from '../../../../components/types/audioGame-interface'
 import { IWord } from '../../../../components/types/interface'
-import { settings } from '../../../../settings'
+import { SETTINGS, settings } from '../../../../settings'
 import GameResults from '../results'
 import AudioChooseButton from './button'
 import styles from './styles.module.scss'
+import { Context } from '../../../../index'
 
-function AudioGameMain() {
+const AudioGameMain = observer(() => {
+  const { audioCallStore } = useContext(Context)
   const { group, page } = useParams()
   const [current, setCurrent] = useState(0)
-  const [answers, setAnswers] = useState<Array<string>>([])
   const [isShowAnswer, setShowAnswer] = useState(false)
-  const [gameState, setGameState] = useState(0)
-  const [looseCounter, setLooseCounter] = useState(0)
   const [words, setWords] = useState<Array<IWord | never>>([])
-  const [answersArr, setAnswersArr] = useState<IAnswer[]>([])
   const [heart, setHeart] = useState<number[]>([])
 
   const currentWord = words[current]
@@ -58,8 +56,8 @@ function AudioGameMain() {
   }
 
   const onWordPlay = () => {
-    if (currentWord && gameState === 0 && looseCounter <= 4) {
-      const currentAudio = new Audio(`${settings.url}${currentWord.audio}`)
+    if (currentWord && audioCallStore.gameState === 0 && audioCallStore.looseCounter <= 4) {
+      const currentAudio = new Audio(`${SETTINGS.BASE_URL}/${currentWord.audio}`)
       currentAudio.play()
     }
   }
@@ -67,30 +65,30 @@ function AudioGameMain() {
   useEffect(() => {
     if (current) {
       heartCount()
-      if (looseCounter <= 4) newWord()
+      if (audioCallStore.looseCounter <= 4) newWord()
     }
   }, [current])
 
   useEffect(() => {
     heartCount()
     helpers.checkUser()
-    setGameState(0)
-    setAnswersArr([])
+    audioCallStore.setGameState(0)
+    audioCallStore.setAnswersArr([])
     getWords()
   }, [])
 
   useEffect(() => {
-    if (looseCounter > 4) setGameState(1)
-  }, [looseCounter])
+    if (audioCallStore.looseCounter > 4) audioCallStore.setGameState(1)
+  }, [audioCallStore.looseCounter])
 
   useEffect(() => {
     newWord()
   }, [words])
 
   const newWord = () => {
-    if (words.length && gameState === 0) {
-      if (current === words.length || looseCounter > 4) {
-        setGameState(1)
+    if (words.length && audioCallStore.gameState === 0) {
+      if (current === words.length || audioCallStore.looseCounter > 4) {
+        audioCallStore.setGameState(1)
       } else {
         onWordPlay()
 
@@ -103,27 +101,23 @@ function AudioGameMain() {
         const answersArray = shuffleArray(
           filtered().slice(0, 4).concat([currentWord.wordTranslate]),
         )
-        setAnswers(answersArray)
+        audioCallStore.setAnswers(answersArray)
       }
     }
   }
 
   const heartCount = () => {
     const arr = heart.length ? heart : Array(5).fill(1)
-    const heartLoose = answersArr.filter((el) => el.answer === false).length
-    setLooseCounter(heartLoose)
+    const heartLoose = audioCallStore.answersArr.filter((el) => el.answer === false).length
+    audioCallStore.setLooseCounter(heartLoose)
     arr.fill(0, 0, heartLoose)
     setHeart(arr)
   }
 
   return (
     <div className={styles['game-main']}>
-      {gameState ? (
-        <GameResults
-          setGameState={setGameState}
-          answersArr={answersArr}
-          setAnswersArr={setAnswersArr}
-        />
+      {audioCallStore.gameState ? (
+        <GameResults />
       ) : currentWord ? (
         <div className={styles.content}>
           <img
@@ -148,18 +142,15 @@ function AudioGameMain() {
           <h3 className={styles.subtitle}>Выберите перевод услышанного слова</h3>
           <div className={styles['buttons-block']}>
             {currentWord ? (
-              answers.map((el, index) => (
+              audioCallStore.answers.map((el, index) => (
                 <AudioChooseButton
                   key={index + el}
                   index={index}
-                  setAnswersArr={setAnswersArr}
                   answer={currentWord}
                   choose={el}
                   isShowAnswer={isShowAnswer}
                   setShowAnswer={setShowAnswer}
                   setCurrent={setCurrent}
-                  answersArr={answersArr}
-                  setGameState={setGameState}
                 />
               ))
             ) : (
@@ -172,5 +163,5 @@ function AudioGameMain() {
       )}
     </div>
   )
-}
+})
 export default AudioGameMain

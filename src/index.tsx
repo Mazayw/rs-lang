@@ -3,10 +3,12 @@ import './index.scss'
 import App from './App'
 import { HashRouter } from 'react-router-dom'
 import { createContext } from 'react'
-import UserStore from './store/UserStore'
+import GlobalStore from './store/UserStore'
+import AudioCallStore from './store/AudioCallStore'
 
 const contextData = {
-  user: new UserStore(),
+  store: new GlobalStore(),
+  audioCallStore: new AudioCallStore(),
 }
 
 export const Context = createContext(contextData)

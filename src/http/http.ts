@@ -1,14 +1,7 @@
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
-import { IToken } from '../components/types/interface'
+import { IToken, ITokenData } from '../components/types/interface'
 import { SETTINGS } from '../settings'
-
-type tokenData = {
-  id: string
-  tokenId: string
-  iat: number
-  exp: number
-}
 
 export const api = axios.create({
   baseURL: SETTINGS.BASE_URL,
@@ -40,7 +33,7 @@ authApi.interceptors.response.use(
       originalRequest._isRetry = true
       try {
         const token = localStorage.getItem('refreshToken') || ''
-        const userId: tokenData = jwtDecode(token)
+        const userId: ITokenData = jwtDecode(token)
         const response = await axios.get<IToken>(`${SETTINGS.BASE_URL}/users/${userId.id}/tokens`, {
           headers: { Authorization: `Bearer ${token}` },
         })
@@ -51,6 +44,7 @@ authApi.interceptors.response.use(
         console.log('НЕ АВТОРИЗОВАН')
       }
     }
+    console.log('error')
     throw error
   },
 )

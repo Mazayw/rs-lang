@@ -1,5 +1,3 @@
-
-
 export interface IWord {
   id: string
   _id: string
@@ -99,3 +97,9 @@ export interface IMenu {
   submenu?: Array<IMenuMain>
 }
 
+export interface ITokenData {
+  id: string
+  tokenId: string
+  iat: number
+  exp: number
+}

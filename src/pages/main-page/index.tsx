@@ -11,7 +11,7 @@ const MainPage = observer(
     setActive: React.Dispatch<React.SetStateAction<boolean>>
     setAuthType: React.Dispatch<React.SetStateAction<string>>
   }) => {
-    const { user } = useContext(Context)
+    const { store } = useContext(Context)
     return (
       <div className={styles.main}>
         <img
@@ -27,7 +27,7 @@ const MainPage = observer(
               новые слова и повторяйте их до закрепления результата!
             </h3>
           </div>
-          {!user.isAuth && (
+          {!store.isAuth && (
             <div className={styles['buttons-block']}>
               <button
                 type='button'

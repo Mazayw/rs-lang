@@ -1,21 +1,33 @@
 import styles from './styles.module.scss'
 import { useEffect, useState, useContext } from 'react'
-import { AxiosResponse } from 'axios'
-import apiService from '../../api/api-service'
-import { IUserStat, IGameStat } from '../../components/types/interface'
+import { IUserStat, IGameStat, ITokenData } from '../../components/types/interface'
 import { observer } from 'mobx-react-lite'
 import { Context } from '../../index'
+import jwtDecode from 'jwt-decode'
+import { getUserStatistic } from '../../http/userStatisticApi'
 
 const Statistics = observer(() => {
   const [dayStat, setDayStat] = useState({} as unknown as IUserStat)
   const [gameStat, setGameStat] = useState({} as IGameStat)
-  const { user } = useContext(Context)
+  const [isNoStat, setIsNoStat] = useState(false)
+  const { store } = useContext(Context)
 
   const getStat = async () => {
-    const token = localStorage.getItem('token') as string
-    const userId = localStorage.getItem('userId') as string
-    const stat = (await apiService.getUserStatistic(userId, token)) as AxiosResponse
-    stat.status === 200 && setDayStat(stat.data)
+    console.log(store)
+    const token = localStorage.getItem('token') || ''
+    const userData: ITokenData = jwtDecode(token)
+    console.log(userData)
+    try {
+      console.log(store)
+      store.setIsLoading(true)
+      const stat = await getUserStatistic(userData.id)
+      setDayStat(stat.data)
+    } catch (error) {
+      setIsNoStat(true)
+      console.log(error)
+    } finally {
+      store.setIsLoading(false)
+    }
   }
 
   const updateStatText = (key: string) => {
@@ -30,7 +42,7 @@ const Statistics = observer(() => {
     } else return 0
   }
 
-  const getSatText = () => {
+  const getStatText = () => {
     const res = {
       sprintNewWords: updateStatText('sprintNewWords'),
       sprintShareGuessed: Math.round(updateStatText('sprintShareGuessed')),
@@ -46,20 +58,20 @@ const Statistics = observer(() => {
   const date = new Date()
 
   useEffect(() => {
-    getSatText()
+    store.isAuth && getStatText()
   }, [dayStat])
 
   useEffect(() => {
-    getSatText()
+    getStatText()
   }, [])
 
   useEffect(() => {
-    getStat()
-  }, [user.isAuth])
+    store.isAuth && getStat()
+  }, [store.isAuth])
 
   return (
     <div className={styles.main}>
-      {user.isAuth ? (
+      {store.isAuth ? (
         <>
           <h1 className={styles.title}>Статистика</h1>
           <h3 className={styles['subtitle-stat']}>
