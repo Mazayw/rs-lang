@@ -1,9 +1,9 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import Auth from './components/authorization'
 import Layout from './components/layout'
-import { IWord } from './components/types/interface'
+import { ITokenData, IWord } from './components/types/interface'
 import About from './pages/about'
 import Description from './pages/games/audiocall/description'
 import AudioGameMain from './pages/games/audiocall/game'
@@ -15,12 +15,26 @@ import Vocabulary from './pages/vocabulary'
 import LoadingAnimation from './components/loadingAnimation/index'
 import { observer } from 'mobx-react-lite'
 import { Context } from './index'
+import { getUserToken } from './http/userApi'
 
 const App = observer(() => {
   const [isModalActive, setModalActive] = useState(false)
   const [authType, setAuthType] = useState('')
   const [check20WordsInPage, setCheck20WordsInPage] = useState([] as IWord[])
   const { store } = useContext(Context)
+
+  const checkAuthorization = async () => {
+    try {
+      const response = await getUserToken()
+      if (response?.status === 200) store.setIsAuth(true)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    checkAuthorization()
+  }, [])
 
   return (
     <div className='App'>

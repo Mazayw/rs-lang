@@ -33,13 +33,19 @@ authApi.interceptors.response.use(
       originalRequest._isRetry = true
       try {
         const token = localStorage.getItem('refreshToken') || ''
-        const userId: ITokenData = jwtDecode(token)
-        const response = await axios.get<IToken>(`${SETTINGS.BASE_URL}/users/${userId.id}/tokens`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        localStorage.setItem('token', response.data.token)
-        localStorage.setItem('refreshToken', response.data.refreshToken)
-        return api.request(originalRequest)
+        if (token) {
+          const userId: ITokenData = jwtDecode(token)
+          const response = await axios.get<IToken>(
+            `${SETTINGS.BASE_URL}/users/${userId.id}/tokens`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            },
+          )
+          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('refreshToken', response.data.refreshToken)
+          return api.request(originalRequest)
+        }
+        throw Error
       } catch (e) {
         console.log('НЕ АВТОРИЗОВАН')
       }

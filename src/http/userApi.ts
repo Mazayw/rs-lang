@@ -1,5 +1,12 @@
 import { api, authApi } from './http'
-import { IUser, IToken, IUserSignIn, IUserSignInResponse } from '../components/types/interface'
+import {
+  IUser,
+  IToken,
+  IUserSignIn,
+  IUserSignInResponse,
+  ITokenData,
+} from '../components/types/interface'
+import jwtDecode from 'jwt-decode'
 
 export const createUser = async (body: IUser) => {
   const response = await api.post<IUser>('/users', body)
@@ -21,11 +28,20 @@ export const deleteUser = async (id: string) => {
   return response
 }
 
-export const getUserToken = async (id: string) => {
-  const response = await authApi.get<IToken>(`/users/${id}/tokens`)
-  localStorage.setItem('token', response.data.token)
-  localStorage.setItem('refreshToken', response.data.refreshToken)
-  return response
+export const getUserToken = async () => {
+  const token = localStorage.getItem('refreshToken') || ''
+  if (token) {
+    const userData: ITokenData = jwtDecode(token)
+
+    const response = await api.get<IToken>(`/users/${userData.id}/tokens`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    localStorage.setItem('token', response.data.token)
+    localStorage.setItem('refreshToken', response.data.refreshToken)
+    return response
+  }
 }
 
 export const signIn = async (body: IUserSignIn) => {

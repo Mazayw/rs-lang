@@ -4,7 +4,8 @@ import { IUserStat, IGameStat, ITokenData } from '../../components/types/interfa
 import { observer } from 'mobx-react-lite'
 import { Context } from '../../index'
 import jwtDecode from 'jwt-decode'
-import { getUserStatistic } from '../../http/userStatisticApi'
+import { getUserStatistic, setUserStatistic } from '../../http/userStatisticApi'
+import { AxiosError } from 'axios'
 
 const Statistics = observer(() => {
   const [dayStat, setDayStat] = useState({} as unknown as IUserStat)
@@ -12,22 +13,35 @@ const Statistics = observer(() => {
   // const [isNoStat, setIsNoStat] = useState(false)
   const { store } = useContext(Context)
 
+  const createStat = async () => {
+    const token = localStorage.getItem('token') || ''
+    const userData: ITokenData = jwtDecode(token)
+
+    try {
+      await setUserStatistic(userData.id, {
+        learnedWords: 0,
+        optional: {},
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const getStat = async () => {
     const token = localStorage.getItem('token') || ''
     const userData: ITokenData = jwtDecode(token)
-    //    console.log(userData)
     store.setIsLoading(true)
 
     try {
       const stat = await getUserStatistic(userData.id)
       setDayStat(stat.data)
     } catch (error) {
-      // setIsNoStat(true)
+      const err = error as AxiosError
+      if (err.response?.status === 404) createStat()
       console.log(error)
+    } finally {
+      store.setIsLoading(false)
     }
-     finally {
-    store.setIsLoading(false)
-     }
   }
 
   const updateStatText = (key: string) => {
