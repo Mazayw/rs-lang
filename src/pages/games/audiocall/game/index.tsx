@@ -3,7 +3,6 @@ import { useState, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import apiService from '../../../../api/api-service'
 import helpers from '../../../../components/helpers'
-import LoadingAnimation from '../../../../components/loadingAnimation'
 import { IWord } from '../../../../components/types/interface'
 import { SETTINGS, settings } from '../../../../settings'
 import GameResults from '../results'
@@ -118,48 +117,45 @@ const AudioGameMain = observer(() => {
     <div className={styles['game-main']}>
       {audioCallStore.gameState ? (
         <GameResults />
-      ) : currentWord ? (
-        <div className={styles.content}>
-          <img
-            src='./../../rs-lang/icons/audio.svg'
-            alt='Listen word'
-            onClick={onWordPlay}
-            className={styles.audio}
-          />
-          <h1 className={styles.title}>Игра Аудиовызов</h1>
-          <div className={styles.lifes}>
-            {heart.map((el, index) => (
-              <img
-                src={
-                  el ? '../../rs-lang/icons/hearth-filled.svg' : '../../rs-lang/icons/hearth.svg'
-                }
-                alt='heart'
-                className={styles.heart}
-                key={index}
-              />
-            ))}
-          </div>
-          <h3 className={styles.subtitle}>Выберите перевод услышанного слова</h3>
-          <div className={styles['buttons-block']}>
-            {currentWord ? (
-              audioCallStore.answers.map((el, index) => (
-                <AudioChooseButton
-                  key={index + el}
-                  index={index}
-                  answer={currentWord}
-                  choose={el}
-                  isShowAnswer={isShowAnswer}
-                  setShowAnswer={setShowAnswer}
-                  setCurrent={setCurrent}
-                />
-              ))
-            ) : (
-              <LoadingAnimation />
-            )}
-          </div>
-        </div>
       ) : (
-        <LoadingAnimation />
+        currentWord && (
+          <div className={styles.content}>
+            <img
+              src='./../../rs-lang/icons/audio.svg'
+              alt='Listen word'
+              onClick={onWordPlay}
+              className={styles.audio}
+            />
+            <h1 className={styles.title}>Игра Аудиовызов</h1>
+            <div className={styles.lifes}>
+              {heart.map((el, index) => (
+                <img
+                  src={
+                    el ? '../../rs-lang/icons/hearth-filled.svg' : '../../rs-lang/icons/hearth.svg'
+                  }
+                  alt='heart'
+                  className={styles.heart}
+                  key={index}
+                />
+              ))}
+            </div>
+            <h3 className={styles.subtitle}>Выберите перевод услышанного слова</h3>
+            <div className={styles['buttons-block']}>
+              {currentWord &&
+                audioCallStore.answers.map((el, index) => (
+                  <AudioChooseButton
+                    key={index + el}
+                    index={index}
+                    answer={currentWord}
+                    choose={el}
+                    isShowAnswer={isShowAnswer}
+                    setShowAnswer={setShowAnswer}
+                    setCurrent={setCurrent}
+                  />
+                ))}
+            </div>
+          </div>
+        )
       )}
     </div>
   )

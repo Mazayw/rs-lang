@@ -9,25 +9,25 @@ import { getUserStatistic } from '../../http/userStatisticApi'
 const Statistics = observer(() => {
   const [dayStat, setDayStat] = useState({} as unknown as IUserStat)
   const [gameStat, setGameStat] = useState({} as IGameStat)
-  const [isNoStat, setIsNoStat] = useState(false)
+  // const [isNoStat, setIsNoStat] = useState(false)
   const { store } = useContext(Context)
 
   const getStat = async () => {
-    console.log(store)
     const token = localStorage.getItem('token') || ''
     const userData: ITokenData = jwtDecode(token)
-    console.log(userData)
+    //    console.log(userData)
+    store.setIsLoading(true)
+
     try {
-      console.log(store)
-      store.setIsLoading(true)
       const stat = await getUserStatistic(userData.id)
       setDayStat(stat.data)
     } catch (error) {
-      setIsNoStat(true)
+      // setIsNoStat(true)
       console.log(error)
-    } finally {
-      store.setIsLoading(false)
     }
+     finally {
+    store.setIsLoading(false)
+     }
   }
 
   const updateStatText = (key: string) => {
@@ -62,12 +62,14 @@ const Statistics = observer(() => {
   }, [dayStat])
 
   useEffect(() => {
+    getStat()
     getStatText()
   }, [])
-
+  /*
   useEffect(() => {
-    store.isAuth && getStat()
-  }, [store.isAuth])
+    getStat()
+    console.log('fire!')
+  }, [store.isAuth])*/
 
   return (
     <div className={styles.main}>

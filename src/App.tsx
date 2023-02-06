@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import Auth from './components/authorization'
@@ -12,15 +12,20 @@ import MainPage from './pages/main-page'
 import NotFound from './pages/notfound'
 import Statistics from './pages/statistics'
 import Vocabulary from './pages/vocabulary'
+import LoadingAnimation from './components/loadingAnimation/index'
+import { observer } from 'mobx-react-lite'
+import { Context } from './index'
 
-function App() {
+const App = observer(() => {
   const [isModalActive, setModalActive] = useState(false)
   const [authType, setAuthType] = useState('')
   const [check20WordsInPage, setCheck20WordsInPage] = useState([] as IWord[])
+  const { store } = useContext(Context)
 
   return (
     <div className='App'>
       <Auth active={isModalActive} setActive={setModalActive} authType={authType} />
+      {store.isLoading && <LoadingAnimation />}
       <Routes>
         <Route
           path='/'
@@ -49,6 +54,6 @@ function App() {
       </Routes>
     </div>
   )
-}
+})
 
 export default App
