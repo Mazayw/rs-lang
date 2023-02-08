@@ -12,6 +12,7 @@ const MainPage = observer(
     setAuthType: React.Dispatch<React.SetStateAction<string>>
   }) => {
     const { store } = useContext(Context)
+
     return (
       <div className={styles.main}>
         <img

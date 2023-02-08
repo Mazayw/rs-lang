@@ -32,7 +32,6 @@ export const getUserToken = async () => {
   const token = localStorage.getItem('refreshToken') || ''
   if (token) {
     const userData: ITokenData = jwtDecode(token)
-
     const response = await api.get<IToken>(`/users/${userData.id}/tokens`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -40,13 +39,18 @@ export const getUserToken = async () => {
     })
     localStorage.setItem('token', response.data.token)
     localStorage.setItem('refreshToken', response.data.refreshToken)
+    localStorage.setItem('userId', userData.id)
+
     return response
   }
+  localStorage.clear()
 }
 
 export const signIn = async (body: IUserSignIn) => {
   const response = await api.post<IUserSignInResponse>('/signin', body)
   localStorage.setItem('token', response.data.token)
   localStorage.setItem('refreshToken', response.data.refreshToken)
+  localStorage.setItem('userId', response.data.userId)
+
   return response
 }

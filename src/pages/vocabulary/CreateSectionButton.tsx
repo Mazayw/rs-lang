@@ -1,26 +1,28 @@
 import styles from './styles.module.scss'
+import { observer } from 'mobx-react-lite'
+import { useContext } from 'react'
+import { Context } from '../../index'
 
-export function CreateSectionButton({
-  section,
-  index,
-  buttonSectionCurrentIndex,
-  onClickSectionButton,
-}: {
-  section: string
-  index: number
-  buttonSectionCurrentIndex: number
-  onClickSectionButton: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => void
-}) {
+const CreateSectionButton = observer(({ section, index }: { section: string; index: number }) => {
+  const { vocabulary } = useContext(Context)
+
+  const onClickSectionButton = () => {
+    vocabulary.setPage(0)
+    vocabulary.setGroup(index)
+  }
+
   return (
-    <li key={section} className='textbook-sections__list'>
+    <li className='textbook-sections__list'>
       <button
         className={`${styles.textbook__link} ${
-          index === buttonSectionCurrentIndex ? styles['textbook__link_active'] : ''
+          index === vocabulary.group ? styles['textbook__link_active'] : ''
         }`}
-        onClick={(e) => onClickSectionButton(e, index)}
+        onClick={onClickSectionButton}
       >
         {section}
       </button>
     </li>
   )
-}
+})
+
+export default CreateSectionButton

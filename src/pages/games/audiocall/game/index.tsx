@@ -1,14 +1,14 @@
 import { observer } from 'mobx-react-lite'
 import { useState, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom'
-import apiService from '../../../../api/api-service'
 import helpers from '../../../../components/helpers'
 import { IWord } from '../../../../components/types/interface'
-import { SETTINGS, settings } from '../../../../settings'
+import { SETTINGS } from '../../../../settings'
 import GameResults from '../results'
 import AudioChooseButton from './button'
 import styles from './styles.module.scss'
 import { Context } from '../../../../index'
+import { getAllWords } from '../../../../http/wordsApi'
 
 const AudioGameMain = observer(() => {
   const { audioCallStore } = useContext(Context)
@@ -27,11 +27,11 @@ const AudioGameMain = observer(() => {
   const urlCheck = () => {
     const groupChk = typeof group === 'string' ? group : '0'
     const pageChk = typeof page === 'string' ? page : '0'
-    const pageChkSplited = pageChk.split('&')
-    const isVocabularyGame = pageChkSplited.length > 1
+    const pageChkSplitted = pageChk.split('&')
+    const isVocabularyGame = pageChkSplitted.length > 1
 
-    const groupUrl = Number(groupChk) > settings.maxGroup ? '0' : groupChk
-    const pageUrl = Number(pageChkSplited[0]) > settings.maxPage ? '0' : pageChkSplited[0]
+    const groupUrl = Number(groupChk) > SETTINGS.MAX_GROUP ? '0' : groupChk
+    const pageUrl = Number(pageChkSplitted[0]) > SETTINGS.MAX_PAGE ? '0' : pageChkSplitted[0]
     return [groupUrl, pageUrl, isVocabularyGame]
   }
 
@@ -48,7 +48,7 @@ const AudioGameMain = observer(() => {
         'unknownOrUnlearned',
       )
     } else {
-      wordsArr = await apiService.getAllWords(groupUrl as string, pageUrl as string)
+      wordsArr = await getAllWords(groupUrl as string, pageUrl as string)
     }
     wordsArr?.sort(() => Math.random() - 0.5)
     wordsArr && setWords(wordsArr)

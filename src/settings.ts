@@ -7,4 +7,6 @@ export const settings = {
 
 export const SETTINGS = {
   BASE_URL: 'https://rslangbe.onrender.com',
+  MAX_GROUP: 5,
+  MAX_PAGE: 30,
 }

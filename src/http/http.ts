@@ -34,6 +34,7 @@ authApi.interceptors.response.use(
       try {
         const token = localStorage.getItem('refreshToken') || ''
         if (token) {
+          console.log(originalRequest._isRetry)
           const userId: ITokenData = jwtDecode(token)
           const response = await axios.get<IToken>(
             `${SETTINGS.BASE_URL}/users/${userId.id}/tokens`,
@@ -51,6 +52,6 @@ authApi.interceptors.response.use(
       }
     }
     console.log('error')
-    throw error
+    throw Error
   },
 )
