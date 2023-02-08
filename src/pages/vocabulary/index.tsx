@@ -25,8 +25,6 @@ const Vocabulary = observer(
   }) => {
     const { vocabulary, store } = useContext(Context)
 
-    // const [word, setWord] = useState({} as IWord)
-    // const [words, setWords] = useState([] as IWord[])
     const [hardWord, setHardWord] = useState([] as IWord[])
     const [easyWord, setEasyWord] = useState([] as IWord[])
     const [hardWordsId, setHardWordsId] = useState([] as string[])
@@ -51,10 +49,15 @@ const Vocabulary = observer(
 
     const getWords = async () => {
       store.setIsLoading(true)
+
       try {
-        const data = await getAllWords(vocabulary.group.toString(), vocabulary.page.toString())
-        vocabulary.setWords(data)
-        vocabulary.setWord(data[0])
+        if (vocabulary.group === 6) {
+          console.log(vocabulary.group) // TODO
+        } else {
+          const data = await getAllWords(vocabulary.group.toString(), vocabulary.page.toString())
+          vocabulary.setWords(data)
+          vocabulary.setWord(data[0])
+        }
       } catch (error) {
         console.log(error)
       } finally {
@@ -506,7 +509,7 @@ const Vocabulary = observer(
             </NavLink>
           </div>
         )}
-        <CreateTextbookSectionsButtons onClickSectionHardButton={handlerClickHardButton} />
+        <CreateTextbookSectionsButtons />
         <Word
           ClickStudiedWord={handlerClickStudiedWord}
           ClickHardWord={handlerClickHardWord}

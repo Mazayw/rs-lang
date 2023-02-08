@@ -24,19 +24,6 @@ const Word = observer(
   }) => {
     const { store, vocabulary } = useContext(Context)
 
-    const wordButtonBackground = [
-      'word-card-background-A1',
-      'word-card-background-A2',
-      'word-card-background-B1',
-      'word-card-background-B2',
-      'word-card-background-C1',
-      'word-card-background-C2',
-    ]
-
-    const [totalGuessedAudio, setTotalGuessedAudio] = useState('0')
-    const [totalGuessedSprint, setTotalGuessedSprint] = useState('0')
-    const [totalMistakesAudio, setTotalMistakesAudio] = useState('0')
-    const [totalMistakesSprint, setTotalMistakesSprint] = useState('0')
     const [sumGuessed, setSumGuessed] = useState('0')
     const [sumMistakes, setSumMistakes] = useState('0')
     const [isAuth, setIsAuth] = useState(false)
@@ -69,10 +56,6 @@ const Word = observer(
         const guessedSprint = helpers.undefinedCheck(data?.optional.totalGuessedSprint)
         const mistakesAudio = helpers.undefinedCheck(data?.optional.totalMistakesAudio)
         const mistakeSprint = helpers.undefinedCheck(data?.optional.totalMistakesSprint)
-        setTotalGuessedAudio(`${guessedAudio}`)
-        setTotalMistakesAudio(`${mistakesAudio}`)
-        setTotalGuessedSprint(`${guessedSprint}`)
-        setTotalMistakesSprint(`${mistakeSprint}`)
         setSumMistakes(`${Number(mistakesAudio) + Number(mistakeSprint)}`)
         setSumGuessed(`${Number(guessedAudio) + Number(guessedSprint)}`)
       }
@@ -94,7 +77,7 @@ const Word = observer(
         )}
         <div
           className={`${vocabulary.word ? styles['word-card'] : styles['word-card_none']} ${
-            styles['word-card-background-group-'+vocabulary.group]
+            styles['word-card-background-group-' + vocabulary.group]
           }`}
         >
           <img
