@@ -32,6 +32,8 @@ export interface IToken {
 }
 
 export interface IUserWord {
+  [x: string]: unknown
+  id?: string
   difficulty: string
   optional: {
     totalGuessedSprint?: string

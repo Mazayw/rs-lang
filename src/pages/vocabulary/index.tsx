@@ -1,7 +1,6 @@
 import styles from './styles.module.scss'
 import CreateTextbookSectionsButtons from './CreateTextbookSectionsButtons'
 import { useEffect, useState, useContext } from 'react'
-import WordButtons from './WordButtons'
 import Word from './Word'
 import TextbookPagesButtons from './TextbookPagesButtons'
 import { NavLink } from 'react-router-dom'
@@ -9,9 +8,17 @@ import apiService from '../../api/api-service'
 import helpers from '../../components/helpers'
 import { IWord, IUserWord } from '../../components/types/interface'
 import { Context } from '../../index'
-import { updateUserWord } from '../../http/userWordsApi'
+import {
+  updateUserWord,
+  getUserWord,
+  createUserWord,
+  getAllUserWords,
+} from '../../http/userWordsApi'
 import { observer } from 'mobx-react-lite'
 import { getAllWords } from '../../http/wordsApi'
+import { AxiosError } from 'axios'
+import { getAllAggregatedWords } from '../../http/userAggregatedWordsApi'
+import WordButton from './WordButton'
 
 export const INDEX_STAR_SECTION_BUTTON = 10
 
@@ -54,7 +61,18 @@ const Vocabulary = observer(
         if (vocabulary.group === 6) {
           console.log(vocabulary.group) // TODO
         } else {
-          const data = await getAllWords(vocabulary.group.toString(), vocabulary.page.toString())
+          let data
+          if (store.isAuth) {
+            console.log(1, store.isAuth)
+            data = await getAllWords(vocabulary.group.toString(), vocabulary.page.toString())
+          } else {
+            console.log(2)
+            data = await getAllAggregatedWords(
+              vocabulary.group.toString(),
+              vocabulary.page.toString(),
+            )
+          }
+
           vocabulary.setWords(data)
           vocabulary.setWord(data[0])
         }
@@ -65,9 +83,23 @@ const Vocabulary = observer(
       }
     }
 
+    const getSelectedWord = () => {
+      console.log('fire')
+
+      if (vocabulary.words.length > 0) {
+        const selectedWord = vocabulary.words.find((el) => el.id === vocabulary.selectedWordId)
+        console.log(selectedWord)
+        selectedWord && vocabulary.setWord(selectedWord as IWord)
+      }
+    }
+
+    useEffect(() => {
+      getSelectedWord()
+    }, [vocabulary.selectedWordId, vocabulary.words])
+
     useEffect(() => {
       getWords()
-    }, [vocabulary.page, vocabulary.group])
+    }, [vocabulary.page, vocabulary.group, store.isAuth])
     /*
     useEffect(() => {
       getWords()
@@ -140,13 +172,13 @@ const Vocabulary = observer(
             wordId: wordId,
           },
         }
-        const putResponse = await updateUserWord(userId, wordId, body)
-        const put = putResponse?.data as IUserWord
+        //       const putResponse = await updateUserWord(userId, wordId, body)
+        //     const put = putResponse?.data as IUserWord
 
         const dbDelWord = dbUserWords.filter(
           (word) => word.optional.wordId !== wordId,
         ) as IUserWord[]
-        setDbUserWords(() => [...dbDelWord, put])
+        //      setDbUserWords(() => [...dbDelWord, put])
 
         const deleteHardWordsId = hardWordsId.filter((id) => id !== wordId)
         setHardWordsId(deleteHardWordsId)
@@ -472,6 +504,34 @@ const Vocabulary = observer(
       }
     }
 
+    const hardWordHandler = async (word: IWord) => {
+      const userWordData = await getUserWord(word._id)
+      console.log('11111', userWordData)
+
+      try {
+        const newDifficultyValue = userWordData.data.difficulty === 'easy' ? 'hard' : 'easy'
+
+        console.log('click', newDifficultyValue)
+        console.log('цщкв вфеф', userWordData.data)
+        delete userWordData.data.id
+
+        await updateUserWord(word._id, {
+          difficulty: newDifficultyValue,
+          optional: userWordData.data.optional,
+        })
+      } catch (error) {
+        const err = error as AxiosError
+        console.log(error)
+
+        if (err.code === '404') {
+          await createUserWord(word.id, {
+            difficulty: 'hard',
+            optional: {},
+          })
+        }
+      }
+    }
+
     return (
       <div
         className={`${styles.textbook} ${
@@ -516,8 +576,19 @@ const Vocabulary = observer(
           hardWordsId={hardWordsId}
           easyWordsId={easyWordsId}
           buttonSectionCurrentIndex={buttonSectionCurrentIndex}
-        />
-        <WordButtons hardWordsId={hardWordsId} easyWordsId={easyWordsId} />
+          hardWordHandler={hardWordHandler}
+        />{' '}
+        <ul className={styles['word-buttons']}>
+          {vocabulary.words.map((word) => (
+            <WordButton
+              key={word._id}
+              word={word}
+              // hardWordsId={hardWordsId}
+              // easyWordsId={easyWordsId}
+              hardWordHandler={hardWordHandler}
+            />
+          ))}
+        </ul>
         <TextbookPagesButtons
           buttonSectionCurrentIndex={buttonSectionCurrentIndex}
           check20WordsInPage={check20WordsInPage}

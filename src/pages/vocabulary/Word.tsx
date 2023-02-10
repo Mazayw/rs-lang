@@ -6,15 +6,18 @@ import helpers from '../../components/helpers'
 import { observer } from 'mobx-react-lite'
 import { Context } from '../../index'
 import { SETTINGS } from '../../settings'
+import { IWord } from '../../components/types/interface'
 
 const Word = observer(
   ({
+    hardWordHandler,
     ClickStudiedWord,
     ClickHardWord,
     hardWordsId,
     easyWordsId,
     buttonSectionCurrentIndex,
   }: {
+    hardWordHandler: (word: IWord) => Promise<void>
     ClickStudiedWord: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => void
     ClickHardWord: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => void
     hardWordsId: string[]
@@ -25,8 +28,10 @@ const Word = observer(
     const { store, vocabulary } = useContext(Context)
 
     const [sumGuessed, setSumGuessed] = useState('0')
+    // const [word, setWord] = useState(() => filterSelectedWord())
     const [sumMistakes, setSumMistakes] = useState('0')
-    const [isAuth, setIsAuth] = useState(false)
+    // const [isHardWord, setHardWord] = useState(vocabulary.word.userWord?.difficulty === 'hard')
+
     const [gramophoneButtonDisabled, setGramophoneButtonDisabled] = useState(false)
 
     const handlerClickAudio = () => {
@@ -44,7 +49,7 @@ const Word = observer(
         }
       }
     }
-
+    /*
     const getUserWord = async () => {
       const userId = localStorage.getItem('userId')
       const token = localStorage.getItem('token')
@@ -63,18 +68,23 @@ const Word = observer(
 
     useEffect(() => {
       getUserWord()
-      setIsAuth(helpers.checkUserLocal())
-    }, [vocabulary.word.id])
+      console.log(vocabulary.word)
+    }, [vocabulary.word.id])*/
 
-    return vocabulary.word.id || vocabulary.word._id ? (
+    const hardWordButtonClickHandler = () => {
+      hardWordHandler(vocabulary.word)
+      // setHardWord((prev) => !prev)
+    }
+
+    return vocabulary.word ? (
       <>
         <div className={styles['stat-buttons']}></div>
-        {isAuth && (
+        {/* store.isAuth && (
           <div className={styles['word-game-results']}>
             <p>{`Слово угадано в играх: ${sumGuessed}`}</p>
             <p>{`Слово не угадано в играх: ${sumMistakes}`}</p>
           </div>
-        )}
+        )*/}
         <div
           className={`${vocabulary.word ? styles['word-card'] : styles['word-card_none']} ${
             styles['word-card-background-group-' + vocabulary.group]
@@ -142,7 +152,8 @@ const Word = observer(
           >
             <button
               className={styles['words-image-auth__button']}
-              onClick={(e) => ClickStudiedWord(e, vocabulary.word.id || vocabulary.word._id)}
+              onClick={() => console.log('click')}
+              // onClick={(e) => ClickStudiedWord(e, vocabulary.word.id || vocabulary.word._id)}
             >
               <svg
                 width='40'
@@ -187,7 +198,7 @@ const Word = observer(
                   ? true
                   : false
               }
-              onClick={(e) => ClickHardWord(e, vocabulary.word.id || vocabulary.word._id)}
+              onClick={hardWordButtonClickHandler}
             >
               <svg
                 width='40'
@@ -198,11 +209,7 @@ const Word = observer(
               >
                 <path
                   d='M18.0344 1.52785C18.3211 0.829617 18.9992 0.306529 19.7523 0.226776C20.4945 0.132948 21.2703 0.468381 21.7078 1.07513C21.9797 1.4567 22.1164 1.91098 22.3109 2.3332C23.7156 5.62029 25.1148 8.90893 26.5234 12.1945C30.3156 12.5346 34.1078 12.8802 37.9 13.2281C38.2648 13.2547 38.632 13.3376 38.9477 13.5292C39.5664 13.8833 39.9656 14.5691 40 15.2782V15.4096C39.9813 16.0078 39.7094 16.5895 39.2578 16.982C36.3539 19.5318 33.4484 22.0792 30.5453 24.6289C31.3867 28.3249 32.2211 32.0217 33.0617 35.7178C33.2539 36.3605 33.1875 37.0931 32.7938 37.6483C32.2117 38.5443 30.9156 38.8383 29.9992 38.2949C26.6656 36.3018 23.3352 34.3041 20.0008 32.3134C16.6859 34.2986 13.3695 36.2839 10.0508 38.2628C9.21094 38.7922 8.01641 38.6202 7.37187 37.8609C6.90703 37.3511 6.725 36.6083 6.8875 35.939C7.74219 32.1672 8.59844 28.3961 9.45312 24.625C6.53594 22.0643 3.61875 19.5044 0.701562 16.9437C0.271875 16.5613 0.0234375 15.9968 0 15.4252V15.2798C0.0289063 14.2688 0.857813 13.361 1.86406 13.2547C5.73594 12.895 9.60859 12.5549 13.4805 12.1937C14.9984 8.6384 16.5164 5.08312 18.0344 1.52785Z'
-                  fill={
-                    hardWordsId.includes(vocabulary.word.id || vocabulary.word._id)
-                      ? '#F5443B'
-                      : '#171836'
-                  }
+                  // fill={isHardWord ? '#F5443B' : '#171836'}
                 />
               </svg>
             </button>

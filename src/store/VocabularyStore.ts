@@ -6,18 +6,24 @@ export default class VocabularyStore {
   private _words: IWord[]
   private _group: number
   private _page: number
+  private _selectedWordId: string
 
   constructor() {
     this._word = {} as IWord
     this._words = []
     this._group = 0
     this._page = 0
+    this._selectedWordId = ''
 
     makeAutoObservable(this)
   }
 
   setWord(obj: IWord) {
     this._word = obj
+  }
+
+  setSelectedWordId(id: string) {
+    this._selectedWordId = id
   }
 
   setWords(arr: IWord[]) {
@@ -34,6 +40,10 @@ export default class VocabularyStore {
 
   get word() {
     return this._word
+  }
+
+  get selectedWordId() {
+    return this._selectedWordId
   }
 
   get words() {

@@ -1,4 +1,4 @@
-import { IUserSignInResponse, IUserWord, IUserStat, IWord, IGameStat } from './types/interface'
+import { IUserSignInResponse, IUserWord, IUserStat, IWord, IGameStat, ITokenData } from './types/interface'
 import { IAnswer } from './types/audioGame-interface'
 import { AxiosResponse } from 'axios'
 import apiService from '../api/api-service'
@@ -223,6 +223,12 @@ class Helpers {
         page = `${Number(page) - 1}`
       } while (result.length < arrSize && Number(page) >= 0)
     return result.slice(0, arrSize)
+  }
+  
+  getUserId = () => {
+    const token = localStorage.getItem('refreshToken') || ''
+    const userData: ITokenData = jwtDecode(token)
+    return userData.id
   }
 }
 

@@ -1,8 +1,8 @@
+import helpers from '../components/helpers'
 import { IWord, IUserWord } from '../components/types/interface'
 import { authApi } from './http'
 
 export const getAllAggregatedWords = async (
-  id: string,
   group = '',
   page = '',
   wordsPerPage = '20',
@@ -23,7 +23,7 @@ export const getAllAggregatedWords = async (
   }
 
   const url: string[] = []
-  url.push(`/users/${id}/aggregatedWords?`)
+  url.push(`/users/${helpers.getUserId()}/aggregatedWords?`)
   group && url.push(`group=${group}`)
   page && url.push(`page=${page}`)
   wordsPerPage && url.push(`wordsPerPage=${wordsPerPage}`)

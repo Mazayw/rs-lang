@@ -1,45 +1,39 @@
 import { api, authApi } from './http'
-import {
-  IUser,
-  IToken,
-  IUserSignIn,
-  IUserSignInResponse,
-  ITokenData,
-} from '../components/types/interface'
-import jwtDecode from 'jwt-decode'
+import { IUser, IToken, IUserSignIn, IUserSignInResponse } from '../components/types/interface'
+
+import helpers from '../components/helpers'
 
 export const createUser = async (body: IUser) => {
   const response = await api.post<IUser>('/users', body)
   return response.data
 }
 
-export const getUser = async (id: string) => {
-  const response = await authApi.get<IUser>(`/users/${id}`)
+export const getUser = async () => {
+  const response = await authApi.get<IUser>(`/users/${helpers.getUserId()}`)
   return response.data
 }
 
-export const updateUser = async (body: IUser, id: string) => {
-  const response = await authApi.put<IUser>(`/users/${id}`, body)
+export const updateUser = async (body: IUser) => {
+  const response = await authApi.put<IUser>(`/users/${helpers.getUserId()}`, body)
   return response
 }
 
-export const deleteUser = async (id: string) => {
-  const response = await authApi.delete<IUser>(`/users/${id}`)
+export const deleteUser = async () => {
+  const response = await authApi.delete<IUser>(`/users/${helpers.getUserId()}`)
   return response
 }
 
 export const getUserToken = async () => {
   const token = localStorage.getItem('refreshToken') || ''
   if (token) {
-    const userData: ITokenData = jwtDecode(token)
-    const response = await api.get<IToken>(`/users/${userData.id}/tokens`, {
+    const response = await api.get<IToken>(`/users/${helpers.getUserId()}/tokens`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
     localStorage.setItem('token', response.data.token)
     localStorage.setItem('refreshToken', response.data.refreshToken)
-    localStorage.setItem('userId', userData.id)
+    localStorage.setItem('userId', helpers.getUserId())
 
     return response
   }
