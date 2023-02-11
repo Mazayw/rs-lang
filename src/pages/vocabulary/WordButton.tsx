@@ -43,9 +43,9 @@ const WordButton = observer(
     const { getWordsData } = useLoadWords(vocabulary, store)
 
     const onClickHardWord = async () => {
-      toggleWordDifficulty()
+      await toggleWordDifficulty()
       // updateWordsArray(index, newWord, vocabulary.words, vocabulary.setWords)
-      updateWordsArray()
+      // updateWordsArray()
       const wordsData = await getWordsData()
       vocabulary.setWords(wordsData)
     }

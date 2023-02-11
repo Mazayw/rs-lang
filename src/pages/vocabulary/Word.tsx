@@ -8,6 +8,7 @@ import { Context } from '../../index'
 import { SETTINGS } from '../../settings'
 import { IWord } from '../../components/types/interface'
 import useHardWord from '../../hooks/useHardWord'
+import useLoadWords from '../../hooks/useLoadWords'
 
 const Word = observer(
   ({
@@ -29,6 +30,7 @@ const Word = observer(
     const { store, vocabulary } = useContext(Context)
     const [word, setWord] = useState({} as IWord)
     const [isHardWord, toggleWordDifficulty, newWord] = useHardWord(word)
+    const { getWordsData } = useLoadWords(vocabulary, store)
 
     const [sumGuessed, setSumGuessed] = useState('0')
     // const [word, setWord] = useState(() => filterSelectedWord())
@@ -36,6 +38,14 @@ const Word = observer(
     // const [isHardWord, setHardWord] = useState(word.userWord?.difficulty === 'hard')
 
     const [gramophoneButtonDisabled, setGramophoneButtonDisabled] = useState(false)
+
+    const onClickHardWord = async () => {
+      await toggleWordDifficulty()
+      // updateWordsArray(index, newWord, vocabulary.words, vocabulary.setWords)
+      // updateWordsArray()
+      const wordsData = await getWordsData()
+      vocabulary.setWords(wordsData)
+    }
 
     useEffect(() => {
       const index = vocabulary.selectedWordIndex
@@ -161,7 +171,7 @@ const Word = observer(
           >
             <button
               className={styles['words-image-auth__button']}
-              onClick={() => console.log('click')}
+              onClick={onClickHardWord}
               // onClick={(e) => ClickStudiedWord(e, word.id || word._id)}
             >
               <svg
