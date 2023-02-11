@@ -39,7 +39,7 @@ const WordButton = observer(
     index: number
   }) => {
     const { vocabulary, store } = useContext(Context)
-    const [isHardWord, toggleWordDifficulty, newWord] = useHardWord(word)
+    const [isHardWord, toggleWordDifficulty] = useHardWord(word)
     const { getWordsData } = useLoadWords(vocabulary, store)
 
     const onClickHardWord = async () => {
@@ -53,7 +53,7 @@ const WordButton = observer(
     useEffect(() => {
       console.log('change array')
     }, [vocabulary.words])
-
+    /*
     const updateWordsArray = () => {
       const newWords: IWord[] = vocabulary.words.map((el) => {
         return { ...{ ...el } }
@@ -62,7 +62,7 @@ const WordButton = observer(
 
       console.log('newWords', newWords)
       vocabulary.setWords(newWords)
-    }
+    }*/
 
     return (
       <li className={styles['word-button-list']}>
