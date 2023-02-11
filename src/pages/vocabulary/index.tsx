@@ -19,6 +19,7 @@ import { getAllWords } from '../../http/wordsApi'
 import { AxiosError } from 'axios'
 import { getAllAggregatedWords } from '../../http/userAggregatedWordsApi'
 import WordButton from './WordButton'
+import useLoadWords from '../../hooks/useLoadWords'
 
 export const INDEX_STAR_SECTION_BUTTON = 10
 
@@ -31,6 +32,7 @@ const Vocabulary = observer(
     setCheck20WordsInPage: React.Dispatch<React.SetStateAction<IWord[]>>
   }) => {
     const { vocabulary, store } = useContext(Context)
+    const { getWordsData } = useLoadWords(vocabulary, store)
 
     const [hardWord, setHardWord] = useState([] as IWord[])
     const [easyWord, setEasyWord] = useState([] as IWord[])
@@ -53,28 +55,27 @@ const Vocabulary = observer(
         return val ? [...acc, val] : acc
       }, [])
     }
-
+    /*
     const getWords = async () => {
       store.setIsLoading(true)
 
       try {
         if (vocabulary.group === 6) {
-          console.log(vocabulary.group) // TODO
+          console.log('group', vocabulary.group) // TODO
         } else {
           let data
           if (store.isAuth) {
             console.log(1, store.isAuth)
-            data = await getAllWords(vocabulary.group.toString(), vocabulary.page.toString())
-          } else {
-            console.log(2)
             data = await getAllAggregatedWords(
               vocabulary.group.toString(),
               vocabulary.page.toString(),
             )
+          } else {
+            data = await getAllWords(vocabulary.group.toString(), vocabulary.page.toString())
+            console.log(2)
           }
 
           vocabulary.setWords(data)
-          vocabulary.setWord(data[0])
         }
       } catch (error) {
         console.log(error)
@@ -82,12 +83,12 @@ const Vocabulary = observer(
         store.setIsLoading(false)
       }
     }
-
+    /*
     const getSelectedWord = () => {
       console.log('fire')
 
       if (vocabulary.words.length > 0) {
-        const selectedWord = vocabulary.words.find((el) => el.id === vocabulary.selectedWordId)
+        const selectedWord = vocabulary.words.find((el) => el.word === vocabulary.selectedWordId)
         console.log(selectedWord)
         selectedWord && vocabulary.setWord(selectedWord as IWord)
       }
@@ -95,10 +96,19 @@ const Vocabulary = observer(
 
     useEffect(() => {
       getSelectedWord()
-    }, [vocabulary.selectedWordId, vocabulary.words])
+    }, [vocabulary.selectedWordId, vocabulary.words])*/
 
     useEffect(() => {
-      getWords()
+      const setWords = async () => {
+        store.setIsLoading(true)
+        const words = await getWordsData()
+        vocabulary.setWords(words)
+        store.setIsLoading(false)
+      }
+      setWords()
+
+      // getWords()
+      vocabulary.setSelectedWordIndex(0)
     }, [vocabulary.page, vocabulary.group, store.isAuth])
     /*
     useEffect(() => {
@@ -579,10 +589,11 @@ const Vocabulary = observer(
           hardWordHandler={hardWordHandler}
         />{' '}
         <ul className={styles['word-buttons']}>
-          {vocabulary.words.map((word) => (
+          {vocabulary.words.map((word, index) => (
             <WordButton
-              key={word._id}
+              key={word.word}
               word={word}
+              index={index}
               // hardWordsId={hardWordsId}
               // easyWordsId={easyWordsId}
               hardWordHandler={hardWordHandler}
