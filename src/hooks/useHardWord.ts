@@ -14,14 +14,14 @@ const useHardWord = (word: IWord) => {
   const id = word?._id || word?.id
 
   useEffect(() => {
-    getWords()
+    updateWord()
   }, [isHardWord])
 
   const toggleWordDifficulty = () => {
     setIsHardWord((prev) => !prev)
   }
 
-  const getWords = async () => {
+  const updateWord = async () => {
     try {
       const newDifficultyValue = isHardWord ? Difficulty.HARD : Difficulty.EASY
       const newUserData = { ...userWord, difficulty: newDifficultyValue }
@@ -42,7 +42,7 @@ const useHardWord = (word: IWord) => {
 
   const newWord = { ...word, userWord: userWord }
 
-  return [isHardWord, toggleWordDifficulty, newWord] as const
+  return { isHardWord, toggleWordDifficulty, newWord }
 }
 
 export default useHardWord

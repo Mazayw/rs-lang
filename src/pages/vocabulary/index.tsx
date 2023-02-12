@@ -596,7 +596,7 @@ const Vocabulary = observer(
               index={index}
               // hardWordsId={hardWordsId}
               // easyWordsId={easyWordsId}
-              hardWordHandler={hardWordHandler}
+              //              hardWordHandler={hardWordHandler}
             />
           ))}
         </ul>

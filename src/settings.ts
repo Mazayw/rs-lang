@@ -11,3 +11,8 @@ export const SETTINGS = {
   MAX_GROUP: 5,
   MAX_PAGE: 30,
 }
+
+export const VOCABULARY_SETTINGS = {
+  ACTIVE_ICON_COLOR: '#FFFFFF',
+  DISABLED_ICON_COLOR: '#171836',
+}

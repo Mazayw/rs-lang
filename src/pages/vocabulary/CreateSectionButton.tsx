@@ -20,7 +20,11 @@ const CreateSectionButton = observer(({ section, index }: { section: string; ind
         } ${!store.isAuth && section === 'star' && styles['textbook-games-buttons_none']}`}
         onClick={onClickSectionButton}
       >
-        {store.isAuth && section === 'star' ? <StarIcon /> : section}
+        {store.isAuth && section === 'star' ? (
+          <StarIcon color={'#ffffff'} width={'40'} height={'40'} />
+        ) : (
+          section
+        )}
       </button>
     </li>
   )
