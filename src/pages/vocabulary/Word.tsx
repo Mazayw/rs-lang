@@ -43,18 +43,21 @@ const Word = observer(() => {
 
   const handlerClickAudio = () => {
     setGramophoneButtonDisabled(true)
-
-    const audioPlayer = new Audio(`${SETTINGS.BASE_URL}/${word.audio}`)
-    audioPlayer.play()
-    audioPlayer.onended = function () {
-      const audioPlayer = new Audio(`${SETTINGS.BASE_URL}/${word.audioMeaning}`)
-      audioPlayer.play()
-      audioPlayer.onended = function () {
-        const audioPlayer = new Audio(`${SETTINGS.BASE_URL}/${word.audioExample}`)
-        audioPlayer.play()
-        setGramophoneButtonDisabled(false)
+    const audio = [word.audio, word.audioMeaning, word.audioExample]
+    const playAudios = (audios: string[]) => {
+      let i = 0
+      const playNextAudio = () => {
+        if (i < audios.length) {
+          const audio = new Audio(`${SETTINGS.BASE_URL}/${audios[i]}`)
+          audio.play()
+          i++
+          audio.onended = playNextAudio
+        }
       }
+      playNextAudio()
     }
+    playAudios(audio)
+    setGramophoneButtonDisabled(false)
   }
 
   return word ? (
