@@ -8,65 +8,37 @@ import useLoadWords from '../../hooks/useLoadWords'
 import CheckIcon from '../../assets/icons/checkIcon'
 import { VOCABULARY_SETTINGS } from '../../settings'
 import StarIcon from '../../assets/icons/starIcon'
-
-const updateWordsArray2 = (
-  index: number,
-  word: IWord,
-  words: IWord[],
-  func: (words: IWord[]) => void,
-) => {
-  console.log(words)
-  const newWords: IWord[] = words.map((el) => {
-    return { ...{ ...el } }
-  })
-  newWords[index] = word
-  /*
-  const newWords = words.map((el) => {
-    if (el.word === word.word) {
-      return word
-    }
-    return { ...el }
-  })*/
-  console.log(newWords)
-  func(newWords)
-}
+import useLearnedWords from '../../hooks/useLearnedWords'
 
 const WordButton = observer(
   ({
     word,
-    // hardWordHandler,
     index,
   }: {
     word: IWord
-    // hardWordHandler: (word: IWord) => Promise<void>
+
     index: number
   }) => {
     const { vocabulary, store } = useContext(Context)
     const { isHardWord, toggleWordDifficulty } = useHardWord(word)
+    const { isStudiedWord, toggleWordLearned } = useLearnedWords(word)
+
     const { getWordsData } = useLoadWords(vocabulary, store)
 
     const onClickHardWord = async () => {
       await toggleWordDifficulty()
-      // updateWordsArray(index, newWord, vocabulary.words, vocabulary.setWords)
-      // updateWordsArray()
       const wordsData = await getWordsData()
       vocabulary.setWords(wordsData)
+    }
+
+    const onClickLearnedWord = async () => {
+      await toggleWordLearned()
+      getWordsData().then((data) => vocabulary.setWords(data))
     }
 
     useEffect(() => {
       console.log('change array')
     }, [vocabulary.words])
-
-    /*
-    const updateWordsArray = () => {
-      const newWords: IWord[] = vocabulary.words.map((el) => {
-        return { ...{ ...el } }
-      })
-      newWords[index] = word
-
-      console.log('newWords', newWords)
-      vocabulary.setWords(newWords)
-    }*/
 
     return (
       <li className={styles['word-button-list']}>
@@ -76,7 +48,6 @@ const WordButton = observer(
           }`}
           onClick={() => {
             vocabulary.setSelectedWordIndex(index)
-            // vocabulary.setSelectedWordId(word.word)
           }}
         >
           <span className={styles['word-button-container']}>
@@ -88,15 +59,10 @@ const WordButton = observer(
               store.isAuth ? styles['word-button-container-icon_active'] : ''
             }`}
           >
-            <button
-              className={styles['words-image-auth__button']}
-              onClick={() => {
-                console.log('click')
-              }}
-            >
+            <button className={styles['words-image-auth__button']} onClick={onClickLearnedWord}>
               <CheckIcon
                 color={
-                  isHardWord // FIX IT
+                  isStudiedWord
                     ? VOCABULARY_SETTINGS.ACTIVE_ICON_COLOR
                     : VOCABULARY_SETTINGS.DISABLED_ICON_COLOR
                 }
