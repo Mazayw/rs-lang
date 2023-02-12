@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IWord } from '../components/types/interface'
 import { createUserWord, updateUserWord } from '../http/userWordsApi'
 
@@ -8,28 +8,22 @@ enum Difficulty {
 }
 
 const useHardWord = (word: IWord) => {
-  const [isHardWord, setIsHardWord] = useState(false)
-  const isHardWordRef = useRef(isHardWord)
-
   let userWord = word?.userWord
+  const [isHardWord, setIsHardWord] = useState(userWord?.difficulty === Difficulty.HARD)
+
   const id = word?._id || word?.id
 
   useEffect(() => {
-    const isHard = userWord?.difficulty === Difficulty.HARD
-    setIsHardWord(isHard)
-  }, [word])
-
-  useEffect(() => {
-    isHardWordRef.current = isHardWord
+    getWords()
   }, [isHardWord])
 
-  const toggleWordDifficulty = async () => {
+  const toggleWordDifficulty = () => {
     setIsHardWord((prev) => !prev)
-    isHardWordRef.current = !isHardWordRef.current
+  }
 
+  const getWords = async () => {
     try {
-      const newDifficultyValue = isHardWordRef.current ? Difficulty.HARD : Difficulty.EASY
-      console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhooo', newDifficultyValue, isHardWordRef.current)
+      const newDifficultyValue = isHardWord ? Difficulty.HARD : Difficulty.EASY
       const newUserData = { ...userWord, difficulty: newDifficultyValue }
       if (userWord) {
         userWord = await (await updateUserWord(id, newUserData)).data
