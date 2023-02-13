@@ -4,19 +4,20 @@ import { observer } from 'mobx-react-lite'
 import { Context } from '../../index'
 import { SETTINGS, VOCABULARY_SETTINGS } from '../../settings'
 import { IWord } from '../../components/types/interface'
-import useHardWord from '../../hooks/useHardWord'
 import useLoadWords from '../../hooks/useLoadWords'
 import CheckIcon from '../../assets/icons/checkIcon'
 import StarIcon from '../../assets/icons/starIcon'
 import GramophoneIcon from '../../assets/icons/gramophoneIcon'
-import useLearnedWords from '../../hooks/useLearnedWords'
+
+import useUpdateWord from '../../hooks/useUpdateWord'
 
 const Word = observer(() => {
   const { store, vocabulary } = useContext(Context)
   const [word, setWord] = useState({} as IWord)
-  const { isHardWord, toggleWordDifficulty } = useHardWord(word)
-  const { toggleWordLearned } = useLearnedWords(word)
+  /* const { isHardWord, toggleWordDifficulty } = useHardWord(word)
+  const { toggleWordLearned } = useLearnedWords(word)*/
   const { getWordsData } = useLoadWords(vocabulary, store)
+  const { toggleWordDifficulty, toggleWordLearned } = useUpdateWord(word)
 
   const [gramophoneButtonDisabled, setGramophoneButtonDisabled] = useState(false)
 
@@ -35,10 +36,6 @@ const Word = observer(() => {
     const index = vocabulary.selectedWordIndex
     const words = vocabulary.words
     setWord(words[index])
-    console.log('redraw', word?.userWord?.difficulty)
-
-    console.log('isHardWord', isHardWord)
-    console.log('word', word?.userWord?.difficulty)
   }, [vocabulary.selectedWordIndex, vocabulary.words])
 
   const handlerClickAudio = () => {

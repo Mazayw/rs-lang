@@ -9,6 +9,7 @@ import AudioChooseButton from './button'
 import styles from './styles.module.scss'
 import { Context } from '../../../../index'
 import { getAllWords } from '../../../../http/wordsApi'
+import { getAllAggregatedWords } from '../../../../http/userAggregatedWordsApi'
 
 const AudioGameMain = observer(() => {
   const { audioCallStore } = useContext(Context)
@@ -37,20 +38,23 @@ const AudioGameMain = observer(() => {
 
   const getWords = async () => {
     const [groupUrl, pageUrl, isVocabularyGame] = urlCheck()
-    let wordsArr
+
     console.log('Words loading, please wait')
 
-    if (isVocabularyGame) {
-      wordsArr = await helpers.getUnlearnedWords(
-        groupUrl as string,
-        pageUrl as string,
-        20,
-        'unknownOrUnlearned',
-      )
-    } else {
-      wordsArr = await getAllWords(groupUrl as string, pageUrl as string)
-    }
-    wordsArr?.sort(() => Math.random() - 0.5)
+    const wordsArr = isVocabularyGame
+      ? await (
+          await getAllAggregatedWords({
+            wordsPerPage: SETTINGS.CARDS_PER_PAGE.toString(),
+            page: String(groupUrl),
+            group: String(groupUrl),
+            filter: '{"$or":[{"userWord":null},{"userWord.optional.isStudied":false}]}',
+          })
+        ).data
+      : await (
+          await getAllWords(groupUrl as string, pageUrl as string)
+        ).data
+
+    wordsArr.sort(() => Math.random() - 0.5)
     wordsArr && setWords(wordsArr)
   }
 

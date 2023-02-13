@@ -1,42 +1,21 @@
-import helpers from '../components/helpers'
-import { IWord, IUserWord } from '../components/types/interface'
+import { IUserWord } from '../components/types/interface'
 import { authApi } from './http'
 
-export const getAllAggregatedWords = async (
-  group = '',
-  page = '',
-  wordsPerPage = '20',
-  filterType = '',
-) => {
-  switch (filterType) {
-    case 'easyOrUnknown':
-      filterType = '{"$or":[{"userWord.difficulty":"easy"},{"userWord":null}]}'
-      break
+const userId = localStorage.getItem('userId') || ''
 
-    case 'hard':
-      filterType = '{"userWord.difficulty":"hard"}'
-      break
+export const getAllAggregatedWords = async (params: { [key: string]: string }) => {
+  const url = `/users/${userId}/aggregatedWords?`
 
-    case 'unknownOrUnlearned':
-      filterType = '{"$or":[{"userWord":null},{"userWord.optional.isStudied":false}]}'
-      break
-  }
+  const urlQuery = new URLSearchParams(params).toString()
 
-  const url: string[] = []
-  url.push(`/users/${helpers.getUserId()}/aggregatedWords?`)
-  group && url.push(`group=${group}`)
-  page && url.push(`page=${page}`)
-  wordsPerPage && url.push(`wordsPerPage=${wordsPerPage}`)
-  filterType && url.push(`filter=${filterType}`)
+  const response = await authApi.get(url + urlQuery)
+  const itemsCount = response.data[0].totalCount[0].count
+  const data = response.data[0].paginatedResults
 
-  const urlStr = url.join('&').replace('&', '')
-
-  const response = (await authApi.get(urlStr)).data[0].paginatedResults as IWord[]
-
-  return response
+  return { data, itemsCount }
 }
 
-export const getAggregatedWord = async (id: string, wordId: string) => {
-  const response = await authApi.get<IUserWord>(`/users/${id}/aggregatedWords/${wordId}`)
+export const getAggregatedWord = async (wordId: string) => {
+  const response = await authApi.get<IUserWord>(`/users/${userId}/aggregatedWords/${wordId}`)
   return response.data
 }

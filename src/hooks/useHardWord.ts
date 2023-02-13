@@ -22,6 +22,7 @@ const useHardWord = (word: IWord) => {
   }
 
   const updateWord = async () => {
+    console.log(isHardWord, userWord?.difficulty, word)
     try {
       const newDifficultyValue = isHardWord ? Difficulty.HARD : Difficulty.EASY
       const newUserData = { ...userWord, difficulty: newDifficultyValue }

@@ -3,12 +3,11 @@ import { observer } from 'mobx-react-lite'
 import { useContext, useEffect } from 'react'
 import { Context } from '../..'
 import { IWord } from '../../components/types/interface'
-import useHardWord from '../../hooks/useHardWord'
 import useLoadWords from '../../hooks/useLoadWords'
 import CheckIcon from '../../assets/icons/checkIcon'
 import { VOCABULARY_SETTINGS } from '../../settings'
 import StarIcon from '../../assets/icons/starIcon'
-import useLearnedWords from '../../hooks/useLearnedWords'
+import useUpdateWord from '../../hooks/useUpdateWord'
 
 const WordButton = observer(
   ({
@@ -16,12 +15,13 @@ const WordButton = observer(
     index,
   }: {
     word: IWord
-
     index: number
   }) => {
     const { vocabulary, store } = useContext(Context)
-    const { isHardWord, toggleWordDifficulty } = useHardWord(word)
-    const { isStudiedWord, toggleWordLearned } = useLearnedWords(word)
+    /* const { isHardWord, toggleWordDifficulty } = useHardWord(word)
+    const { isStudiedWord, toggleWordLearned } = useLearnedWords(word)*/
+    const { isHardWord, isStudiedWord, toggleWordDifficulty, toggleWordLearned, newWord } =
+      useUpdateWord(word)
 
     const { getWordsData } = useLoadWords(vocabulary, store)
 

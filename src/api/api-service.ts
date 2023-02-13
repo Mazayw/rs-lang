@@ -10,6 +10,7 @@ import {
   IUserSignInResponse,
 } from '../components/types/interface'
 import { AxiosError } from 'axios'
+import { SETTINGS } from '../settings'
 
 class ApiService {
   private errorHandler(error: AxiosError) {
@@ -166,7 +167,7 @@ class ApiService {
     token: string,
     group = '',
     page = '',
-    wordsPerPage = '20',
+    wordsPerPage = SETTINGS.CARDS_PER_PAGE.toString(),
     filterType = '',
   ) {
     switch (filterType) {

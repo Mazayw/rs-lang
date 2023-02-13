@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import { IWord } from '../components/types/interface'
+import { SETTINGS } from '../settings'
 
 export default class VocabularyStore {
   private _word: IWord
@@ -8,6 +9,7 @@ export default class VocabularyStore {
   private _page: number
   private _selectedWordId: string
   private _selectedWordIndex: number
+  private _maxPagesCount: number
 
   constructor() {
     this._word = {} as IWord
@@ -16,8 +18,13 @@ export default class VocabularyStore {
     this._page = 0
     this._selectedWordId = ''
     this._selectedWordIndex = 0
+    this._maxPagesCount = SETTINGS.MAX_PAGE
 
     makeAutoObservable(this)
+  }
+
+  setMaxPagesCount(num: number) {
+    this._maxPagesCount = num
   }
 
   setWord(obj: IWord) {
@@ -42,6 +49,10 @@ export default class VocabularyStore {
 
   setGroup(num: number) {
     this._group = num
+  }
+
+  get maxPagesCount() {
+    return this._maxPagesCount
   }
 
   get word() {
