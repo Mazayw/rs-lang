@@ -313,6 +313,12 @@
   background-color: #F5443B;
 }
 
+.page-buttons__arrow-left:hover,
+.page-buttons__arrow-right:hover {
+  cursor: pointer;
+  transition: .5s;
+}
+
 .page-buttons__arrow-left,
 .page-buttons__arrow-right,
 .words-image-auth__button,
@@ -320,15 +326,15 @@
   background-color: transparent;
   border: none;
   border-radius: 6px;
+
+  &:disabled {
+    cursor: default;
+  }
 }
 
 
 
-.page-buttons__arrow-left:hover,
-.page-buttons__arrow-right:hover {
-  cursor: pointer;
-  transition: .5s;
-}
+
 
 .word-card_none,
 .page-buttons_none {
