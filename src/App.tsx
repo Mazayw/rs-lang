@@ -3,7 +3,6 @@ import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import Auth from './components/authorization'
 import Layout from './components/layout'
-import { IWord } from './components/types/interface'
 import About from './pages/about'
 import Description from './pages/games/audiocall/description'
 import AudioGameMain from './pages/games/audiocall/game'
@@ -20,7 +19,6 @@ import { getUserToken } from './http/userApi'
 const App = observer(() => {
   const [isModalActive, setModalActive] = useState(false)
   const [authType, setAuthType] = useState('')
-  // const [check20WordsInPage, setCheck20WordsInPage] = useState([] as IWord[])
   const { store } = useContext(Context)
 
   const checkAuthorization = async () => {

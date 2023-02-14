@@ -14,12 +14,13 @@ const Layout = observer(
     setModalActive: React.Dispatch<React.SetStateAction<boolean>>
     setAuthType: React.Dispatch<React.SetStateAction<string>>
   }) => {
-    const { store } = useContext(Context)
+    const { vocabulary, store } = useContext(Context)
 
     const modalHandler = () => {
       if (store.isAuth) {
         store.setIsAuth(false)
         localStorage.clear()
+        if (vocabulary.group === 6) vocabulary.setGroup(0)
       } else {
         setModalActive(true)
         setAuthType('Войти')

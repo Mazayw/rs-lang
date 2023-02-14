@@ -1,6 +1,4 @@
 import styles from './styles.module.scss'
-import { INDEX_STAR_SECTION_BUTTON } from '.'
-import { IWord } from '../../components/types/interface'
 import { observer } from 'mobx-react-lite'
 import { useContext } from 'react'
 import { Context } from '../../index'
@@ -8,29 +6,11 @@ import { VOCABULARY_SETTINGS } from '../../settings'
 import NextPageButton from '../../assets/icons/nextPageButton'
 import PrevPageButton from '../../assets/icons/prevPageButton'
 
-const TextbookPagesButtons = observer((/* {
-    buttonSectionCurrentIndex,
-    check20WordsInPage,
-  }: {
-    buttonSectionCurrentIndex: number
-    check20WordsInPage: IWord[]
-  }*/) => {
+const TextbookPagesButtons = observer(() => {
   const { vocabulary } = useContext(Context)
 
-  const page = {
-    disabled: '#1F2143',
-    active: 'rgba(255, 255, 255, 0.3)',
-  }
-  console.log(vocabulary.maxPagesCount)
-
   return (
-    <div
-      className={
-        INDEX_STAR_SECTION_BUTTON === vocabulary.page // buttonSectionCurrentIndex
-          ? styles['page-buttons_none']
-          : styles['page-buttons']
-      }
-    >
+    <div className={styles['page-buttons']}>
       <button
         className={styles['page-buttons__arrow-left']}
         disabled={vocabulary.page <= 0}

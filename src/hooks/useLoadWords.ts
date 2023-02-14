@@ -18,9 +18,10 @@ const useLoadWords = (vocabulary: VocabularyStore, store: GlobalStore) => {
           wordsPerPage: SETTINGS.CARDS_PER_PAGE.toString(),
           filter: '{"userWord.difficulty":"hard"}',
         })
-        setWords(data.data)
-        setItemsCount(data.itemsCount)
-        return data.data
+
+        await setWords(data.data)
+        await setItemsCount(data.itemsCount)
+        return { words: data.data, itemsCount: data.itemsCount }
       } else {
         const data = store.isAuth
           ? await getAllAggregatedWords({
@@ -29,16 +30,16 @@ const useLoadWords = (vocabulary: VocabularyStore, store: GlobalStore) => {
               wordsPerPage: SETTINGS.CARDS_PER_PAGE.toString(),
             })
           : await getAllWords(vocabulary.group.toString(), vocabulary.page.toString())
-        data.itemsCount
-        console.log('hook', data)
-        setWords(data.data)
-        setItemsCount(data.itemsCount)
-        return data
+        console.log('1', data)
+
+        await setWords(data.data)
+        await setItemsCount(data.itemsCount)
+        return { words: data.data, itemsCount: data.itemsCount }
       }
     } catch (error) {
       console.log(error)
     }
-    return { words }
+    return { words, itemsCount }
   }
 
   return { words, getWordsData, itemsCount }

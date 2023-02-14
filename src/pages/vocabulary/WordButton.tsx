@@ -1,6 +1,6 @@
 import styles from './styles.module.scss'
 import { observer } from 'mobx-react-lite'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { Context } from '../..'
 import { IWord } from '../../components/types/interface'
 import useLoadWords from '../../hooks/useLoadWords'
@@ -20,17 +20,17 @@ const WordButton = observer(({ word, index }: { word: IWord; index: number }) =>
   const onClickHardWord = async () => {
     await toggleWordDifficulty()
     const wordsData = await getWordsData()
-    vocabulary.setWords(wordsData)
+    vocabulary.setWords(wordsData.words)
   }
 
   const onClickLearnedWord = async () => {
     await toggleWordLearned()
-    getWordsData().then((data) => vocabulary.setWords(data))
+    getWordsData().then((data) => vocabulary.setWords(data.words))
   }
-
+  /*
   useEffect(() => {
     console.log('change array')
-  }, [vocabulary.words])
+  }, [vocabulary.words])*/
 
   return (
     <li className={styles['word-button-list']}>

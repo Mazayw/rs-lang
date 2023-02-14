@@ -14,8 +14,6 @@ import useUpdateWord from '../../hooks/useUpdateWord'
 const Word = observer(() => {
   const { store, vocabulary } = useContext(Context)
   const [word, setWord] = useState({} as IWord)
-  /* const { isHardWord, toggleWordDifficulty } = useHardWord(word)
-  const { toggleWordLearned } = useLearnedWords(word)*/
   const { getWordsData } = useLoadWords(vocabulary, store)
   const { toggleWordDifficulty, toggleWordLearned } = useUpdateWord(word)
 
@@ -24,12 +22,12 @@ const Word = observer(() => {
   const onClickHardWord = async () => {
     await toggleWordDifficulty()
 
-    getWordsData().then((data) => vocabulary.setWords(data))
+    getWordsData().then((data) => vocabulary.setWords(data.words))
   }
 
   const onClickLearnedWord = async () => {
     await toggleWordLearned()
-    getWordsData().then((data) => vocabulary.setWords(data))
+    getWordsData().then((data) => vocabulary.setWords(data.words))
   }
 
   useEffect(() => {
