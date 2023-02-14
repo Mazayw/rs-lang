@@ -1,50 +1,51 @@
+import { useState, useContext, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
-
+import Auth from './components/authorization'
 import Layout from './components/layout'
-import MainPage from './components/pages/main-page/index'
-import Vocabulary from './components/pages/vocabulary/index'
-import Sprint from './components/pages/games/sprint/index'
-import Statistics from './components/pages/statistics/index'
-import About from './components/pages/about'
-import NotFound from './components/pages/notfound/index'
-import { useState } from 'react'
-import { IWord } from './components/types/interface'
-import AudioGameMain from './components/pages/games/audiocall/game/index'
-import Description from './components/pages/games/audiocall/description/index'
+import About from './pages/about'
+import Description from './pages/games/audiocall/description'
+import AudioGameMain from './pages/games/audiocall/game'
+import Sprint from './pages/games/sprint'
+import MainPage from './pages/main-page'
+import NotFound from './pages/notfound'
+import Statistics from './pages/statistics'
+import Vocabulary from './pages/vocabulary'
+import LoadingAnimation from './components/loadingAnimation/index'
+import { observer } from 'mobx-react-lite'
+import { Context } from './index'
+import { getUserToken } from './http/userApi'
 
-function App() {
+const App = observer(() => {
   const [isModalActive, setModalActive] = useState(false)
-  const [isAuthorized, setIsAuthorized] = useState(false)
   const [authType, setAuthType] = useState('')
-  const [check20WordsInPage, setCheck20WordsInPage] = useState([] as IWord[])
+  const { store } = useContext(Context)
+
+  const checkAuthorization = async () => {
+    try {
+      const response = await getUserToken()
+      if (response?.status === 200) store.setIsAuth(true)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    checkAuthorization()
+  }, [])
 
   return (
     <div className='App'>
+      <Auth active={isModalActive} setActive={setModalActive} authType={authType} />
+      {store.isLoading && <LoadingAnimation />}
       <Routes>
         <Route
           path='/'
-          element={
-            <Layout
-              isModalActive={isModalActive}
-              setModalActive={setModalActive}
-              setIsAuthorized={setIsAuthorized}
-              authType={authType}
-              setAuthType={setAuthType}
-              isAuthorized={isAuthorized}
-            />
-          }
+          element={<Layout setModalActive={setModalActive} setAuthType={setAuthType} />}
         >
           <Route
             index
-            element={
-              <MainPage
-                setIsAuthorized={setIsAuthorized}
-                isAuthorized={isAuthorized}
-                setActive={setModalActive}
-                setAuthType={setAuthType}
-              />
-            }
+            element={<MainPage setActive={setModalActive} setAuthType={setAuthType} />}
           />
           <Route path='audiocall' element={<Description />} />
           <Route path='audiocall/:group/:page' element={<AudioGameMain />} />
@@ -53,21 +54,18 @@ function App() {
             path='vocabulary'
             element={
               <Vocabulary
-                check20WordsInPage={check20WordsInPage}
-                setCheck20WordsInPage={setCheck20WordsInPage}
+              /*   check20WordsInPage={check20WordsInPage}
+                setCheck20WordsInPage={setCheck20WordsInPage}*/
               />
             }
           />
-          <Route
-            path='statistics'
-            element={<Statistics isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} />}
-          />
+          <Route path='statistics' element={<Statistics />} />
           <Route path='about' element={<About />} />
           <Route path='*' element={<NotFound />} />
         </Route>
       </Routes>
     </div>
   )
-}
+})
 
 export default App

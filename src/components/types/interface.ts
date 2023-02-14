@@ -1,5 +1,3 @@
-
-
 export interface IWord {
   id: string
   _id: string
@@ -34,6 +32,8 @@ export interface IToken {
 }
 
 export interface IUserWord {
+  [x: string]: unknown
+  id?: string
   difficulty: string
   optional: {
     totalGuessedSprint?: string
@@ -44,6 +44,7 @@ export interface IUserWord {
     isStudied?: boolean
     activeColor?: string
     wordId?: string
+    isSeen?: boolean
   }
 }
 
@@ -99,3 +100,9 @@ export interface IMenu {
   submenu?: Array<IMenuMain>
 }
 
+export interface ITokenData {
+  id: string
+  tokenId: string
+  iat: number
+  exp: number
+}
