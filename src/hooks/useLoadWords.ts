@@ -30,10 +30,9 @@ const useLoadWords = (vocabulary: VocabularyStore, store: GlobalStore) => {
               wordsPerPage: SETTINGS.CARDS_PER_PAGE.toString(),
             })
           : await getAllWords(vocabulary.group.toString(), vocabulary.page.toString())
-        console.log('1', data)
 
-        await setWords(data.data)
-        await setItemsCount(data.itemsCount)
+        await setWords(data?.data)
+        await setItemsCount(data?.itemsCount)
         return { words: data.data, itemsCount: data.itemsCount }
       }
     } catch (error) {

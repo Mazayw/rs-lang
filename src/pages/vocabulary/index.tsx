@@ -19,7 +19,6 @@ const Vocabulary = observer(() => {
     const updateWords = async () => {
       store.setIsLoading(true)
       const words = await getWordsData()
-      console.log(words)
       vocabulary.setWords(words.words)
       vocabulary.setMaxPagesCount(Math.ceil(words.itemsCount / SETTINGS.CARDS_PER_PAGE))
       store.setIsLoading(false)
@@ -72,7 +71,7 @@ const Vocabulary = observer(() => {
 
           <ul className={styles['word-buttons']}>
             {vocabulary.words.map((word, index) => (
-              <WordButton key={word.word} word={word} index={index} />
+              <WordButton key={word.word + Math.random()} word={word} index={index} />
             ))}
           </ul>
         </>

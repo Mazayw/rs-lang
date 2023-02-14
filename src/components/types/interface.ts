@@ -44,6 +44,7 @@ export interface IUserWord {
     isStudied?: boolean
     activeColor?: string
     wordId?: string
+    isSeen?: boolean
   }
 }
 

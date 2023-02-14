@@ -9,8 +9,9 @@ export const getAllAggregatedWords = async (params: { [key: string]: string }) =
   const urlQuery = new URLSearchParams(params).toString()
 
   const response = await authApi.get(url + urlQuery)
-  const itemsCount = response.data[0].totalCount[0].count
-  const data = response?.data[0].paginatedResults
+  console.log('response', response)
+  const itemsCount = response.data[0].totalCount[0]?.count || 0
+  const data = response?.data[0].paginatedResults || []
 
   return { data, itemsCount }
 }
