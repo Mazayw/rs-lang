@@ -51,28 +51,32 @@ const WordButton = observer(({ word, index }: { word: IWord; index: number }) =>
             store.isAuth ? styles['word-button-container-icon_active'] : ''
           }`}
         >
-          <button className={styles['words-image-auth__button']} onClick={onClickLearnedWord}>
-            <CheckIcon
-              color={
-                isStudiedWord
-                  ? VOCABULARY_SETTINGS.ACTIVE_ICON_COLOR
-                  : VOCABULARY_SETTINGS.DISABLED_ICON_COLOR
-              }
-              width={'19'}
-              height={'19'}
-            />
-          </button>
-          <button onClick={onClickHardWord} className={styles['words-image-auth__button']}>
-            <StarIcon
-              color={
-                isHardWord
-                  ? VOCABULARY_SETTINGS.ACTIVE_ICON_COLOR
-                  : VOCABULARY_SETTINGS.DISABLED_ICON_COLOR
-              }
-              width={'19'}
-              height={'19'}
-            />
-          </button>
+          {store.isAuth && (
+            <>
+              <span className={styles['words-image-auth__button']} onClick={onClickLearnedWord}>
+                <CheckIcon
+                  color={
+                    isStudiedWord
+                      ? VOCABULARY_SETTINGS.ACTIVE_ICON_COLOR
+                      : VOCABULARY_SETTINGS.DISABLED_ICON_COLOR
+                  }
+                  width={'19'}
+                  height={'19'}
+                />
+              </span>
+              <span onClick={onClickHardWord} className={styles['words-image-auth__button']}>
+                <StarIcon
+                  color={
+                    isHardWord
+                      ? VOCABULARY_SETTINGS.ACTIVE_ICON_COLOR
+                      : VOCABULARY_SETTINGS.DISABLED_ICON_COLOR
+                  }
+                  width={'19'}
+                  height={'19'}
+                />
+              </span>
+            </>
+          )}
         </span>
       </button>
     </li>

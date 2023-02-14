@@ -33,9 +33,11 @@ const Word = observer(() => {
   }
 
   useEffect(() => {
-    const index = vocabulary.selectedWordIndex
-    const words = vocabulary.words
-    setWord(words[index])
+    if (vocabulary.words) {
+      const index = vocabulary.selectedWordIndex
+      const words = vocabulary.words
+      setWord(words[index])
+    }
   }, [vocabulary.selectedWordIndex, vocabulary.words])
 
   const handlerClickAudio = () => {
@@ -99,28 +101,33 @@ const Word = observer(() => {
             store.isAuth ? styles['words-image-auth_active'] : ''
           }`}
         >
-          <button className={styles['words-image-auth__button']} onClick={onClickLearnedWord}>
-            <CheckIcon
-              color={
-                word?.userWord?.optional?.isStudied
-                  ? VOCABULARY_SETTINGS.ACTIVE_ICON_COLOR
-                  : VOCABULARY_SETTINGS.DISABLED_ICON_COLOR
-              }
-              width={'40'}
-              height={'40'}
-            />
-          </button>
-          <button className={styles['words-image-auth__button']} onClick={onClickHardWord}>
-            <StarIcon
-              color={
-                word?.userWord?.difficulty === 'hard'
-                  ? VOCABULARY_SETTINGS.ACTIVE_ICON_COLOR
-                  : VOCABULARY_SETTINGS.DISABLED_ICON_COLOR
-              }
-              width={'40'}
-              height={'40'}
-            />
-          </button>
+          {store.isAuth && (
+            <>
+              {' '}
+              <button className={styles['words-image-auth__button']} onClick={onClickLearnedWord}>
+                <CheckIcon
+                  color={
+                    word?.userWord?.optional?.isStudied
+                      ? VOCABULARY_SETTINGS.ACTIVE_ICON_COLOR
+                      : VOCABULARY_SETTINGS.DISABLED_ICON_COLOR
+                  }
+                  width={'40'}
+                  height={'40'}
+                />
+              </button>
+              <button className={styles['words-image-auth__button']} onClick={onClickHardWord}>
+                <StarIcon
+                  color={
+                    word?.userWord?.difficulty === 'hard'
+                      ? VOCABULARY_SETTINGS.ACTIVE_ICON_COLOR
+                      : VOCABULARY_SETTINGS.DISABLED_ICON_COLOR
+                  }
+                  width={'40'}
+                  height={'40'}
+                />
+              </button>
+            </>
+          )}
         </div>
       </div>
     </>

@@ -20,7 +20,7 @@ import { getUserToken } from './http/userApi'
 const App = observer(() => {
   const [isModalActive, setModalActive] = useState(false)
   const [authType, setAuthType] = useState('')
-  const [check20WordsInPage, setCheck20WordsInPage] = useState([] as IWord[])
+  // const [check20WordsInPage, setCheck20WordsInPage] = useState([] as IWord[])
   const { store } = useContext(Context)
 
   const checkAuthorization = async () => {
@@ -56,8 +56,8 @@ const App = observer(() => {
             path='vocabulary'
             element={
               <Vocabulary
-                check20WordsInPage={check20WordsInPage}
-                setCheck20WordsInPage={setCheck20WordsInPage}
+              /*   check20WordsInPage={check20WordsInPage}
+                setCheck20WordsInPage={setCheck20WordsInPage}*/
               />
             }
           />

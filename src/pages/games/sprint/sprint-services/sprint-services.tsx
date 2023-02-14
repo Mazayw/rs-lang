@@ -1,4 +1,4 @@
-import apiService from '../../../../api/api-service'
+import apiService from '../../../../api2/api-service'
 import helpers from '../../../../components/helpers'
 import { IAnswer } from '../../../../components/types/audioGame-interface'
 import { IWord, IUserWord, IUserStat } from '../../../../components/types/interface'

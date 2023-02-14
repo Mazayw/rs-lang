@@ -30,9 +30,10 @@ const useLoadWords = (vocabulary: VocabularyStore, store: GlobalStore) => {
             })
           : await getAllWords(vocabulary.group.toString(), vocabulary.page.toString())
         data.itemsCount
+        console.log('hook', data)
         setWords(data.data)
         setItemsCount(data.itemsCount)
-        return data.data
+        return data
       }
     } catch (error) {
       console.log(error)
